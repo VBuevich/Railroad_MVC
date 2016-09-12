@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         >
+
+    <servlet>
+        <servlet-name>loginCheck</servlet-name>
+        <servlet-class>RailServlet.LoginCheck</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>loginCheck</servlet-name>
+        <url-pattern>/loginCheck</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ticketing</servlet-name>
+        <servlet-class>RailServlet.Ticketing</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ticketing</servlet-name>
+        <url-pattern>/RailServlet/Ticketing</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>logoff</servlet-name>
+        <servlet-class>RailServlet.Logoff</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>logoff</servlet-name>
+        <url-pattern>/RailServlet/logoff</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>stationTrainsServlet</servlet-name>
+        <servlet-class>RailServlet.StationTrainsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>stationTrainsServlet</servlet-name>
+        <url-pattern>/RailServlet/StationTrainsServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>buyingTicket</servlet-name>
+        <servlet-class>RailServlet.BuyingTicket</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>buyingTicket</servlet-name>
+        <url-pattern>/RailServlet/BuyingTicket</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>RailServlet.Dispatcher</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/RailServlet/dispatcher</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>passengerList</servlet-name>
+        <servlet-class>RailServlet.PassengerList</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>passengerList</servlet-name>
+        <url-pattern>/RailServlet/passengerList</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>myTickets</servlet-name>
+        <servlet-class>RailServlet.MyTickets</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>myTickets</servlet-name>
+        <url-pattern>/RailServlet/myTickets</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addStation</servlet-name>
+        <servlet-class>RailServlet.AddStation</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addStation</servlet-name>
+        <url-pattern>/RailServlet/addStation</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addTrain</servlet-name>
+        <servlet-class>RailServlet.AddTrain</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addTrain</servlet-name>
+        <url-pattern>/RailServlet/addTrain</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addSchedule</servlet-name>
+        <servlet-class>RailServlet.AddSchedule</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addSchedule</servlet-name>
+        <url-pattern>/RailServlet/addSchedule</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>loginFilter</filter-name>
+        <filter-class>RailServlet.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>loginFilter</filter-name>
+        <url-pattern>/RailServlet/*</url-pattern>
+    </filter-mapping>
+
+
+</web-app>

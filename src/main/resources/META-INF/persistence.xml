@@ -1,0 +1,37 @@
+<persistence version="2.1"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+
+    <persistence-unit name="Railroad" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>Railroad.Station</class>
+        <class>Railroad.Employee</class>
+        <class>Railroad.Passenger</class>
+        <class>Railroad.Schedule</class>
+        <class>Railroad.Ticket</class>
+        <class>Railroad.Train</class>
+
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value = "update"/>
+            <property name="hibernate.show_sql" value = "true"/>
+            <property name="hibernate.format_sql" value = "true"/>
+            <property name="current_session_context_class" value = "thread"/>
+            <property name="hibernate.archive.autodetection" value="class, hbm"/>
+
+
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+            <property name="hibernate.connection.username" value="VBuevich" />
+            <property name="hibernate.connection.password" value="gw777blade" />
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/javaschool" />
+
+
+
+        </properties>
+
+    </persistence-unit>
+</persistence>
+
