@@ -7,7 +7,9 @@ import javax.persistence.OneToMany;
 import java.util.Collection;
 
 /**
- * Created by VBuevich on 01.09.2016.
+ * @author vbuevich
+ *
+ * Hibernate entity class
  */
 @Entity
 public class Station {
@@ -26,6 +28,11 @@ public class Station {
         this.stationName = stationName;
     }
 
+    /**
+     *
+     * @param o Object to compare
+     * @return true if equals
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -38,6 +45,9 @@ public class Station {
         return true;
     }
 
+    /**
+     * @return hashcode
+     */
     @Override
     public int hashCode() {
         return stationName != null ? stationName.hashCode() : 0;

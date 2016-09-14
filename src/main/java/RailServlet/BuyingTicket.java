@@ -1,6 +1,6 @@
 package RailServlet;
 
-import Railroad.RailroadDao;
+import Railroad.PassengerService;
 import Service.MessageBean;
 import Service.ServiceBean;
 
@@ -12,7 +12,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Created by VBuevich on 08.09.2016.
+ * @author vbuevich
+ *
+ * Servlet class called from findTrain.jsp by Passenger in order to buy his chosen ticket
  */
 public class BuyingTicket extends HttpServlet {
 
@@ -38,15 +40,9 @@ public class BuyingTicket extends HttpServlet {
             return;
         }
 
-        String tryingToBuyTicket = RailroadDao.buyTicket(userId, departureStation, arrivalStation, tNumber);
-        if (tryingToBuyTicket == null) {
-            message.setErrorMessage(null);
-            message.setSuccessMessage("You have successfully bought a ticket, train number " + trainNumber + " from " + departureStation + " to " + departureStation + "! Please check 'My tickets' to get a confirmation.");
-        }
-        else {
-            message.setErrorMessage(tryingToBuyTicket);
-            message.setSuccessMessage(null);
-        }
+        message.setErrorMessage(null);
+        message.setSuccessMessage(null);
+        PassengerService.buyTicket(userId, departureStation, arrivalStation, tNumber, message);
 
         response.sendRedirect(request.getContextPath() + "/findTrain.jsp");
     }

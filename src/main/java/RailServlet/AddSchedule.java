@@ -1,6 +1,5 @@
 package RailServlet;
 
-import Railroad.RailroadDao;
 import Railroad.ScheduleDao;
 import Railroad.StationDao;
 import Service.AdminBean;
@@ -14,13 +13,21 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
- * Created by vbuevich on 13.09.2016.
+ * @author vbuevich
+ *
+ * Servlet class called from newSchedule.jsp by Employee in order to add new Schedule
  */
 public class AddSchedule extends HttpServlet {
 
+    /**
+     *
+     * @param request HTTP request
+     * @param response HTTP response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -36,11 +43,9 @@ public class AddSchedule extends HttpServlet {
         try {
             String hourS = departureTime.substring(0, 2);
             String minuteS = departureTime.substring(3, 5);
-            String secondS = departureTime.substring(6, 8);
 
             hour = Integer.parseInt(hourS);
             minute = Integer.parseInt(minuteS);
-            second = Integer.parseInt(secondS);
         }
         catch (Exception e) {
             message.setErrorMessage("Invalid time");
@@ -62,17 +67,17 @@ public class AddSchedule extends HttpServlet {
             return;
         }
 
-        String addSchedule = ScheduleDao.addSchedule(tNumber, station, dTime);
+        Boolean addSchedule = ScheduleDao.addSchedule(tNumber, station, dTime);
 
-        if (addSchedule == null) {
+        if (addSchedule) {
             message.setErrorMessage(null);
             message.setSuccessMessage("Schedule for train # " + trainNumber + " departing from " + station + " at " + departureTime + " is succesfully added");
-            bean.setStationList(RailroadDao.getStationList());
+            bean.setStationList(StationDao.getStationList());
         } else {
             message.setSuccessMessage(null);
             message.setErrorMessage("Schedule is not added, please check and try again");
         }
-        bean.setStationList(RailroadDao.getStationList());
+        bean.setStationList(StationDao.getStationList());
 
         response.sendRedirect(request.getContextPath() + "/newSchedule.jsp");
     }

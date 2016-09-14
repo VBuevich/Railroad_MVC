@@ -52,6 +52,12 @@ CREATE TABLE Schedule
   PRIMARY KEY (schedule_id)
 );
 
+CREATE UNIQUE INDEX XAK1Schedule ON Schedule
+(
+	train_number,
+  station_name
+);
+
 CREATE TABLE Station
 (
 	station_name         VARCHAR(20) NOT NULL,

@@ -4,6 +4,12 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+/**
+ * Servlet class which is called from many jsp`s navbars in order to end users activity and log off
+ * redirects to login page
+ *
+ * @author vbuevich
+ */
 public class Logoff extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

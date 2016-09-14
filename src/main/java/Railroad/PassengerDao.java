@@ -2,28 +2,37 @@ package Railroad;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-
-import java.util.List;
+import org.jboss.logging.Logger;
 
 /**
- * Created by vbuevich on 12.09.2016.
+ * @author vbuevich
+ *
+ * DAO class for Passenger entity
  */
 public class PassengerDao {
+
+    private static final Logger LOGGER = Logger.getLogger(PassengerDao.class);
+
+    /**
+     *
+     * @param userId primary key of Passenger entity
+     * @return Passenger entity for given key
+     */
     public static Passenger getPassenger(int userId) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+        Session session = DaoFactory.getSessionFactory().openSession(); // Hibernate session
         Passenger p = null;
 
         try {
             Query q = session.createQuery("FROM Railroad.Passenger p WHERE p.passengerId = :userId");
 
             q.setParameter("userId", userId);
-            p = (Passenger)q.uniqueResult();
+            p = (Passenger)q.uniqueResult(); // due to the fact that passengerId is primary key we can get just unique result
         }
         catch (Exception e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         finally {
-            session.close();
+            session.close(); // we always closing Hibernate session
         }
         return p;
     }

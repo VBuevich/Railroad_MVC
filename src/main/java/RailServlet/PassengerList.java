@@ -1,8 +1,7 @@
 package RailServlet;
 
-import Railroad.DaoService;
 import Railroad.Passenger;
-import Railroad.RailroadDao;
+import Railroad.PassengerService;
 import Service.AdminBean;
 import Service.MessageBean;
 
@@ -15,7 +14,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by vbuevich on 12.09.2016.
+ * Servlet class called from passengerList.jsp by Employee
+ *
+ * @author vbuevich
  */
 public class PassengerList  extends HttpServlet {
 
@@ -37,7 +38,7 @@ public class PassengerList  extends HttpServlet {
             return;
         }
 
-        List<Passenger> passengerList = DaoService.getPassengerList(tNumber);
+        List<Passenger> passengerList = PassengerService.getPassengerList(tNumber);
         if (passengerList == null) {
             bean.setPassengerList(null);
             message.setErrorMessage("No passengers found for this train");

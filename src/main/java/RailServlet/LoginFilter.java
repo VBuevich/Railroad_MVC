@@ -16,6 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Class Filter that restricts access to protected pages (RailServlet/*) in case if user is not logged in
+ *
+ * @author vbuevich
+ */
 @WebFilter("/WEB-INF/classes/RailServlet/*")
 public class LoginFilter implements Filter {
 

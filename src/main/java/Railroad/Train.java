@@ -4,7 +4,9 @@ import javax.persistence.*;
 import java.util.Collection;
 
 /**
- * Created by VBuevich on 01.09.2016.
+ * @author vbuevich
+ *
+ * Hibernate entity class
  */
 @Entity
 public class Train {
@@ -33,6 +35,11 @@ public class Train {
         this.seats = seats;
     }
 
+    /**
+     *
+     * @param o Object to compare
+     * @return true if equals
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -46,6 +53,9 @@ public class Train {
         return true;
     }
 
+    /**
+     * @return hashcode
+     */
     @Override
     public int hashCode() {
         int result = trainNumber != null ? trainNumber.hashCode() : 0;

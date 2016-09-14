@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="bean" class="Service.AdminBean" scope="session" />
 <jsp:useBean id="message" class="Service.MessageBean" scope="session" />
@@ -9,6 +10,7 @@
     <style>
         .wrap {
             width: 50%;
+            margin-left: 200px;
         }
     </style>
 </head>

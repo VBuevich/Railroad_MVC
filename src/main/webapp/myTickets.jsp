@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="bean" class="Service.ServiceBean" scope="session" />
 <jsp:useBean id="message" class="Service.MessageBean" scope="session" />
@@ -9,6 +10,7 @@
     <style>
         .wrap {
             width: 50%;
+            margin-left: 200px;
         }
     </style>
 </head>
@@ -27,11 +29,6 @@
         </ul>
     </nav>
 </div>
-
-<strong> Refresh to get the list of your tickets </strong>
-<form method="post" name="form1" action="/RailServlet/myTickets">
-    <button type="submit" class="btn btn-default">Refresh</button>
-</form>
 
 <div class="wrap">
     <c:if test="${not empty message.errorMessage}">

@@ -4,7 +4,9 @@ import javax.persistence.*;
 import java.sql.Time;
 
 /**
- * Created by VBuevich on 01.09.2016.
+ * @author vbuevich
+ *
+ * Hibernate entity class
  */
 @Entity
 public class Schedule {
@@ -56,6 +58,11 @@ public class Schedule {
         this.time = time;
     }
 
+    /**
+     *
+     * @param o Object to compare
+     * @return true if equals
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +80,9 @@ public class Schedule {
         return true;
     }
 
+    /**
+     * @return hashcode
+     */
     @Override
     public int hashCode() {
         int result = scheduleId != null ? scheduleId.hashCode() : 0;

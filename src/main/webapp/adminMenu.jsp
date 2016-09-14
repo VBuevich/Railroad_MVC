@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="bean" class="Service.AdminBean" scope="session" />
 <jsp:useBean id="message" class="Service.MessageBean" scope="session" />
@@ -10,6 +11,7 @@
     <style>
         .wrap {
             width: 50%;
+            margin-left: 200px;
         }
     </style>
 </head>
@@ -30,8 +32,10 @@
     </nav>
 </div>
 
-<strong>Admin role granted for Mr. <c:out value="${bean.user.name}"></c:out> <c:out value="${bean.user.surname}"></c:out></strong><br>
-<string>Please use navigation bar for options.</string>
+<div class="wrap">
+    <strong>Admin role granted for Mr. <c:out value="${bean.user.name}"></c:out> <c:out value="${bean.user.surname}"></c:out></strong><br>
+    <string>Please use navigation bar for options.</string>
+</div>
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="Bootstrap/js/bootstrap.min.js"></script>

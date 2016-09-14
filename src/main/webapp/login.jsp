@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="bean" class="Service.ServiceBean" scope="session" />
@@ -35,7 +36,7 @@
                     <input type = "radio" name = "status" value = "Passenger">  I am a Passenger <br>
                     <input type = "radio" name = "status" value = "Employee">  I am an Employee <br>
                 </label>
-                <button type="submit" name="submit" class="btn btn-success btn-block">Authorise</button>
+                <button type="submit" name="submit" class="btn btn-success btn-block">Log in</button>
             </form>
         </div>
     </div>

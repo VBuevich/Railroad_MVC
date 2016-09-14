@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="bean" class="Service.AdminBean" scope="session" />
 <jsp:useBean id="message" class="Service.MessageBean" scope="session" />
@@ -6,9 +7,11 @@
 <head>
     <title>New Station</title>
     <link href="Bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="Bootstrap/js/bootstrap.min.js"></script>
     <style>
         .wrap {
             width: 50%;
+            margin-left: 200px;
         }
     </style>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -30,11 +33,6 @@
             <li><a href="RailServlet/logoff">Log off</a></li>
         </ul>
     </nav>
-</div>
-
-<div class="input-group bootstrap-timepicker timepicker">
-    <input id="timepicker1" type="text" class="form-control input-small">
-    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 </div>
 
 <div class="wrap">
@@ -76,10 +74,5 @@
         </table>
     </div>
 
-<script type="text/javascript">
-    $('#timepicker1').timepicker();
-</script>
-
-<script src="Bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

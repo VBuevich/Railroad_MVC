@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="bean" class="Service.ServiceBean" scope="session" />
 <jsp:useBean id="message" class="Service.MessageBean" scope="session" />
@@ -9,6 +10,7 @@
     <style>
         .wrap {
             width: 50%;
+            margin-left: 200px;
         }
     </style>
 </head>
@@ -28,6 +30,7 @@
     </nav>
 </div>
 
+<div class="wrap">
 <form method="post" name="form1" action="/RailServlet/StationTrainsServlet">
 
     <p>Departure Station</p>
@@ -40,6 +43,7 @@
 
     <button type="submit" class="btn btn-default">Get schedule</button>
 </form>
+</div>
 
 <div class="wrap">
     <c:if test="${not empty message.errorMessage}">

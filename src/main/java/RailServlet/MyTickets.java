@@ -13,7 +13,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by VBuevich on 08.09.2016.
+ * Servlet class which is called by Dispatcher in case if Passenger wants to check his tickets
+ * Redirects to myTickets.jsp
+ *
+ * @author vbuevich
  */
 public class MyTickets extends HttpServlet {
 

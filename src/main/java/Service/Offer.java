@@ -14,17 +14,7 @@ public class Offer {
 
     public Offer() {};
 
-    public Offer(Integer trainNumber, String departureStation, String arrivalStation, Time departureTime, Time arrivalTime) {
-        this.trainNumber = trainNumber;
-        this.departureStation = departureStation;
-        this.arrivalStation = arrivalStation;
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
-    }
-
-    public Integer getTrainNumber() {
-        return trainNumber;
-    }
+    public Integer getTrainNumber() { return trainNumber; }
 
     public void setTrainNumber(Integer trainNumber) {
         this.trainNumber = trainNumber;

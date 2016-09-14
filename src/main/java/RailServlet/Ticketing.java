@@ -1,6 +1,6 @@
 package RailServlet;
 
-import Railroad.DaoService;
+import Railroad.PassengerService;
 import Service.MessageBean;
 import Service.Offer;
 import Service.ServiceBean;
@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by VBuevich on 08.09.2016.
+ * Servlet class called from findTrain.jsp during Passenger`s ticketing activity
+ *
+ * @author vbuevich
  */
 public class Ticketing extends HttpServlet {
 
@@ -30,7 +32,7 @@ public class Ticketing extends HttpServlet {
         String arrivalTime = request.getParameter("arrivalTime");
         String arrivalStation = request.getParameter("arrivalStation");
 
-        List<Offer> offers = DaoService.getOffers(departureStation, departureTime, arrivalStation, arrivalTime);
+        List<Offer> offers = PassengerService.getOffers(departureStation, departureTime, arrivalStation, arrivalTime);
 
         if (offers == null || offers.size() == 0) {
             message.setErrorMessage("No offers found using your criteria of search");

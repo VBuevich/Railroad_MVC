@@ -5,7 +5,9 @@ import java.sql.Date;
 import java.util.Collection;
 
 /**
- * Created by VBuevich on 01.09.2016.
+ * @author vbuevich
+ *
+ * Hibernate entity class
  */
 @Entity
 public class Passenger {
@@ -78,6 +80,11 @@ public class Passenger {
         this.password = password;
     }
 
+    /**
+     *
+     * @param o Object to compare
+     * @return true if equals
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -96,6 +103,9 @@ public class Passenger {
         return true;
     }
 
+    /**
+     * @return hashcode
+     */
     @Override
     public int hashCode() {
         int result = passengerId != null ? passengerId.hashCode() : 0;

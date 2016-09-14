@@ -1,7 +1,7 @@
 package RailServlet;
 
-import Railroad.RailroadDao;
 import Railroad.Schedule;
+import Railroad.TrainDao;
 import Service.MessageBean;
 import Service.ServiceBean;
 
@@ -15,9 +15,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by vbuevich on 08.09.2016.
+ * Servlet class called from schedule.jsp by Passenger
+ *
+ * @author vbuevich
  */
-@WebServlet(name = "findYourTrainServlet")
 public class StationTrainsServlet extends HttpServlet {
 
     @Override
@@ -29,7 +30,7 @@ public class StationTrainsServlet extends HttpServlet {
         MessageBean message = MessageBean.get(session);
 
         String stationName = req.getParameter("stationName");
-        List<Schedule> scheduleList = RailroadDao.trainList(stationName);
+        List<Schedule> scheduleList = TrainDao.trainList(stationName);
 
         if (scheduleList == null || scheduleList.size() == 0) {
             bean.setScheduleList(null);
@@ -52,7 +53,7 @@ public class StationTrainsServlet extends HttpServlet {
         MessageBean message = MessageBean.get(session);
 
         String stationName = req.getParameter("stationName");
-        List<Schedule> scheduleList = RailroadDao.trainList(stationName);
+        List<Schedule> scheduleList = TrainDao.trainList(stationName);
 
         if (scheduleList == null || scheduleList.size() == 0) {
             bean.setScheduleList(null);

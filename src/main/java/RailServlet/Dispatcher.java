@@ -10,7 +10,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Created by VBuevich on 11.09.2016.
+ * Class "dispatcher" that is assuring that user is logged in ,
+ * managing informative messages and redirects users to chosen page
+ * Is called from many jsp`s from navbar tab
+ *
+ * @author vbuevich
  */
 public class Dispatcher extends HttpServlet {
 
@@ -25,10 +29,15 @@ public class Dispatcher extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp"); // No logged-in user found, so redirect to login page.
         }
 
-        String page = request.getParameter(request.getContextPath() + "page");
+        String page = request.getParameter("page");
 
         message.setErrorMessage(null);
         message.setSuccessMessage(null);
+
+        if (page.equals("/myTickets.jsp")) {
+            response.sendRedirect("/RailServlet/myTickets");
+            return;
+        }
 
         response.sendRedirect(page);
     }

@@ -1,6 +1,5 @@
 package RailServlet;
 
-import Railroad.RailroadDao;
 import Railroad.StationDao;
 import Service.AdminBean;
 import Service.MessageBean;
@@ -13,7 +12,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Created by VBuevich on 12.09.2016.
+ * @author vbuevich
+ *
+ * Servlet class called from newStation.jsp by Employee in order to add new Station
  */
 public class AddStation extends HttpServlet {
 
@@ -25,17 +26,17 @@ public class AddStation extends HttpServlet {
         MessageBean message = MessageBean.get(session);
         String stationName = request.getParameter("stationName");
 
-        String addStation = StationDao.addStation(stationName);
+        Boolean addStation = StationDao.addStation(stationName);
 
-        if (addStation == null) {
+        if (addStation) {
             message.setErrorMessage(null);
             message.setSuccessMessage("Station " + stationName + " is succesfully added");
-            bean.setStationList(RailroadDao.getStationList());
+            bean.setStationList(StationDao.getStationList());
         } else {
             message.setSuccessMessage(null);
             message.setErrorMessage("Station is not added, please check and try again");
         }
-        bean.setStationList(RailroadDao.getStationList());
+        bean.setStationList(StationDao.getStationList());
 
         response.sendRedirect(request.getContextPath() + "/newStation.jsp");
     }

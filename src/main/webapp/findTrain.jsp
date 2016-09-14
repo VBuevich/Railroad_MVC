@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="bean" class="Service.ServiceBean" scope="session" />
 <jsp:useBean id="message" class="Service.MessageBean" scope="session" />
@@ -11,8 +12,11 @@
     <style>
         .wrap {
             width: 50%;
+            margin-left: 200px;
         }
     </style>
+    <link type="text/css" href="Timepicker/bootstrap-timepicker.min.css" />
+    <script type="text/javascript" src="Timepicker/bootstrap-timepicker.min.js"></script>
 </head>
 <body>
 
@@ -30,6 +34,7 @@
     </nav>
 </div>
 
+<div class="wrap">
 <form method="post" name="form1" action="/RailServlet/Ticketing" >
 
     <table width=410 cellspacing="0" cellpadding="5">
@@ -37,7 +42,10 @@
             <td>
                 <div class="form-group">
                     <label for="depTimeStart">Departure Time</label>
-                    <input type="text" name="departureTime" class="form-control" id="depTimeStart">
+                    <div class="input-group bootstrap-timepicker timepicker" id="depTimeStart">
+                        <input id="timepicker1" type="text" class="form-control input-small" name="departureTime">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                    </div>
 
                     <label for="depSelectStart">Departure Station</label>
                     <select size="1" name="departureStation" id="depSelectStart">
@@ -50,7 +58,10 @@
             <td>
                 <div class="form-group">
                     <label for="arrTimeStart">Arrival Time</label>
-                    <input type="text" name="arrivalTime" class="form-control" id="arrTimeStart">
+                    <div class="input-group bootstrap-timepicker timepicker" id="arrTimeStart">
+                        <input id="timepicker2" type="text" class="form-control input-small" name="arrivalTime">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                    </div>
 
                     <label for="arrSelectStart">Arrival Station</label>
                     <select size="1" name="arrivalStation" id="arrSelectStart">
@@ -65,6 +76,7 @@
 
     <button type="submit" class="btn btn-default">Find trains</button>
 </form>
+</div>
 
 <div class="wrap">
     <c:if test="${not empty message.errorMessage}">
@@ -83,8 +95,8 @@
 </div>
 
 <c:if test="${not empty bean.offerList}">
-    <strong> List of trains matching your criteria of search. Consider to buy!</strong>
     <div class="wrap">
+        <strong> List of trains matching your criteria of search. Consider to buy!</strong>
 
         <table class="table table-stripped">
             <thead>
@@ -118,6 +130,23 @@
         </table>
     </div>
 </c:if>
+
+<script type="text/javascript">
+    $('#timepicker1').timepicker({
+        minuteStep:1,
+        showSeconds:false,
+        defaultTime:'current',
+        showMeridian:false
+    });
+</script>
+<script type="text/javascript">
+    $('#timepicker2').timepicker({
+        minuteStep:1,
+        showSeconds:false,
+        defaultTime:'current',
+        showMeridian:false
+    });
+</script>
 
 </body>
 </html>

@@ -1,21 +1,25 @@
 package Railroad;
 
-import Service.Offer;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.jboss.logging.Logger;
 
 import java.util.List;
 
 /**
- * Created by VBuevich on 24.08.2016.
+ * @author vbuevich
+ *
+ * "main" class, basicly used for quick method`s testing
  */
 public class Main {
 
+    private static final Logger LOGGER = Logger.getLogger(Main.class);
+
     public static void main(String[] args) {
 
-        String sha1password = DigestUtils.sha1Hex("JS777JS");
-        System.out.println(sha1password);
+        // String sha1password = DigestUtils.sha1Hex("JS777JS");
+        // System.out.println(sha1password);
 
-        List<Passenger> passengerList = DaoService.getPassengerList(1001);
+        // List<Passenger> passengerList = PassengerService.getPassengerList(1001);
 
         // 0.1 ================================================================================
         // ЛОГИН
@@ -59,7 +63,5 @@ public class Main {
         // System.exit(0);
         System.out.println("111");
     }
-
-    // http://www.tutorialspoint.com/hibernate/hibernate_examples.htm
 
 }
