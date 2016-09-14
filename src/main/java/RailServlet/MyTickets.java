@@ -20,6 +20,13 @@ import java.util.List;
  */
 public class MyTickets extends HttpServlet {
 
+    /**
+     *
+     * @param request HTTP request
+     * @param response HTTP response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

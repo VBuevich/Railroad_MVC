@@ -1,11 +1,9 @@
 package Service;
 
-import Railroad.Employee;
-
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by vbuevich on 12.09.2016.
+ * @author VBuevich
  */
 public class MessageBean {
 

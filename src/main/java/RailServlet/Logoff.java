@@ -12,6 +12,13 @@ import javax.servlet.http.*;
  */
 public class Logoff extends HttpServlet {
 
+    /**
+     *
+     * @param request HTTP request
+     * @param response HTTP response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

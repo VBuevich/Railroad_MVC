@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
- * Created by vbuevich on 12.09.2016.
+ * @author VBuevich
  */
 public class AdminBean {
 

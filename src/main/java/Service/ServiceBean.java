@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
- * Created by VBuevich on 11.09.2016.
+ * @author VBuevich
  */
 public class ServiceBean {
     private Passenger user = null;

@@ -23,6 +23,11 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.10</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -46,17 +51,21 @@
             <version>3.3.0.Final</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax.transaction/jta -->
+
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
             <version>1.1</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
+
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
             <version>1.6.1</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.hibernate.common/hibernate-commons-annotations -->
 
         <dependency>
@@ -127,21 +136,31 @@
             <version>1.10</version>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-parent</artifactId>
+            <version>1.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.1.0-RC.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+
 
     </dependencies>
 
 </project>
 
-<!--
-    <property name="connection.username">JavaSchool</property>
-    <property name="connection.password">JS</property>
-
-    <property name="connection.username">VBuevich</property>
-    <property name="connection.password">gw777blade</property>
-
-    , insertable = false, updatable = false) // IU
--->

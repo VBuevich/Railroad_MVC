@@ -18,6 +18,13 @@ import java.io.IOException;
  */
 public class Dispatcher extends HttpServlet {
 
+    /**
+     *
+     * @param request HTTP request
+     * @param response HTTP response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

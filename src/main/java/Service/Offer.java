@@ -3,7 +3,7 @@ package Service;
 import java.sql.Time;
 
 /**
- * Created by VBuevich on 11.09.2016.
+ * @author VBuevich
  */
 public class Offer {
     private Integer trainNumber;

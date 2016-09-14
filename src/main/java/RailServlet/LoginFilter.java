@@ -30,6 +30,14 @@ public class LoginFilter implements Filter {
         // here by config.getInitParameter("name") and assign it as field.
     }
 
+    /**
+     *
+     * @param req HTTP Request
+     * @param res HTTP Responce
+     * @param chain filter chain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;

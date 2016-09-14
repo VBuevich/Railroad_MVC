@@ -18,6 +18,13 @@ import java.io.IOException;
  */
 public class AddStation extends HttpServlet {
 
+    /**
+     *
+     * @param request HTTP request
+     * @param response HTTP response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

@@ -19,8 +19,15 @@ public class LoginCheck extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(LoginCheck.class);
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    /**
+     *
+     * @param request HTTP request
+     * @param response HTTP response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException { // changed from protected due to testing
 
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");

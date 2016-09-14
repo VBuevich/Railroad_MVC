@@ -21,6 +21,13 @@ import java.util.List;
  */
 public class StationTrainsServlet extends HttpServlet {
 
+    /**
+     *
+     * @param req HTTP request
+     * @param resp HTTP response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
          throws ServletException, IOException {
@@ -44,6 +51,13 @@ public class StationTrainsServlet extends HttpServlet {
         resp.sendRedirect(req.getContextPath() + "/schedule.jsp");
     }
 
+    /**
+     *
+     * @param req HTTP request
+     * @param resp HTTP response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
