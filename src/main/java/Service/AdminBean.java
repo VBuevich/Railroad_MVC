@@ -1,21 +1,28 @@
 package Service;
 
-import Railroad.Employee;
-import Railroad.Passenger;
+import Persistence.Entity.Employee;
+import Persistence.Entity.Passenger;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
+ * Bean for Employee, containing usefull fields for his activity
+ *
  * @author VBuevich
  */
 public class AdminBean {
 
-    private Employee user;
+    private Employee user; //
     private List<String> stationList = null;
     private List<String> trainList = null;
     private List<Passenger> passengerList = null;
 
+    /**
+     *
+     * @param session HTTPSession
+     * @return Bean for Employee
+     */
     public static AdminBean get(HttpSession session) {
         AdminBean bean = (AdminBean) session.getAttribute("bean");
         if (bean == null) {

@@ -1,5 +1,7 @@
-package Railroad;
+package Persistence.Service;
 
+import Persistence.Dao.*;
+import Persistence.Entity.*;
 import Service.MessageBean;
 import Service.Offer;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -106,12 +108,11 @@ public class PassengerService {
                                                          // firstly we getting an encrypted value of string field of password
 
         try {
-            Query q = session.createQuery("FROM Railroad.Passenger WHERE email = :em AND password = :pa");
+            Query q = session.createQuery("FROM Passenger WHERE email = :em AND password = :pa");
             q.setParameter("em", email);
             q.setParameter("pa", sha1password);
 
             passenger = (Passenger)q.uniqueResult(); // uniqueResult could be received just in case if passenger found
-            System.err.println("Login Successful, passengerId: " + passenger.getPassengerId());
         }
         catch (Exception e) {
             // method will return null is Exception is cought

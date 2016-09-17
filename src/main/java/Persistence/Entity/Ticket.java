@@ -1,4 +1,4 @@
-package Railroad;
+package Persistence.Entity;
 
 import javax.persistence.*;
 

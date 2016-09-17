@@ -1,5 +1,7 @@
-package Railroad;
+package Persistence.Dao;
 
+import Persistence.Entity.Schedule;
+import Persistence.Entity.Train;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -27,7 +29,7 @@ public class TrainDao {
 
         ArrayList<String> trainList = new ArrayList<String>();
         try {
-            Query q = session.createQuery("FROM Railroad.Train");
+            Query q = session.createQuery("FROM Train");
             List<Train> tList = q.list(); // getting the list of Train entities
 
             for (Train t : tList) {
@@ -55,7 +57,7 @@ public class TrainDao {
         List<Schedule> trainList = null;
 
         try {
-            Query q = session.createQuery("FROM Railroad.Schedule WHERE stationName = :st ORDER BY time");
+            Query q = session.createQuery("FROM Schedule WHERE stationName = :st ORDER BY time");
             q.setParameter("st", stationName);
 
             trainList = q.list();
@@ -112,7 +114,7 @@ public class TrainDao {
         Integer seats = 0;
 
         try {
-            Query q2 = session.createQuery("SELECT seats FROM Railroad.Train WHERE trainNumber = :tn");
+            Query q2 = session.createQuery("SELECT seats FROM Train WHERE trainNumber = :tn");
             q2.setParameter("tn", trainNumber);
             Object uniqueResult = q2.uniqueResult();
             seats = ((Number) uniqueResult).intValue();

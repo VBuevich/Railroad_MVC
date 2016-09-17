@@ -1,7 +1,7 @@
 package RailServlet;
 
-import Railroad.ScheduleDao;
-import Railroad.StationDao;
+import Persistence.Dao.ScheduleDao;
+import Persistence.Dao.StationDao;
 import Service.AdminBean;
 import Service.MessageBean;
 

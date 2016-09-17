@@ -1,5 +1,6 @@
-package Railroad;
+package Persistence.Dao;
 
+import Persistence.Entity.Station;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -62,7 +63,7 @@ public class StationDao {
         Session session = DaoFactory.getSessionFactory().openSession();
         ArrayList<String> stationList = new ArrayList<String>();
         try {
-            Query q = session.createQuery("FROM Railroad.Station");
+            Query q = session.createQuery("FROM Station");
             List<Station> sList = q.list(); // getting list of Station objects
 
             for (Station s : sList) { // getting the name of station from each Station object

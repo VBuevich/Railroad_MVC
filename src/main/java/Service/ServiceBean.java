@@ -1,8 +1,8 @@
 package Service;
 
-import Railroad.Passenger;
-import Railroad.Schedule;
-import Railroad.Ticket;
+import Persistence.Entity.Passenger;
+import Persistence.Entity.Schedule;
+import Persistence.Entity.Ticket;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 

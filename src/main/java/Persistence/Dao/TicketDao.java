@@ -1,7 +1,7 @@
-package Railroad;
+package Persistence.Dao;
 
+import Persistence.Entity.Ticket;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
 
@@ -27,7 +27,7 @@ public class TicketDao {
         List<Ticket> tickets = null;
 
         try {
-            Query q = session.createQuery("FROM Railroad.Ticket s WHERE s.passengerId = :userId");
+            Query q = session.createQuery("FROM Ticket s WHERE s.passengerId = :userId");
 
             q.setParameter("userId", userId);
             tickets = q.list();
@@ -52,7 +52,7 @@ public class TicketDao {
         List<Ticket> tickets = null;
 
         try {
-            Query q = session.createQuery("FROM Railroad.Ticket s WHERE s.trainNumber = :tNumber");
+            Query q = session.createQuery("FROM Ticket s WHERE s.trainNumber = :tNumber");
 
             q.setParameter("tNumber", tNumber);
             tickets = q.list();
@@ -78,7 +78,7 @@ public class TicketDao {
         Integer count = 1;
 
         try {
-            Query q1 = session.createQuery("SELECT COUNT(*) FROM Railroad.Ticket WHERE trainNumber = :tn");
+            Query q1 = session.createQuery("SELECT COUNT(*) FROM Ticket WHERE trainNumber = :tn");
             q1.setParameter("tn", trainNumber);
             count = ((Number) q1.uniqueResult()).intValue();
         }
@@ -103,7 +103,7 @@ public class TicketDao {
         Session session = DaoFactory.getSessionFactory().openSession();
 
         try {
-            Query q3 = session.createQuery("SELECT COUNT(*) FROM Railroad.Ticket WHERE trainNumber = :tn AND passengerId = :pid");
+            Query q3 = session.createQuery("SELECT COUNT(*) FROM Ticket WHERE trainNumber = :tn AND passengerId = :pid");
             q3.setParameter("tn", trainNumber);
             q3.setParameter("pid", passengerId);
             Integer ticketsSoldForPassenger = ((Number) q3.uniqueResult()).intValue(); // unique result due to the fact that primary key

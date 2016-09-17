@@ -1,6 +1,7 @@
 package RailServlet;
 
-import Railroad.*;
+import Persistence.Dao.TicketDao;
+import Persistence.Entity.Ticket;
 import Service.MessageBean;
 import Service.ServiceBean;
 

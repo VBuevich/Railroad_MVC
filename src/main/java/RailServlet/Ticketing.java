@@ -1,6 +1,6 @@
 package RailServlet;
 
-import Railroad.PassengerService;
+import Persistence.Service.PassengerService;
 import Service.MessageBean;
 import Service.Offer;
 import Service.ServiceBean;

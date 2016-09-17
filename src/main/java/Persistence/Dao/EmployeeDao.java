@@ -1,4 +1,4 @@
-package Railroad;
+package Persistence.Dao;
 
 import org.jboss.logging.Logger;
 

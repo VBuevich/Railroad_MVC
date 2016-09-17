@@ -55,7 +55,7 @@
 <form method="post" name="form1" action="/RailServlet/addSchedule">
 <strong>Add new schedule</strong>
 <div class="form-group">
-    <label for="trainGroup">Departure Station</label>
+    <label for="trainGroup">Train Number</label>
     <select size="1" name="trainNumber" id="trainGroup">
         <c:forEach var = "train" items="${bean.trainList}">
             <option value="${train}">${train}</option>

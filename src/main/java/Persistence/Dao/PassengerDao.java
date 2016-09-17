@@ -1,5 +1,6 @@
-package Railroad;
+package Persistence.Dao;
 
+import Persistence.Entity.Passenger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
@@ -23,7 +24,7 @@ public class PassengerDao {
         Passenger p = null;
 
         try {
-            Query q = session.createQuery("FROM Railroad.Passenger p WHERE p.passengerId = :userId");
+            Query q = session.createQuery("FROM Passenger p WHERE p.passengerId = :userId");
 
             q.setParameter("userId", userId);
             p = (Passenger)q.uniqueResult(); // due to the fact that passengerId is primary key we can get just unique result

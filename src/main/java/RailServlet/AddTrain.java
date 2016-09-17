@@ -1,6 +1,6 @@
 package RailServlet;
 
-import Railroad.TrainDao;
+import Persistence.Dao.TrainDao;
 import Service.AdminBean;
 import Service.MessageBean;
 

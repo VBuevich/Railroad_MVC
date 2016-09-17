@@ -1,5 +1,7 @@
-package Railroad;
+package Persistence.Service;
 
+import Persistence.Dao.DaoFactory;
+import Persistence.Entity.Employee;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -29,15 +31,14 @@ public class EmployeeService {
                                                          // firstly we getting an encrypted value of string field of password
 
         try {
-            Query q = session.createQuery("FROM Railroad.Employee WHERE email = :em AND password = :pa");
+            Query q = session.createQuery("FROM Employee WHERE email = :em AND password = :pa");
             q.setParameter("em", email);
             q.setParameter("pa", sha1password);
 
             employee = (Employee)q.uniqueResult(); // uniqueResult could be received just in case if passenger found
-            System.err.println("Login Successful, employeeId: " + employee.getEmployeeId());
         }
         catch (Exception e) {
-            // method will return null is Exception is cought
+            // method will return null if Exception is caught
             // LOGGER of invoker method will log this case when receives null
         }
         finally {

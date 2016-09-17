@@ -1,14 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="MySQL - javaschool@localhost">
   <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
     <schema id="1" name="javaschool">
       <visible>1</visible>
     </schema>
-    <table id="2" parent="1" name="employee" />
-    <table id="3" parent="1" name="passenger" />
-    <table id="4" parent="1" name="schedule" />
-    <table id="5" parent="1" name="station" />
-    <table id="6" parent="1" name="ticket" />
-    <table id="7" parent="1" name="train" />
+    <table id="2" parent="1" name="employee"/>
+    <table id="3" parent="1" name="passenger"/>
+    <table id="4" parent="1" name="schedule"/>
+    <table id="5" parent="1" name="station"/>
+    <table id="6" parent="1" name="ticket"/>
+    <table id="7" parent="1" name="train"/>
     <column id="8" parent="2" name="employee_id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
@@ -63,7 +64,7 @@
       <columns>name
 surname
 dob</columns>
-      <desc-columns />
+      <desc-columns></desc-columns>
       <unique>1</unique>
     </index>
     <key id="21" parent="3" name="PRIMARY">
@@ -95,11 +96,11 @@ dob</columns>
     </column>
     <index id="27" parent="4" name="R_1">
       <columns>station_name</columns>
-      <desc-columns />
+      <desc-columns></desc-columns>
     </index>
     <index id="28" parent="4" name="R_3">
       <columns>train_number</columns>
-      <desc-columns />
+      <desc-columns></desc-columns>
     </index>
     <key id="29" parent="4" name="PRIMARY">
       <columns>schedule_id</columns>
@@ -152,19 +153,19 @@ dob</columns>
     </column>
     <index id="40" parent="6" name="R_10">
       <columns>departure_station</columns>
-      <desc-columns />
+      <desc-columns></desc-columns>
     </index>
     <index id="41" parent="6" name="R_11">
       <columns>arrival_station</columns>
-      <desc-columns />
+      <desc-columns></desc-columns>
     </index>
     <index id="42" parent="6" name="R_4">
       <columns>passenger_id</columns>
-      <desc-columns />
+      <desc-columns></desc-columns>
     </index>
     <index id="43" parent="6" name="R_5">
       <columns>train_number</columns>
-      <desc-columns />
+      <desc-columns></desc-columns>
     </index>
     <key id="44" parent="6" name="PRIMARY">
       <columns>ticket_id</columns>

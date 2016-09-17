@@ -1,7 +1,9 @@
-package Railroad;
+package Persistence.Dao;
 
+import Persistence.Entity.Schedule;
+import Persistence.Entity.Station;
+import Persistence.Entity.Train;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
 
@@ -29,7 +31,7 @@ public class ScheduleDao {
         List<Schedule> trainList = null;
 
         try {
-            Query q = session.createQuery("FROM Railroad.Schedule s WHERE s.stationName = :st AND TIME(s.time) > TIME(:departureTime)");
+            Query q = session.createQuery("FROM Schedule s WHERE s.stationName = :st AND TIME(s.time) > TIME(:departureTime)");
             q.setParameter("st", stationName);
             q.setParameter("departureTime", departureTime);
 
@@ -56,7 +58,7 @@ public class ScheduleDao {
         List<Schedule> trainList = null;
 
         try {
-            Query q = session.createQuery("FROM Railroad.Schedule s WHERE s.stationName = :st AND TIME(s.time) < TIME(:arrivalTime)");
+            Query q = session.createQuery("FROM Schedule s WHERE s.stationName = :st AND TIME(s.time) < TIME(:arrivalTime)");
 
             q.setParameter("st", stationName);
             q.setParameter("arrivalTime", arrivalTime);
@@ -115,7 +117,7 @@ public class ScheduleDao {
 
         Session session = DaoFactory.getSessionFactory().openSession();
 
-        Query q4 = session.createQuery("SELECT time FROM Railroad.Schedule WHERE trainNumber = :tn AND stationName = :sn");
+        Query q4 = session.createQuery("SELECT time FROM Schedule WHERE trainNumber = :tn AND stationName = :sn");
         q4.setParameter("tn", trainNumber);
         q4.setParameter("sn", departureS);
         Time timeOfDeparture = ((Time)q4.uniqueResult()); // uniqueness is granted by database table Unique restriction

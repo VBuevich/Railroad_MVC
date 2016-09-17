@@ -10,12 +10,12 @@
     <property name="connection.username">VBuevich</property>
     <property name="connection.password">gw777blade</property>
 
-    <mapping class="Railroad.Passenger"/>
-    <mapping class="Railroad.Schedule"/>
-    <mapping class="Railroad.Station"/>
-    <mapping class="Railroad.Train"/>
-    <mapping class="Railroad.Employee"/>
-    <mapping class="Railroad.Ticket"/>
+    <mapping class="Persistence.Entity.Passenger"/>
+    <mapping class="Persistence.Entity.Schedule"/>
+    <mapping class="Persistence.Entity.Station"/>
+    <mapping class="Persistence.Entity.Train"/>
+    <mapping class="Persistence.Entity.Employee"/>
+    <mapping class="Persistence.Entity.Ticket"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

@@ -1,12 +1,11 @@
 package RailServlet;
 
-import Railroad.Schedule;
-import Railroad.TrainDao;
+import Persistence.Entity.Schedule;
+import Persistence.Dao.TrainDao;
 import Service.MessageBean;
 import Service.ServiceBean;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
