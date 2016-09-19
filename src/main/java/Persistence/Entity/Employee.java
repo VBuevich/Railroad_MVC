@@ -14,6 +14,7 @@ public class Employee {
     private String surname;
     private String email;
     private String password;
+    private String passRecovery;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
@@ -57,7 +58,7 @@ public class Employee {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 20)
+    @Column(name = "password", nullable = false, length = 100)
     public String getPassword() {
         return password;
     }
@@ -65,6 +66,12 @@ public class Employee {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Basic
+    @Column(name = "pass_recovery", nullable = false, length = 100)
+    public String getPassRecovery() { return passRecovery; }
+
+    public void setPassRecovery(String passRecovery) { this.passRecovery = passRecovery; }
 
     /**
      *
@@ -83,6 +90,7 @@ public class Employee {
         if (surname != null ? !surname.equals(employee.surname) : employee.surname != null) return false;
         if (email != null ? !email.equals(employee.email) : employee.email != null) return false;
         if (password != null ? !password.equals(employee.password) : employee.password != null) return false;
+        if (passRecovery != null ? !passRecovery.equals(employee.passRecovery) : employee.passRecovery != null) return false;
 
         return true;
     }
@@ -97,6 +105,7 @@ public class Employee {
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (passRecovery != null ? passRecovery.hashCode() : 0);
         return result;
     }
 }

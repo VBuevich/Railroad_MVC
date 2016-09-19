@@ -1,3 +1,4 @@
+DROP TABLE Seatmap;
 DROP TABLE Schedule;
 DROP TABLE Ticket;
 DROP TABLE Station;
@@ -12,6 +13,7 @@ CREATE TABLE Employee
 	surname              VARCHAR(20) NOT NULL,
 	email                VARCHAR(40) NOT NULL,
 	password             VARCHAR(100) NOT NULL,
+  pass_recovery        VARCHAR(100) NOT NULL,
   PRIMARY KEY (employee_id)
 );
 
@@ -28,6 +30,7 @@ CREATE TABLE Passenger
 	dob                  DATE NOT NULL,
 	email                VARCHAR(40) NOT NULL,
 	password             VARCHAR(100) NOT NULL,
+  pass_recovery        VARCHAR(100) NOT NULL,
   PRIMARY KEY (passenger_id)
 );
 
@@ -71,6 +74,7 @@ CREATE TABLE Ticket
 	train_number         INTEGER NOT NULL,
 	departure_station    VARCHAR(20) NOT NULL,
 	arrival_station      VARCHAR(20) NOT NULL,
+  seat                 VARCHAR(4) NOT NULL,
 	is_one_way           BOOLEAN NOT NULL,  
   PRIMARY KEY (ticket_id)
 );
@@ -99,3 +103,18 @@ ADD FOREIGN KEY R_10 (departure_station) REFERENCES Station (station_name);
 
 ALTER TABLE Ticket
 ADD FOREIGN KEY R_11 (arrival_station) REFERENCES Station (station_name);
+
+CREATE TABLE Seatmap
+(
+  seatmap_id           INTEGER NOT NULL AUTO_INCREMENT,
+  train_number         INTEGER NOT NULL,
+  seat                 VARCHAR(4) NOT NULL,
+  passenger_owner      INTEGER, 
+  PRIMARY KEY (seatmap_id)
+);
+
+ALTER TABLE Seatmap
+ADD FOREIGN KEY R_12 (train_number) REFERENCES Train (train_number);
+
+ALTER TABLE Seatmap
+ADD FOREIGN KEY R_13 (passenger_owner) REFERENCES Passenger (passenger_id);

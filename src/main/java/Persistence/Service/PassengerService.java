@@ -203,4 +203,28 @@ public class PassengerService {
             session.close(); // we always closing Hibernate session
         }
     }
+
+    public static StringBuilder getOccupiedSeats(String trainNumber) {
+
+        StringBuilder sb = new StringBuilder();
+        int tNumber = 0;
+        try {
+            tNumber = Integer.parseInt(trainNumber);
+        }
+        catch (NumberFormatException e) {
+            LOGGER.error(e.getMessage());
+            return sb;
+        }
+
+        List<Seatmap> sm = SeatmapDao.getOccupiedSeats(tNumber);
+
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        sb.append("<seatmap>");
+
+        for (Seatmap s : sm) {
+            sb.append("<seat_number>").append(s.getSeat()).append("</seat_number>");
+        }
+        sb.append("</seatmap>");
+        return sb;
+    }
 }

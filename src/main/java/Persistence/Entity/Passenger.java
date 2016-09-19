@@ -17,7 +17,9 @@ public class Passenger {
     private Date dob;
     private String email;
     private String password;
+    private String passRecovery;
     private Collection<Ticket> ticketsByPassengerId;
+    private Collection<Seatmap> seatmapsByPassengerId;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
@@ -71,7 +73,7 @@ public class Passenger {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 20)
+    @Column(name = "password", nullable = false, length = 100)
     public String getPassword() {
         return password;
     }
@@ -79,6 +81,12 @@ public class Passenger {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Basic
+    @Column(name = "pass_recovery", nullable = false, length = 100)
+    public String getPassRecovery() { return passRecovery; }
+
+    public void setPassRecovery(String passRecovery) { this.passRecovery = passRecovery; }
 
     /**
      *
@@ -99,6 +107,7 @@ public class Passenger {
         if (dob != null ? !dob.equals(passenger.dob) : passenger.dob != null) return false;
         if (email != null ? !email.equals(passenger.email) : passenger.email != null) return false;
         if (password != null ? !password.equals(passenger.password) : passenger.password != null) return false;
+        if (passRecovery != null ? !passRecovery.equals(passenger.passRecovery) : passenger.passRecovery != null) return false;
 
         return true;
     }
@@ -114,6 +123,7 @@ public class Passenger {
         result = 31 * result + (dob != null ? dob.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (passRecovery != null ? passRecovery.hashCode() : 0);
         return result;
     }
 
@@ -124,5 +134,14 @@ public class Passenger {
 
     public void setTicketsByPassengerId(Collection<Ticket> ticketsByPassengerId) {
         this.ticketsByPassengerId = ticketsByPassengerId;
+    }
+
+    @OneToMany(mappedBy = "passengerByPassengerOwner")
+    public Collection<Seatmap> getSeatmapsByPassengerId() {
+        return seatmapsByPassengerId;
+    }
+
+    public void setSeatmapsByPassengerId(Collection<Seatmap> seatmapsByPassengerId) {
+        this.seatmapsByPassengerId = seatmapsByPassengerId;
     }
 }

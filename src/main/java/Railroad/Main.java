@@ -1,9 +1,8 @@
 package Railroad;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import Persistence.Service.PassengerService;
+import Service.Mailer;
 import org.jboss.logging.Logger;
-
-import java.util.List;
 
 /**
  * @author vbuevich
@@ -13,8 +12,14 @@ import java.util.List;
 public class Main {
 
     private static final Logger LOGGER = Logger.getLogger(Main.class);
+    private static Mailer mailer = new Mailer();
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
+
+        // mailer.send("This is Subject", "SSL: This is text!", "javaschool.railroad@gmail.com", "javaschool.railroad@gmail.com");
+
+        StringBuilder sb = PassengerService.getOccupiedSeats("1001");
+        System.out.println(sb);
 
         // String sha1password = DigestUtils.sha1Hex("JS777JS");
         // System.out.println(sha1password);

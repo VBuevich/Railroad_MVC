@@ -19,6 +19,7 @@ public class Ticket {
     private Train trainByTrainNumber;
     private Station stationByDepartureStation;
     private Station stationByArrivalStation;
+    private String seat;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
@@ -157,5 +158,15 @@ public class Ticket {
 
     public void setStationByArrivalStation(Station stationByArrivalStation) {
         this.stationByArrivalStation = stationByArrivalStation;
+    }
+
+    @Basic
+    @Column(name = "seat", nullable = false, length = 4)
+    public String getSeat() {
+        return seat;
+    }
+
+    public void setSeat(String seat) {
+        this.seat = seat;
     }
 }

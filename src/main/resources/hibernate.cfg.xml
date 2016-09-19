@@ -16,7 +16,8 @@
     <mapping class="Persistence.Entity.Train"/>
     <mapping class="Persistence.Entity.Employee"/>
     <mapping class="Persistence.Entity.Ticket"/>
-    <!-- DB schema will be updated if needed -->
+    <mapping class="Persistence.Entity.Seatmap"/>
+      <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>
 </hibernate-configuration>

@@ -28,6 +28,7 @@ public class DaoFactory {
         configuration.addAnnotatedClass(Station.class);
         configuration.addAnnotatedClass(Ticket.class);
         configuration.addAnnotatedClass(Train.class);
+        configuration.addAnnotatedClass(Seatmap.class);
 
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());

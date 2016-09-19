@@ -17,6 +17,12 @@
     </style>
     <link type="text/css" href="Timepicker/bootstrap-timepicker.min.css" />
     <script type="text/javascript" src="Timepicker/bootstrap-timepicker.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="SeatChart/jquery.seat-charts.css">
+    <!--link rel="stylesheet" type="text/css" href="SeatChart/SeatChart.style.css"-->
+    <link rel="stylesheet" type="text/css" href="SeatChart/style.css">
+    <script src="SeatChart/jquery.seat-charts.js"></script>
+
 </head>
 <body>
 
@@ -128,8 +134,124 @@
 
             </tbody>
         </table>
+
+        <input type="text" name="selectedSeatT" id="selectedSeat">
+        <input type="hidden" name="selectedSeat" value="">
+        <button type="submit" class="btn btn-default" name="seatBuy">Please choose your seat</button>
+
+
     </div>
 </c:if>
+
+<div class="wrapper">
+    <div class="container">
+        <div id="seat-map">
+            <div class="front-indicator">Front</div>
+        </div>
+    </div>
+</div>
+
+<button type="button" onclick="loadDoc()">Get my Seats</button>
+
+<script>
+    function loadDoc() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                map(this);
+            }
+        };
+        xhttp.open("POST", "/RailServlet/occupiedSeats", true);
+        xhttp.send("trainNumber=1001");
+    }
+    function map(xml) {
+        var i;
+        var xmlDoc = xml.responseXML;
+
+        var $cart = $('#selected-seats'),
+                $counter = $('#counter'),
+                $total = $('#total'),
+                sc = $('#seat-map').seatCharts({
+                    map: [
+                        'f_ff',
+                        'f_ff',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee',
+                        'e_ee'
+                    ],
+                    seats: {
+                        f: {
+                            price   : 100,
+                            classes : 'first-class', //your custom CSS class
+                            category: 'First Class'
+                        },
+                        e: {
+                            price   : 40,
+                            classes : 'economy-class', //your custom CSS class
+                            category: 'Economy Class'
+                        }
+
+                    },
+                    naming : {
+                        top : false,
+                        getLabel : function (character, row, column) {
+                            var label = row + '_' + column;
+                            return label;
+                        },
+                    },
+                    legend : {
+                        node : $('#legend'),
+                        items : [
+                            [ 'f', 'available',   'First Class' ],
+                            [ 'e', 'available',   'Economy Class'],
+                            [ 'f', 'unavailable', 'Already Booked']
+                        ]
+                    },
+                    click: function () {
+                        if (this.status() == 'available') {
+                            var select = document.getElementsByName('selectedSeatT')[0];
+                            select.value = this.settings.status;
+                            var select1 = document.getElementsByName('selectedSeat')[0];
+                            select1.value = this.settings.label;
+                            var b = document.getElementsByName('seatBuy')[0];
+                            b.innerHTML = 'Buy ticket, seat number ' + this.settings.label;
+
+                            sc.find('selected').each(function () {
+                                this.click();
+                            });
+                            return 'selected';
+                        } else if (this.status() == 'selected') {
+                            return 'available';
+                        } else if (this.status() == 'unavailable') {
+                            //seat has been already booked
+                            return 'unavailable';
+                        } else {
+                            return this.style();
+                        }
+                    }
+                });
+
+        //let's pretend some seats have already been booked
+
+        var x = xmlDoc.getElementsByTagName("seat_number");
+        for (i = 0; i <x.length; i++) {
+            sc.get([x[i].childNodes[0].nodeValue]).status('unavailable');
+        }
+        sc.get(['1_2', '4_1', '7_1', '7_2']).status('unavailable');
+        sc.get(['1_1']).status('unavailable')
+
+    }
+</script>
 
 <script type="text/javascript">
     $('#timepicker1').timepicker({

@@ -103,6 +103,15 @@
         <url-pattern>/RailServlet/addSchedule</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>occupiedSeats</servlet-name>
+        <servlet-class>RailServlet.OccupiedSeats</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>occupiedSeats</servlet-name>
+        <url-pattern>/RailServlet/occupiedSeats</url-pattern>
+    </servlet-mapping>
+
     <filter>
         <filter-name>loginFilter</filter-name>
         <filter-class>RailServlet.LoginFilter</filter-class>

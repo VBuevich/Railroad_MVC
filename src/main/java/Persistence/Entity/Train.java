@@ -14,6 +14,7 @@ public class Train {
     private Integer seats;
     private Collection<Schedule> schedulesByTrainNumber;
     private Collection<Ticket> ticketsByTrainNumber;
+    private Collection<Seatmap> seatmapsByTrainNumber;
 
     @Id
     @Column(name = "train_number", nullable = false)
@@ -79,5 +80,14 @@ public class Train {
 
     public void setTicketsByTrainNumber(Collection<Ticket> ticketsByTrainNumber) {
         this.ticketsByTrainNumber = ticketsByTrainNumber;
+    }
+
+    @OneToMany(mappedBy = "trainByTrainNumber")
+    public Collection<Seatmap> getSeatmapsByTrainNumber() {
+        return seatmapsByTrainNumber;
+    }
+
+    public void setSeatmapsByTrainNumber(Collection<Seatmap> seatmapsByTrainNumber) {
+        this.seatmapsByTrainNumber = seatmapsByTrainNumber;
     }
 }
