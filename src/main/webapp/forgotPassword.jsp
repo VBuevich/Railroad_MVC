@@ -6,7 +6,7 @@
 
 <html>
 <head>
-    <title>Login</title>
+    <title>Password retreival</title>
     <link href="Bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .well {
@@ -20,9 +20,9 @@
 <div class="container">
     <div class="row">
         <div class="well span4 offset4">
-            <legend>Authorisation</legend>
+            <legend>Password retrieval</legend>
 
-            <form method="post" action="loginCheck" accept-charset="UTF-8">
+            <form method="post" action="passChange" accept-charset="UTF-8">
 
                 <c:if test="${not empty message.errorMessage}">
                     <div class="alert alert-error">
@@ -30,22 +30,14 @@
                     </div>
                     <% message.setErrorMessage(null); %>
                 </c:if>
-                <c:if test="${not empty message.successMessage}">
-                    <div class="alert alert-success">
-                        <a class="close" data-dismiss="alert" href="#">x</a> ${message.successMessage}
-                    </div>
-                    <% message.setSuccessMessage(null); %>
-                </c:if>
-                    <input type="text" name="email" class="span4" placeholder="E-Mail">
-                    <input type="password" name="pass" class="span4" placeholder="Password">
+                <input type="text" name="email" class="span4" placeholder="E-Mail">
+                <input type="password" name="secret" class="span4" placeholder="Secret phrase">
                 <label class="radio">
                     <input type = "radio" name = "status" value = "Passenger">  I am a Passenger <br>
                     <input type = "radio" name = "status" value = "Employee">  I am an Employee <br>
                 </label>
                 <br>
-                    <a href="forgotPassword.jsp" >Forgot your password?</a><br>
-                    <a href="newCustomer.jsp" >New customer?</a><br><br>
-                <button type="submit" name="submit" class="btn btn-success btn-block">Log in</button>
+                <button type="submit" name="submit" class="btn btn-success btn-block">Get new password</button>
             </form>
         </div>
     </div>

@@ -35,6 +35,7 @@ public class BuyingTicket extends HttpServlet {
         String departureStation = request.getParameter("departureStation");
         String arrivalStation = request.getParameter("arrivalStation");
         String trainNumber = request.getParameter("trainNumber");
+        String selectedSeat = request.getParameter("selectedSeat");
 
         int userId = bean.getUser().getPassengerId();
         int tNumber = 0;
@@ -49,7 +50,7 @@ public class BuyingTicket extends HttpServlet {
 
         message.setErrorMessage(null);
         message.setSuccessMessage(null);
-        PassengerService.buyTicket(userId, departureStation, arrivalStation, tNumber, message);
+        PassengerService.buyTicket(userId, departureStation, arrivalStation, tNumber, selectedSeat, message);
 
         response.sendRedirect(request.getContextPath() + "/findTrain.jsp");
     }

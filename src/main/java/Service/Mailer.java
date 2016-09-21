@@ -33,18 +33,21 @@ public class Mailer {
     }
 
     /**
+     * Method that sends an email
      *
      * @param subject Subject of message
      * @param text message body
      * @param fromEmail "from" field
      * @param toEmail "to" field
+     * @return true if success otherwise false
      */
-    public void send(String subject, String text, String fromEmail, String toEmail) {
+    public Boolean send(String subject, String text, String fromEmail, String toEmail) {
         Session session = Session.getDefaultInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
         });
+        Boolean isSuccess = false;
 
         try {
             Message message = new MimeMessage(session);
@@ -54,9 +57,12 @@ public class Mailer {
             message.setText(text); // text of e-mail
 
             Transport.send(message); // sending message
+
+            isSuccess = true; // if we have successfully sent the message - then we return true
         } catch (MessagingException e) {
             LOGGER.error("Error sending message: from: " + fromEmail + " to: " + toEmail + " subject: " + subject + " exception: "  + e.getMessage()); // logging in case of error
         }
+        return isSuccess;
     }
 }
 

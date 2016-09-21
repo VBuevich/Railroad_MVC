@@ -1,6 +1,7 @@
 package RailServlet;
 
 import Persistence.Dao.TrainDao;
+import Persistence.Service.EmployeeService;
 import Service.AdminBean;
 import Service.MessageBean;
 
@@ -43,7 +44,7 @@ public class AddTrain extends HttpServlet {
             return;
         }
 
-        Boolean addTrain = TrainDao.addTrain(tNumber);
+        Boolean addTrain = EmployeeService.addTrain(tNumber);
         if (addTrain) {
             message.setErrorMessage(null);
             message.setSuccessMessage("Train # " + trainNumber + " is succesfully added");

@@ -46,6 +46,7 @@
                 <th>Train number</th>
                 <th>Departure Station</th>
                 <th>Arrival Station</th>
+                <th>Seat number</th>
             </tr>
             </thead>
             <tbody>
@@ -55,6 +56,7 @@
                     <td><a href="#" >${t.trainNumber}</a></td>
                     <td><a href="#" >${t.departureStation}</a></td>
                     <td><a href="#" >${t.arrivalStation}</a></td>
+                    <td><a href="#" >${t.seat}</a></td>
                 </tr>
             </c:forEach>
             </tbody>

@@ -11,7 +11,7 @@
     <script src="Bootstrap/js/bootstrap.min.js"></script>
     <style>
         .wrap {
-            width: 50%;
+
             margin-left: 200px;
         }
     </style>
@@ -41,9 +41,11 @@
 </div>
 
 <div class="wrap">
-<form method="post" name="form1" action="/RailServlet/Ticketing" >
+<div class="row">
+    <div class="span9">
+        <form method="post" name="form1" action="/RailServlet/Ticketing" >
 
-    <table width=410 cellspacing="0" cellpadding="5">
+        <table width=410 cellspacing="0" cellpadding="5">
         <tr>
             <td>
                 <div class="form-group">
@@ -78,93 +80,93 @@
                 </div>
             </td>
         </tr>
-    </table>
-
-    <button type="submit" class="btn btn-default">Find trains</button>
-</form>
-</div>
-
-<div class="wrap">
-    <c:if test="${not empty message.errorMessage}">
-        <div class="alert alert-error">
-            <a class="close" data-dismiss="alert" href="#">x</a> ${message.errorMessage}
-        </div>
-    </c:if>
-</div>
-
-<div class="wrap">
-    <c:if test="${not empty message.successMessage}">
-        <div class="alert alert-success">
-            <a class="close" data-dismiss="alert" href="#">x</a> ${message.successMessage}
-        </div>
-    </c:if>
-</div>
-
-<c:if test="${not empty bean.offerList}">
-    <div class="wrap">
-        <strong> List of trains matching your criteria of search. Consider to buy!</strong>
-
-        <table class="table table-stripped">
-            <thead>
-            <tr>
-                <th>Train number</th>
-                <th>Departure station</th>
-                <th>Departure time</th>
-                <th>Arrival station</th>
-                <th>Arrival time</th>
-                <th>Buy this ticket</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="o" items="${bean.offerList}">
-                <tr>
-                    <form method="post" action="/RailServlet/BuyingTicket">
-                        <td><a href="#" >${o.trainNumber}</a></td>
-                        <td><a href="#" >${o.departureStation}</a></td>
-                        <td><a href="#" >${o.departureTime}</a></td>
-                        <td><a href="#" >${o.arrivalStation}</a></td>
-                        <td><a href="#" >${o.arrivalTime}</a></td>
-                        <td><button type="submit" class="btn btn-default">Buy</button></td>
-                            <input type="hidden" name="trainNumber" value="${o.trainNumber}">
-                            <input type="hidden" name="departureStation" value="${o.departureStation}">
-                            <input type="hidden" name="arrivalStation" value="${o.arrivalStation}">
-                    </form>
-                </tr>
-            </c:forEach>
-
-            </tbody>
         </table>
 
-        <input type="text" name="selectedSeatT" id="selectedSeat">
-        <input type="hidden" name="selectedSeat" value="">
-        <button type="submit" class="btn btn-default" name="seatBuy">Please choose your seat</button>
+        <button type="submit" class="btn btn-default">Find trains</button>
+        </form>
 
+        <c:if test="${not empty message.errorMessage}">
+            <div class="alert alert-error">
+                <a class="close" data-dismiss="alert" href="#">x</a> ${message.errorMessage}
+            </div>
+        </c:if>
 
-    </div>
-</c:if>
+        <c:if test="${not empty message.successMessage}">
+            <div class="alert alert-success">
+                <a class="close" data-dismiss="alert" href="#">x</a> ${message.successMessage}
+            </div>
+        </c:if>
 
-<div class="wrapper">
-    <div class="container">
-        <div id="seat-map">
-            <div class="front-indicator">Front</div>
+        <c:if test="${not empty bean.offerList}">
+
+            <strong> List of trains matching your criteria of search. Consider to buy!</strong>
+
+            <table class="table table-stripped">
+                <thead>
+                <tr>
+                    <th>Train number</th>
+                    <th>Departure station</th>
+                    <th>Departure time</th>
+                    <th>Arrival station</th>
+                    <th>Arrival time</th>
+                    <th>Buy this ticket</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="o" items="${bean.offerList}">
+                    <tr>
+                            <td><a href="#" >${o.trainNumber}</a></td>
+                            <td><a href="#" >${o.departureStation}</a></td>
+                            <td><a href="#" >${o.departureTime}</a></td>
+                            <td><a href="#" >${o.arrivalStation}</a></td>
+                            <td><a href="#" >${o.arrivalTime}</a></td>
+                            <td><button type="button" onclick="loadDoc('${o.trainNumber}', '${o.departureStation}', '${o.arrivalStation}')" class="btn btn-default">Select seat</button></td>
+                    </tr>
+                </c:forEach>
+
+                </tbody>
+            </table>
+
+            <form method="post" action="/RailServlet/BuyingTicket">
+                <input type="hidden" id="trainNumberForm" name="trainNumber" value="">
+                <input type="hidden" id="departureStationForm" name="departureStation" value="">
+                <input type="hidden" id="arrivalStationForm" name="arrivalStation" value="">
+                <input type="hidden" id="selectedSeatForm" name=selectedSeat value="">
+                <button type="submit" class="btn btn-success btn-lg" name="seatBuy">Please choose your seat</button>
+            </form>
+
+        </c:if>
+     </div>
+    <div class="span2">
+        <div class="wrapper">
+            <div class="container">
+                <div id="seat-map">
+                    <div class="front-indicator" id="seatmapFront"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-<button type="button" onclick="loadDoc()">Get my Seats</button>
+</div>
 
 <script>
-    function loadDoc() {
+    function loadDoc(trainNumber, departureStation, arrivalStation) {
+
+        document.getElementById('trainNumberForm').value = trainNumber;
+        document.getElementById('departureStationForm').value = departureStation;
+        document.getElementById('arrivalStationForm').value = arrivalStation;
+        document.getElementById('seatmapFront').innerHTML = 'Seatmap for train #' + trainNumber;
+
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                map(this);
+                map(this, trainNumber);
             }
         };
-        xhttp.open("POST", "/RailServlet/occupiedSeats", true);
-        xhttp.send("trainNumber=1001");
+        xhttp.open("GET", "/RailServlet/occupiedSeats?trainNumber=" + trainNumber, true);
+        xhttp.send();
     }
-    function map(xml) {
+    function map(xml, trainNumber) {
         var i;
         var xmlDoc = xml.responseXML;
 
@@ -219,12 +221,9 @@
                     },
                     click: function () {
                         if (this.status() == 'available') {
-                            var select = document.getElementsByName('selectedSeatT')[0];
-                            select.value = this.settings.status;
-                            var select1 = document.getElementsByName('selectedSeat')[0];
-                            select1.value = this.settings.label;
+                            document.getElementById('selectedSeatForm').value = this.settings.label;
                             var b = document.getElementsByName('seatBuy')[0];
-                            b.innerHTML = 'Buy ticket, seat number ' + this.settings.label;
+                            b.innerHTML = 'Buy ticket: train number ' + trainNumber + ', seat number ' + this.settings.label;
 
                             sc.find('selected').each(function () {
                                 this.click();
@@ -241,15 +240,21 @@
                     }
                 });
 
-        //let's pretend some seats have already been booked
+        //Refreshing seatmap, marking already booked seats
+
+        var seats = ["1_1","1_3","1_4","2_1","2_3","2_4","3_1","3_3","3_4","4_1","4_3","4_4",
+                     "5_1","5_3","5_4","6_1","6_3","6_4","7_1","7_3","7_4","8_1","8_3","8_4",
+                     "9_1","9_3","9_4","10_1","10_3","10_4","11_1","11_3","11_4","12_1","12_3",
+                     "12_4","13_1","13_3","13_4","14_1","14_3","14_4","15_1","15_3","15_4"];
+
+        for (i = 0; i <seats.length; i++) {
+            sc.get(seats[i]).status('available');
+        }
 
         var x = xmlDoc.getElementsByTagName("seat_number");
         for (i = 0; i <x.length; i++) {
             sc.get([x[i].childNodes[0].nodeValue]).status('unavailable');
         }
-        sc.get(['1_2', '4_1', '7_1', '7_2']).status('unavailable');
-        sc.get(['1_1']).status('unavailable')
-
     }
 </script>
 

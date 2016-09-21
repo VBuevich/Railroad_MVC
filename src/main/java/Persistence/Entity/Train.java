@@ -11,7 +11,6 @@ import java.util.Collection;
 @Entity
 public class Train {
     private Integer trainNumber;
-    private Integer seats;
     private Collection<Schedule> schedulesByTrainNumber;
     private Collection<Ticket> ticketsByTrainNumber;
     private Collection<Seatmap> seatmapsByTrainNumber;
@@ -24,16 +23,6 @@ public class Train {
 
     public void setTrainNumber(Integer trainNumber) {
         this.trainNumber = trainNumber;
-    }
-
-    @Basic
-    @Column(name = "seats", nullable = false)
-    public Integer getSeats() {
-        return seats;
-    }
-
-    public void setSeats(Integer seats) {
-        this.seats = seats;
     }
 
     /**
@@ -49,7 +38,6 @@ public class Train {
         Train train = (Train) o;
 
         if (trainNumber != null ? !trainNumber.equals(train.trainNumber) : train.trainNumber != null) return false;
-        if (seats != null ? !seats.equals(train.seats) : train.seats != null) return false;
 
         return true;
     }
@@ -60,7 +48,6 @@ public class Train {
     @Override
     public int hashCode() {
         int result = trainNumber != null ? trainNumber.hashCode() : 0;
-        result = 31 * result + (seats != null ? seats.hashCode() : 0);
         return result;
     }
 

@@ -112,6 +112,24 @@
         <url-pattern>/RailServlet/occupiedSeats</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>passChange</servlet-name>
+        <servlet-class>RailServlet.PassChange</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>passChange</servlet-name>
+        <url-pattern>/passChange</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>newUser</servlet-name>
+        <servlet-class>RailServlet.NewUser</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>newUser</servlet-name>
+        <url-pattern>/newUser</url-pattern>
+    </servlet-mapping>
+
     <filter>
         <filter-name>loginFilter</filter-name>
         <filter-class>RailServlet.LoginFilter</filter-class>

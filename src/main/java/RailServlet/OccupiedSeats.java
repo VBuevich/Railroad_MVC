@@ -28,12 +28,12 @@ public class OccupiedSeats extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String trainNumber = request.getParameter("trainNumber");
 
-        StringBuilder sb = PassengerService.getOccupiedSeats("1001");
+        StringBuilder sb = PassengerService.getOccupiedSeats(trainNumber);
 
         response.setContentType("text/xml;charset=UTF-8");
         PrintWriter writer = response.getWriter();

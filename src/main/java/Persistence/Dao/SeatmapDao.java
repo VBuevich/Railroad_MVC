@@ -31,9 +31,16 @@ public class SeatmapDao {
             "14_1","14_3","14_4",
             "15_1","15_3","15_4"};
 
-    public static void createSeatmap(int trainNumber) {
+    /**
+     * Method creates new set of seatmap records, used when adding new train
+     *
+     * @param trainNumber Train number
+     * @param session Hibernate session - opened in EmployeeService due to the fat that the method is transactional
+     * @return true is success, otherwise false
+     */
+    public static Boolean createSeatmap(int trainNumber, Session session) {
 
-        Session session = DaoFactory.getSessionFactory().openSession();
+        Boolean isSuccess = false;
 
         try {
 
@@ -45,16 +52,22 @@ public class SeatmapDao {
 
                 session.save(s); // persisting an instance of ticket. Now it will be saved in the database.
             }
+            isSuccess = true;
+            LOGGER.info("Seatmap added");
 
-            LOGGER.info("Schedule added");
         } catch (Exception e) {
-            LOGGER.error("Schedule NOT added, " + e.getMessage());
+            LOGGER.error("Seatmap NOT added, " + e.getMessage());
 
-        } finally {
-            session.close(); // we always closing Hibernate session
         }
+        return isSuccess;
     }
 
+    /**
+     * Method to get occupied seats in given train
+     *
+     * @param trainNumber Train number
+     * @return List<Seatmap> of occupied seats either null if no reults found
+     */
     public static List<Seatmap> getOccupiedSeats(int trainNumber) {
 
         List<Seatmap> sm = null;
@@ -73,6 +86,38 @@ public class SeatmapDao {
             session.close();
         }
         return sm;
+    }
+
+    /**
+     * Method checks if selected seat is available in selected train
+     *
+     * @param trainNumber Train
+     * @param selectedSeat Selected seat
+     * @return true if seat is still vacant either false if occupied
+     */
+    public static Boolean isSeatAvailable(int trainNumber, String selectedSeat) {
+        Session session = DaoFactory.getSessionFactory().openSession();
+
+        try {
+            Query q = session.createQuery("FROM Seatmap s WHERE s.trainNumber = :tn AND s.seat = :seat");
+            q.setParameter("tn", trainNumber);
+            q.setParameter("seat", selectedSeat);
+
+            Seatmap s = (Seatmap)q.uniqueResult(); // uniqueResult returns an object if query is successfull either null if not
+            if (s.getPassengerOwner() == null) {
+                return true; // seat is vacant
+            }
+            else {
+                return false; // seat is occupied
+            }
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false; // something goes wrong, so we won`t sell ticket
+        }
+        finally {
+            session.close();
+        }
     }
 }
 

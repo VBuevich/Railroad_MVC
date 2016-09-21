@@ -2,13 +2,18 @@ package Persistence.Service;
 
 import Persistence.Dao.*;
 import Persistence.Entity.*;
+import Service.Mailer;
 import Service.MessageBean;
 import Service.Offer;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,8 +29,10 @@ import java.util.List;
 public class PassengerService {
 
     private static final Logger LOGGER = Logger.getLogger(PassengerService.class);
+    private static Mailer mailer = new Mailer();
 
     /**
+     * Method returns the list of "Offers" that meets passenger`s demands. Each offer has details of ticket that passenger can buy
      *
      * @param depStation Departure Station
      * @param depTime Departure Time
@@ -133,28 +140,27 @@ public class PassengerService {
      * @param trainNumber Train number
      * @param message MessageBean to get access for information messages
      */
-    public static void buyTicket(int passengerId, String departureS, String arrivalS, int trainNumber, MessageBean message) {
+    public static void buyTicket(int passengerId, String departureS, String arrivalS, int trainNumber, String selectedSeat, MessageBean message) {
         Session session = DaoFactory.getSessionFactory().openSession();
+        Transaction tx = null;
 
         try {
-            // first of all, we need to check the awailability of seats for ticketing:
-            // getting the number of sold tickets
-            int numberOfSoldTickets = TicketDao.getNumberOfSoldTickets(trainNumber);
-            // and the number of seats in train (maximum availability)
-            int seats = TrainDao.getSeats(trainNumber);
-
-            // comparing these numbers
-            if (seats <= numberOfSoldTickets) { // true means we reached maximum availability, all tickets sold. Less in case of SQL error
-                message.setErrorMessage("Ticket is not sold: All seats are already sold for train number " + trainNumber);
-                LOGGER.info("Ticket is not sold: All seats are already sold for train number " + trainNumber);
-                return;
-            }
+            tx = session.beginTransaction(); // we are doing transaction due to the fact that we are wrighting to different tables
 
             // checking if passenger has already bought ticket for chosen train
             Boolean check = TicketDao.ifPassengerAlreadyBoughtTicket(trainNumber, passengerId);
             if (check) { // invocked method returns true if passenger already bought a ticket
                 message.setErrorMessage("Ticket is not sold: You have already bought ticket for this train");
                 LOGGER.info("Ticket is not sold: Passenger have already bought ticket for this train");
+                return;
+            }
+
+            // then we need to check the availability of chosen seat - if it is still vacant:
+            Boolean seatStillAvailable = SeatmapDao.isSeatAvailable(trainNumber, selectedSeat);
+
+            if (!seatStillAvailable) { // false means that the seat is occupied already
+                message.setErrorMessage("Ticket is not sold: Selected seat is already occupied. Train number " + trainNumber + " , seat number " + selectedSeat);
+                LOGGER.info("Selected seat has just been sold. Train number " + trainNumber + " , seat number " + selectedSeat);
                 return;
             }
 
@@ -184,6 +190,7 @@ public class PassengerService {
             t.setOneWay(true);
             t.setPassengerId(passengerId);
             t.setTrainNumber(trainNumber);
+            t.setSeat(selectedSeat);
             t.setPassengerByPassengerId((Passenger)session.get(Passenger.class, passengerId));
             t.setStationByArrivalStation((Station)session.get(Station.class, arrivalS));
             t.setStationByDepartureStation((Station)session.get(Station.class, departureS));
@@ -191,19 +198,33 @@ public class PassengerService {
 
             session.save(t); // persisting an instance of ticket. Now it will be saved in the database.
 
-            String s = "You have successfully bought ticket from " + departureS + " to " + arrivalS + " , train #" + trainNumber;
-            message.setSuccessMessage(s);
-            LOGGER.info(s);
+            Query query = session.createQuery("UPDATE Seatmap s SET s.passengerOwner = :pass where s.trainNumber = :trainNumber AND s.seat = :seat");
+            query.setParameter("pass", passengerId);
+            query.setParameter("trainNumber", trainNumber);
+            query.setParameter("seat", selectedSeat);
+            query.executeUpdate();
+
+            tx.commit(); // successfull commit
+
+            String success = "You have successfully bought ticket from " + departureS + " to " + arrivalS + " , train #" + trainNumber + " , seat #" + selectedSeat;
+            message.setSuccessMessage(success);
+            LOGGER.info(success);
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
-
+            LOGGER.error(e.getMessage());
+            if (tx != null) tx.rollback();
         }
         finally {
             session.close(); // we always closing Hibernate session
         }
     }
 
+    /**
+     * Method returns the list of occupied seats for given train
+     *
+     * @param trainNumber Train number
+     * @return StringBuilder containing XML tree of occupied seats
+     */
     public static StringBuilder getOccupiedSeats(String trainNumber) {
 
         StringBuilder sb = new StringBuilder();
@@ -216,8 +237,9 @@ public class PassengerService {
             return sb;
         }
 
-        List<Seatmap> sm = SeatmapDao.getOccupiedSeats(tNumber);
+        List<Seatmap> sm = SeatmapDao.getOccupiedSeats(tNumber); // retreiving list of objects - collection of Seatmap objects with occupied seats
 
+        // Creating XML
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         sb.append("<seatmap>");
 
@@ -226,5 +248,87 @@ public class PassengerService {
         }
         sb.append("</seatmap>");
         return sb;
+    }
+
+    /**
+     * Method checks if user entered valid "secret phrase", generates new password and sends an email confirmation
+     *
+     * @param email User`s email
+     * @param secret User`s secret phrase
+     * @return true if password successfully changed, false in case of any error
+     */
+    public static Boolean changePass(String email, String secret)
+    {
+        Boolean isSuccess = false; // flag for success return
+        Boolean isCorrect = PassengerDao.checkSecret(email, secret); // checking secret phrase
+        Session session = DaoFactory.getSessionFactory().openSession();
+        Transaction tx = null;
+
+        if (isCorrect) {
+
+            SecureRandom random = new SecureRandom(); // secure randomizer
+            String newPassword = new BigInteger(130, random).toString(32); // generating new secure password
+            String sha1password = DigestUtils.sha1Hex(newPassword); // encrypting new password
+            try {
+                tx = session.beginTransaction(); // we are doing transaction due to the fact that we need to be sure that: 1) password changed AND email sent
+                Boolean newPassSuccess = PassengerDao.setPassword(sha1password, email, session); // set new password
+                Boolean isMailSuccess = false;
+                if (newPassSuccess) { // if successfully changed - sending a confirmation email
+                    isMailSuccess = mailer.send("Password change for Railroad site", "You have successfully changed your password: " + newPassword, "javaschool.railroad@gmail.com", email);
+                }
+                if (newPassSuccess && isMailSuccess) { // is both success
+                    isSuccess = true; // for success return
+                }
+                else {
+                    if (tx != null) tx.rollback(); // rollback if email has not been sent
+                }
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage());
+                if (tx != null) tx.rollback(); // rollback if email has not been sent
+            } finally {
+                session.close(); // we always closing Hibernate session
+            }
+        }
+        return isSuccess;
+    }
+
+    /**
+     * Method for register new user
+     *
+     * @param name User`s name
+     * @param surname User`s surname
+     * @param dob User`s date of birth
+     * @param email User`s e-mail
+     * @param pass User`s password
+     * @param secret User`s secret phrase
+     * @return true is success, false if error
+     */
+    public static boolean addUser(String name, String surname, String dob, String email, String pass, String secret) {
+
+        String sha1password = DigestUtils.sha1Hex(pass);
+
+        int year, month, day = 0;
+
+        try {
+            String yearS = dob.substring(0, 4);
+            String monthS = dob.substring(5, 7);
+            String dayS = dob.substring(8, 10);
+
+            year = Integer.parseInt(yearS);
+            month = Integer.parseInt(monthS);
+            day = Integer.parseInt(dayS);
+        }
+        catch (Exception e) {
+            // message.setErrorMessage("Invalid time");
+            return false;
+        }
+
+        Calendar c = Calendar.getInstance();
+        c.set(year,month,day,0,0,0);
+        Date date = new java.sql.Date(c.getTimeInMillis());
+
+        Boolean isSuccess = PassengerDao.addUser(name, surname, date, email, sha1password, secret);
+
+        return isSuccess;
     }
 }

@@ -72,60 +72,25 @@ public class TrainDao {
     }
 
     /**
-     * Method that adds new Train
+     * Method to add new train
      *
-     * @param trainNumber Train number
-     * @return true if success , false if fail
+     * @param trainNumber Train numbers
+     * @param session Hibernate session, opened in EmployeeService due to the fact that method is transactional
+     * @return true if success, otherwise false
      */
-    public static Boolean addTrain(int trainNumber) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public static Boolean addTrain(int trainNumber, Session session) {
 
-        Transaction tx = null;
         Boolean isSuccess = true;
         try {
-            tx = session.beginTransaction();
-
             // crating new instance of Train
             Train t = new Train();
-            t.setSeats(80);
             t.setTrainNumber(trainNumber);
             session.save(t); // persisting
-            tx.commit();
         }
         catch (Exception e) {
             LOGGER.error(e.getMessage());
             isSuccess = false;
-            if (tx != null) tx.rollback();
-        }
-        finally {
-            session.close();
         }
         return isSuccess;
     }
-
-    /**
-     * Method that returns numbers of seats for given train
-     *
-     * @param trainNumber Train number
-     * @return number of seats
-     */
-    public static int getSeats(int trainNumber) {
-        Session session = DaoFactory.getSessionFactory().openSession();
-        Integer seats = 0;
-
-        try {
-            Query q2 = session.createQuery("SELECT seats FROM Train WHERE trainNumber = :tn");
-            q2.setParameter("tn", trainNumber);
-            Object uniqueResult = q2.uniqueResult();
-            seats = ((Number) uniqueResult).intValue();
-        }
-        catch (Exception e) {
-            LOGGER.error(e.getMessage());
-        }
-        finally {
-            session.close();
-        }
-        return seats;
-    }
-
 }

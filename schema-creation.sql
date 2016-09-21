@@ -82,7 +82,6 @@ CREATE TABLE Ticket
 CREATE TABLE Train
 (
 	train_number         INTEGER NOT NULL,
-	seats                INTEGER NOT NULL,
   PRIMARY KEY (train_number)
 );
 
