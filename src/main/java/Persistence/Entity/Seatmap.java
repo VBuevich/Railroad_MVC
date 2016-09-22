@@ -14,6 +14,14 @@ public class Seatmap {
     private Train trainByTrainNumber;
     private Passenger passengerByPassengerOwner;
 
+    public void setSeatmapId(int seatmapId) {
+        this.seatmapId = seatmapId;
+    }
+
+    public void setTrainNumber(int trainNumber) {
+        this.trainNumber = trainNumber;
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
     @Column(name = "seatmap_id", nullable = false)

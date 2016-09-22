@@ -237,16 +237,22 @@ public class PassengerService {
             return sb;
         }
 
-        List<Seatmap> sm = SeatmapDao.getOccupiedSeats(tNumber); // retreiving list of objects - collection of Seatmap objects with occupied seats
+        String templateId = TrainDao.getTemplateId(tNumber); // we need to get the type of Train`s seatmap - his TemplateId
+        List<TemplateRows> tr = TemplateRowsDao.getRows(templateId); // retrieving list of rows for selected templateId
+        List<Seatmap> sm = SeatmapDao.getOccupiedSeats(tNumber); // retrieving list of objects - collection of Seatmap objects with occupied seats
 
         // Creating XML
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         sb.append("<seatmap>");
 
         for (Seatmap s : sm) {
-            sb.append("<seat_number>").append(s.getSeat()).append("</seat_number>");
+            sb.append("<unavailable>").append(s.getSeat()).append("</unavailable>"); // collection of occupied seats
+        }
+        for (TemplateRows t : tr) {
+            sb.append("<row>").append(t.getRowSeats()).append("</row>"); // collection of rows
         }
         sb.append("</seatmap>");
+
         return sb;
     }
 

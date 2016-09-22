@@ -139,10 +139,10 @@
      </div>
     <div class="span2">
         <div class="wrapper">
-            <div class="container">
-                <div id="seat-map">
-                    <div class="front-indicator" id="seatmapFront"></div>
-                </div>
+            <div class="container" id="mapContainer">
+
+                <div class="front-indicator" id="seatmapFront"></div>
+                <div id="seat-map"></div>
             </div>
         </div>
     </div>
@@ -152,6 +152,14 @@
 <script>
     function loadDoc(trainNumber, departureStation, arrivalStation) {
 
+
+        var oldSeatMap = document.getElementById('seat-map');
+        oldSeatMap.remove();
+        var newMap = document.createElement('div');
+        newMap.id = 'seat-map';
+        var mapContainer = document.getElementById('mapContainer');
+        mapContainer.appendChild(newMap);
+
         document.getElementById('trainNumberForm').value = trainNumber;
         document.getElementById('departureStationForm').value = departureStation;
         document.getElementById('arrivalStationForm').value = arrivalStation;
@@ -160,37 +168,27 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                map(this, trainNumber);
+                var xmlDoc = this.responseXML;
+                var swapMap = xmlDoc.getElementsByTagName("row");
+                var rowNumber = swapMap.length;
+                var swapMapArr = new Array(rowNumber);
+                for (var i = 0; i < swapMap.length; i++) {
+                    swapMapArr[i] = swapMap[i].innerHTML;
+                }
+                map(this, trainNumber, swapMapArr);
             }
         };
         xhttp.open("GET", "/RailServlet/occupiedSeats?trainNumber=" + trainNumber, true);
         xhttp.send();
     }
-    function map(xml, trainNumber) {
+    function map(xml, trainNumber, swapMapArr) {
         var i;
         var xmlDoc = xml.responseXML;
-
         var $cart = $('#selected-seats'),
                 $counter = $('#counter'),
                 $total = $('#total'),
                 sc = $('#seat-map').seatCharts({
-                    map: [
-                        'f_ff',
-                        'f_ff',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee',
-                        'e_ee'
-                    ],
+                    map: swapMapArr,
                     seats: {
                         f: {
                             price   : 100,
@@ -242,16 +240,9 @@
 
         //Refreshing seatmap, marking already booked seats
 
-        var seats = ["1_1","1_3","1_4","2_1","2_3","2_4","3_1","3_3","3_4","4_1","4_3","4_4",
-                     "5_1","5_3","5_4","6_1","6_3","6_4","7_1","7_3","7_4","8_1","8_3","8_4",
-                     "9_1","9_3","9_4","10_1","10_3","10_4","11_1","11_3","11_4","12_1","12_3",
-                     "12_4","13_1","13_3","13_4","14_1","14_3","14_4","15_1","15_3","15_4"];
+        sc.find('e.unavailable').status('available');
 
-        for (i = 0; i <seats.length; i++) {
-            sc.get(seats[i]).status('available');
-        }
-
-        var x = xmlDoc.getElementsByTagName("seat_number");
+        var x = xmlDoc.getElementsByTagName("unavailable");
         for (i = 0; i <x.length; i++) {
             sc.get([x[i].childNodes[0].nodeValue]).status('unavailable');
         }

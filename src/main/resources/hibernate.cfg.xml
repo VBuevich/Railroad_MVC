@@ -17,7 +17,10 @@
     <mapping class="Persistence.Entity.Employee"/>
     <mapping class="Persistence.Entity.Ticket"/>
     <mapping class="Persistence.Entity.Seatmap"/>
-      <!-- DB schema will be updated if needed -->
+    <mapping class="Persistence.Entity.TemplateRows"/>
+    <mapping class="Persistence.Entity.TemplateSeats"/>
+    <mapping class="Persistence.Entity.TemplateTrain"/>
+    <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>
 </hibernate-configuration>

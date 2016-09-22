@@ -93,4 +93,24 @@ public class TrainDao {
         }
         return isSuccess;
     }
+
+    public static String getTemplateId(int trainNumber) {
+        Session session = DaoFactory.getSessionFactory().openSession();
+        String templateId = null;
+
+        try {
+            Query q = session.createQuery("FROM Train t WHERE t.trainNumber = :trainNumber");
+            q.setParameter("trainNumber", trainNumber);
+
+            Train train = ((Train)q.uniqueResult()); // uniqueness is granted by database table Unique restriction
+            templateId = train.getTemplateId();
+        }
+        catch (Exception e) {
+            LOGGER.error(e.getMessage());
+        }
+        finally {
+            session.close(); // we always closing Hibernate session
+        }
+        return templateId;
+    }
 }

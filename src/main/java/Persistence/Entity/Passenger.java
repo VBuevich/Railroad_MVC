@@ -21,6 +21,10 @@ public class Passenger {
     private Collection<Ticket> ticketsByPassengerId;
     private Collection<Seatmap> seatmapsByPassengerId;
 
+    public void setPassengerId(int passengerId) {
+        this.passengerId = passengerId;
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
     @Column(name = "passenger_id", nullable = false)

@@ -14,6 +14,11 @@ public class Train {
     private Collection<Schedule> schedulesByTrainNumber;
     private Collection<Ticket> ticketsByTrainNumber;
     private Collection<Seatmap> seatmapsByTrainNumber;
+    private String templateId;
+
+    public void setTrainNumber(int trainNumber) {
+        this.trainNumber = trainNumber;
+    }
 
     @Id
     @Column(name = "train_number", nullable = false)
@@ -76,5 +81,15 @@ public class Train {
 
     public void setSeatmapsByTrainNumber(Collection<Seatmap> seatmapsByTrainNumber) {
         this.seatmapsByTrainNumber = seatmapsByTrainNumber;
+    }
+
+    @Basic
+    @Column(name = "template_id")
+    public String getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
     }
 }

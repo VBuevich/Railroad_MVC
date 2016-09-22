@@ -15,6 +15,11 @@ public class Employee {
     private String email;
     private String password;
     private String passRecovery;
+    private String Seatrow;
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
@@ -68,7 +73,7 @@ public class Employee {
     }
 
     @Basic
-    @Column(name = "pass_recovery", nullable = false, length = 100)
+    @Column(name = "pass_recovery", nullable = false, length = 100, insertable = false, updatable = false) // IU)
     public String getPassRecovery() { return passRecovery; }
 
     public void setPassRecovery(String passRecovery) { this.passRecovery = passRecovery; }
@@ -107,5 +112,15 @@ public class Employee {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (passRecovery != null ? passRecovery.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "pass_recovery")
+    public String getSeatrow() {
+        return Seatrow;
+    }
+
+    public void setSeatrow(String seatrow) {
+        Seatrow = seatrow;
     }
 }

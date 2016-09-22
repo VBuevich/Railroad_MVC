@@ -21,6 +21,18 @@ public class Ticket {
     private Station stationByArrivalStation;
     private String seat;
 
+    public void setTicketId(int ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    public void setPassengerId(int passengerId) {
+        this.passengerId = passengerId;
+    }
+
+    public void setTrainNumber(int trainNumber) {
+        this.trainNumber = trainNumber;
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
     @Column(name = "ticket_id", nullable = false)

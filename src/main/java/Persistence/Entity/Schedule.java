@@ -17,6 +17,14 @@ public class Schedule {
     private Train trainByTrainNumber;
     private Station stationByStationName;
 
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public void setTrainNumber(int trainNumber) {
+        this.trainNumber = trainNumber;
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
     @Column(name = "schedule_id", nullable = false)
