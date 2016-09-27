@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Created by VBuevich on 19.09.2016.
  */
 @Entity
+@Table(name="seatmap")
 public class Seatmap {
     private Integer seatmapId;
     private Integer trainNumber;

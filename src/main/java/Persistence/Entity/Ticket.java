@@ -8,6 +8,7 @@ import javax.persistence.*;
  * Hibernate entity class
  */
 @Entity
+@Table(name="ticket")
 public class Ticket {
     private Integer ticketId;
     private Integer passengerId;

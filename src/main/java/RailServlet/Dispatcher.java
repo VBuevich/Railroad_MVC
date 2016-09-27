@@ -42,11 +42,11 @@ public class Dispatcher extends HttpServlet {
         message.setSuccessMessage(null);
 
         if (page.equals("/myTickets.jsp")) {
-            response.sendRedirect("/RailServlet/myTickets");
+            response.sendRedirect(request.getContextPath() + "/RailServlet/myTickets");
             return;
         }
 
-        response.sendRedirect(page);
+        response.sendRedirect(request.getContextPath() + page);
     }
 }
 

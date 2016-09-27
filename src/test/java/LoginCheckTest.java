@@ -1,4 +1,4 @@
-/*
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -9,11 +9,11 @@ import java.io.File;
 import java.io.PrintWriter;
 
 import static org.junit.Assert.assertTrue;
-*/
+
 /**
  * Created by VBuevich on 14.09.2016.
  */
-/*
+
     public class LoginCheckTest extends Mockito {
 
         @Test
@@ -34,9 +34,8 @@ import static org.junit.Assert.assertTrue;
             verify(request).getParameter("pass");
             verify(request).getParameter("Employee");
             writer.flush(); // it may not have been flushed yet...
-            //assertTrue(FileUtils.readFileToString(new File("somefile.txt"), "UTF-8")
-            //        .contains("My Expected String"));
+            assertTrue(FileUtils.readFileToString(new File("somefile.txt"), "UTF-8")
+                    .contains("My Expected String"));
         }
     }
 
-*/

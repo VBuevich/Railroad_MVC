@@ -8,7 +8,7 @@ import javax.persistence.*;
  * Hibernate entity class
  */
 @Entity
-@Table(name = "template_rows", schema = "javaschool", catalog = "")
+@Table(name="template_rows")
 public class TemplateRows {
     private int templateRowsId;
     private String templateId;

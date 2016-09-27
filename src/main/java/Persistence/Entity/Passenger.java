@@ -10,6 +10,7 @@ import java.util.Collection;
  * Hibernate entity class
  */
 @Entity
+@Table(name="passenger")
 public class Passenger {
     private Integer passengerId;
     private String name;

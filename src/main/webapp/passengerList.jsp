@@ -22,17 +22,17 @@
 
         <ul class="nav">
             <li class="divider-vertical"></li>
-            <li><a href="/RailServlet/dispatcher?page=/newStation.jsp">New Station</a></li>
-            <li><a href="/RailServlet/dispatcher?page=/newTrain.jsp">New Train</a></li>
-            <li><a href="/RailServlet/dispatcher?page=/newSchedule.jsp">New Schedule</a></li>
-            <li><a href="/RailServlet/dispatcher?page=/passengerList.jsp">List of passengers</a></li>
+            <li><a href="RailServlet/dispatcher?page=/newStation.jsp">New Station</a></li>
+            <li><a href="RailServlet/dispatcher?page=/newTrain.jsp">New Train</a></li>
+            <li><a href="RailServlet/dispatcher?page=/newSchedule.jsp">New Schedule</a></li>
+            <li><a href="RailServlet/dispatcher?page=/passengerList.jsp">List of passengers</a></li>
             <li><a href="RailServlet/logoff">Log off</a></li>
         </ul>
     </nav>
 </div>
 
 <div class="wrap">
-<form method="post" name="form1" action="/RailServlet/passengerList">
+<form method="post" name="form1" action="RailServlet/passengerList">
 
     <p>Train number</p>
     <p><select size="1" width="200px" name="trainNumber">

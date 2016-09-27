@@ -9,6 +9,7 @@ import java.util.Collection;
  * Hibernate entity class
  */
 @Entity
+@Table(name="train")
 public class Train {
     private Integer trainNumber;
     private Collection<Schedule> schedulesByTrainNumber;

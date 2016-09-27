@@ -1,9 +1,6 @@
 package Persistence.Entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Collection;
 
 /**
@@ -12,6 +9,7 @@ import java.util.Collection;
  * Hibernate entity class
  */
 @Entity
+@Table(name="station")
 public class Station {
     private String stationName;
     private Collection<Schedule> schedulesByStationName;

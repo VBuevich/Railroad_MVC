@@ -32,9 +32,9 @@
 
         <ul class="nav">
             <li class="divider-vertical"></li>
-            <li><a href="/RailServlet/dispatcher?page=/schedule.jsp">Shedule</a></li>
-            <li><a href="/RailServlet/dispatcher?page=/findTrain.jsp">Find a Train</a></li>
-            <li><a href="/RailServlet/dispatcher?page=/myTickets.jsp">My tickets</a></li>
+            <li><a href="RailServlet/dispatcher?page=/schedule.jsp">Shedule</a></li>
+            <li><a href="RailServlet/dispatcher?page=/findTrain.jsp">Find a Train</a></li>
+            <li><a href="RailServlet/dispatcher?page=/myTickets.jsp">My tickets</a></li>
             <li><a href="RailServlet/logoff">Log off</a></li>
         </ul>
     </nav>
@@ -43,7 +43,7 @@
 <div class="wrap">
 <div class="row">
     <div class="span9">
-        <form method="post" name="form1" action="/RailServlet/Ticketing" >
+        <form method="post" name="form1" action="RailServlet/Ticketing" >
 
         <table width=410 cellspacing="0" cellpadding="5">
         <tr>
@@ -127,7 +127,7 @@
                 </tbody>
             </table>
 
-            <form method="post" action="/RailServlet/BuyingTicket">
+            <form method="post" action="RailServlet/BuyingTicket">
                 <input type="hidden" id="trainNumberForm" name="trainNumber" value="">
                 <input type="hidden" id="departureStationForm" name="departureStation" value="">
                 <input type="hidden" id="arrivalStationForm" name="arrivalStation" value="">
@@ -178,7 +178,7 @@
                 map(this, trainNumber, swapMapArr);
             }
         };
-        xhttp.open("GET", "/RailServlet/occupiedSeats?trainNumber=" + trainNumber, true);
+        xhttp.open("GET", "RailServlet/occupiedSeats?trainNumber=" + trainNumber, true);
         xhttp.send();
     }
     function map(xml, trainNumber, swapMapArr) {

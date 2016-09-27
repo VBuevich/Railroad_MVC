@@ -6,20 +6,9 @@
   <session-factory>
     <property name="connection.url">jdbc:mysql://localhost:3306/javaschool</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.default_schema">javaschool</property>
     <property name="connection.username">VBuevich</property>
     <property name="connection.password">gw777blade</property>
 
-    <mapping class="Persistence.Entity.Passenger"/>
-    <mapping class="Persistence.Entity.Schedule"/>
-    <mapping class="Persistence.Entity.Station"/>
-    <mapping class="Persistence.Entity.Train"/>
-    <mapping class="Persistence.Entity.Employee"/>
-    <mapping class="Persistence.Entity.Ticket"/>
-    <mapping class="Persistence.Entity.Seatmap"/>
-    <mapping class="Persistence.Entity.TemplateRows"/>
-    <mapping class="Persistence.Entity.TemplateSeats"/>
-    <mapping class="Persistence.Entity.TemplateTrain"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

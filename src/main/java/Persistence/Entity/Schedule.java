@@ -9,6 +9,7 @@ import java.sql.Time;
  * Hibernate entity class
  */
 @Entity
+@Table(name="schedule")
 public class Schedule {
     private Integer scheduleId;
     private String stationName;

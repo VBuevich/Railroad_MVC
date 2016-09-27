@@ -122,6 +122,7 @@ public class PassengerService {
             passenger = (Passenger)q.uniqueResult(); // uniqueResult could be received just in case if passenger found
         }
         catch (Exception e) {
+            LOGGER.error(e.getMessage());
             // method will return null is Exception is cought
             // LOGGER of invoker method will log this case when receives null
         }
