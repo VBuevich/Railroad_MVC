@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by VBuevich on 14.09.2016.
  */
-
+/*
     public class LoginCheckTest extends Mockito {
 
         @Test
@@ -39,3 +39,4 @@ import static org.junit.Assert.assertTrue;
         }
     }
 
+*/

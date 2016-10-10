@@ -8,6 +8,7 @@ DROP TABLE Employee;
 DROP TABLE Template_rows;
 DROP TABLE Template_seats;
 DROP TABLE Template_train;
+DROP TABLE Statistics;
 
 CREATE TABLE Template_train
 (
@@ -152,3 +153,22 @@ CREATE TABLE Template_seats
 
 ALTER TABLE Template_seats
   ADD FOREIGN KEY R_22 (template_id) REFERENCES Template_train (template_id);
+
+CREATE TABLE Statistics
+(
+  statistics_id        INTEGER NOT NULL AUTO_INCREMENT,
+  datetime             DATETIME NOT NULL,
+  passenger_name       VARCHAR(20) NOT NULL,
+  passenger_surname    VARCHAR(20) NOT NULL,
+  passenger_dob        DATE NOT NULL,
+  passenger_email      VARCHAR(40) NOT NULL,
+  train_number         INTEGER NOT NULL,
+  train_type           VARCHAR(3) NOT NULL,
+  departure_station    VARCHAR(20) NOT NULL,
+  arrival_station      VARCHAR(20) NOT NULL,
+  seat                 VARCHAR(4) NOT NULL,
+  is_one_way           BOOLEAN NOT NULL,
+  departure_date       DATE NOT NULL,
+  departure_time       TIME NOT NULL,
+  PRIMARY KEY (statistics_id)
+);

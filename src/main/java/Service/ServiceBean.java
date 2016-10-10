@@ -1,8 +1,8 @@
 package Service;
 
-import Persistence.Entity.Passenger;
-import Persistence.Entity.Schedule;
-import Persistence.Entity.Ticket;
+import persistence.entity.Passenger;
+import persistence.entity.Schedule;
+import persistence.entity.Ticket;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 

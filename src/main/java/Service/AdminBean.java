@@ -1,7 +1,7 @@
 package Service;
 
-import Persistence.Entity.Employee;
-import Persistence.Entity.Passenger;
+import persistence.entity.Employee;
+import persistence.entity.Passenger;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;

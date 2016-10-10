@@ -1,7 +1,5 @@
 package Railroad;
 
-import Persistence.Service.EmployeeService;
-import Persistence.Service.PassengerService;
 import Service.Mailer;
 import org.jboss.logging.Logger;
 
@@ -19,7 +17,7 @@ public class Main {
 
         // mailer.send("This is Subject", "SSL: This is text!", "javaschool.railroad@gmail.com", "javaschool.railroad@gmail.com");
 
-        Boolean s = EmployeeService.changePass("VBuevich777@yahoo.com","secret");
+        // Boolean s = EmployeeService.changePass("VBuevich777@yahoo.com","secret");
 
         // String sha1password = DigestUtils.sha1Hex("JS777JS");
         // System.out.println(sha1password);

@@ -3,6 +3,8 @@ package Service;
 import java.sql.Time;
 
 /**
+ * DTO
+ *
  * @author VBuevich
  */
 public class Offer {
