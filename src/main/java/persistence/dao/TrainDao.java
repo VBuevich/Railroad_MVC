@@ -1,5 +1,6 @@
 package persistence.dao;
 
+import org.hibernate.exception.ConstraintViolationException;
 import persistence.entity.Schedule;
 import persistence.entity.Train;
 import org.hibernate.Session;
@@ -77,20 +78,16 @@ public class TrainDao {
      * @param session Hibernate session, opened in EmployeeService due to the fact that method is transactional
      * @return true if success, otherwise false
      */
-    public static Boolean addTrain(int trainNumber, String templateId, Session session) {
+    public static Boolean addTrain(int trainNumber, String templateId, Session session) throws ConstraintViolationException {
 
         Boolean isSuccess = true;
-        try {
+
             // crating new instance of Train
             Train t = new Train();
             t.setTrainNumber(trainNumber);
             t.setTemplateId(templateId);
             session.save(t); // persisting
-        }
-        catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            isSuccess = false;
-        }
+
         return isSuccess;
     }
 

@@ -1,5 +1,6 @@
 package Railroad;
 
+import org.jboss.logging.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class NewTrainController {
+
+    private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     /**
      * Forwards to newTrain.jsp
@@ -51,7 +54,13 @@ public class NewTrainController {
             return "newTrain";
         }
 
-        Boolean addTrain = EmployeeService.addTrain(tNumber, templateId);
+        Boolean addTrain = false;
+        try {
+            addTrain = EmployeeService.addTrain(tNumber, templateId);
+        }
+        catch (Exception e) {
+            LOGGER.info(e.getMessage());
+        }
         if (addTrain) {
             model.addAttribute("successMessage", "Train # " + trainNumber + " is succesfully added");
         } else {

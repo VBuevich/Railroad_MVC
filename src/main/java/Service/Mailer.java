@@ -18,7 +18,7 @@ public class Mailer {
 
     private final String username = "javaschool.railroad";
     private final String password = "railroad";
-    private Properties props;
+    public Properties props;
 
     /**
      * Constructor
@@ -41,7 +41,7 @@ public class Mailer {
      * @param toEmail "to" field
      * @return true if success otherwise false
      */
-    public Boolean send(String subject, String text, String fromEmail, String toEmail) {
+    public Boolean send(String subject, String text, String fromEmail, String toEmail) throws Exception {
         Session session = Session.getDefaultInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
@@ -49,9 +49,13 @@ public class Mailer {
         });
         Boolean isSuccess = false;
 
-        try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username)); // "from" field
+            InternetAddress fEmail = new InternetAddress(fromEmail);
+            fEmail.validate();
+            InternetAddress tEmail = new InternetAddress(toEmail);
+            tEmail.validate();
+
+            message.setFrom(fEmail); // "from" field
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail)); // "to" field
             message.setSubject(subject); // "subject"
             message.setText(text); // text of e-mail
@@ -59,9 +63,7 @@ public class Mailer {
             Transport.send(message); // sending message
 
             isSuccess = true; // if we have successfully sent the message - then we return true
-        } catch (MessagingException e) {
-            LOGGER.error("Error sending message: from: " + fromEmail + " to: " + toEmail + " subject: " + subject + " exception: "  + e.getMessage()); // logging in case of error
-        }
+
         return isSuccess;
     }
 }

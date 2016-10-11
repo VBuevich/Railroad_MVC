@@ -1,6 +1,7 @@
 package persistence.service;
 
 import Service.PassengerList;
+import org.hibernate.exception.ConstraintViolationException;
 import persistence.dao.*;
 import persistence.entity.Employee;
 import Service.Mailer;

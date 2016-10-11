@@ -1,7 +1,13 @@
 package Railroad;
 
 import Service.Mailer;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.jboss.logging.Logger;
+import persistence.dao.DaoFactory;
+import persistence.dao.TrainDao;
+
+import java.util.List;
 
 /**
  * @author vbuevich

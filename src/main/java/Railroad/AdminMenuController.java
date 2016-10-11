@@ -43,7 +43,7 @@ public class AdminMenuController {
         // create some sample data
         List<Statistics> statistics = StatisticsDao.getStatistics();
 
-        // return a view which will be resolved by an excel view resolver
+        // return a view which will be resolved by a view resolver
         return new ModelAndView("pdfView", "statistics", statistics);
     }
 
