@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="bean" class="Service.AdminBean" scope="session" />
-<jsp:useBean id="message" class="Service.MessageBean" scope="session" />
+<jsp:useBean id="bean" class="railroad.service.AdminBean" scope="session" />
+<jsp:useBean id="message" class="railroad.service.MessageBean" scope="session" />
 
 <html>
 <head>
@@ -22,7 +22,7 @@
 
 <div class="navbar navbar-inverse">
     <nav class="navbar-inner">
-        <a class="brand">Railroad Admin</a>
+        <a class="brand">railroad Admin</a>
 
         <ul class="nav">
             <li class="divider-vertical"></li>

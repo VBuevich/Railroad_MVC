@@ -26,7 +26,7 @@
 
 <div class="navbar navbar-inverse">
     <nav class="navbar-inner">
-        <a class="brand">Railroad</a>
+        <a class="brand">railroad</a>
 
         <ul class="nav">
             <li class="divider-vertical"></li>

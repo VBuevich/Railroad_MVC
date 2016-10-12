@@ -7,7 +7,7 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="pdfView"
-          class="Service.PdfStatisticsView">
+          class="railroad.service.PdfStatisticsView">
     </bean>
 
 

@@ -1,13 +1,13 @@
 import org.hibernate.Session;
 import org.junit.*;
-import persistence.dao.DaoFactory;
-import persistence.dao.TrainDao;
+import railroad.persistence.dao.DaoFactory;
+import railroad.persistence.dao.TrainDao;
 
 import javax.persistence.PersistenceException;
 import java.util.List;
 
 /**
- * Created by vbuevich on 11.10.2016.
+ * @author vbuevich
  */
 public class TrainDaoTest {
 
@@ -43,9 +43,9 @@ public class TrainDaoTest {
         List<String> trainList = TrainDao.getTrainList();
         int trainNumber = Integer.parseInt(trainList.get(0)); // just first train , just for test
 
-        TrainDao.addTrain(trainNumber, "TST", session);
+        TrainDao.addTrain(trainNumber, "TST", session); // adding duplicate
 
-        session.getTransaction().commit();
+        session.getTransaction().commit(); // throws PersistenceException
 
     }
 
