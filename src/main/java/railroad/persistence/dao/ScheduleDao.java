@@ -33,7 +33,7 @@ public class ScheduleDao {
         List<Schedule> trainList = null;
 
         try {
-            DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            DateFormat formatter = new SimpleDateFormat("HH:mm");
             Time dTime = new java.sql.Time(formatter.parse(departureTime).getTime());
 
             Query q = session.createQuery("FROM Schedule s WHERE s.stationName = :st AND s.time > :departureTime");
@@ -63,7 +63,7 @@ public class ScheduleDao {
         List<Schedule> trainList = null;
 
         try {
-            DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            DateFormat formatter = new SimpleDateFormat("HH:mm");
             Time aTime = new java.sql.Time(formatter.parse(arrivalTime).getTime());
 
             Query q = session.createQuery("FROM Schedule s WHERE s.stationName = :st AND s.time < :arrivalTime");

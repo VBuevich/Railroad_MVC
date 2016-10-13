@@ -5,8 +5,10 @@ import railroad.service.PassengerList;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import railroad.service.UserBean;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -23,7 +25,14 @@ public class PassengerListController {
      * @return forward to passengersList.jsp
      */
     @RequestMapping("/passengerList")
-    public String passengerList(Model model) {
+    public String passengerList(HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        UserBean bean = UserBean.get(session); // session-scoped DTO
+        if (!bean.getRole().equals("Employee")) {
+            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
+            return "login";
+        }
 
         model.addAttribute("trainList", EmployeeService.getTrainList());
 
@@ -38,6 +47,13 @@ public class PassengerListController {
      */
     @RequestMapping("/getPassengerList")
     public String getPassengerList(HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        UserBean bean = UserBean.get(session); // session-scoped DTO
+        if (!bean.getRole().equals("Employee")) {
+            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
+            return "login";
+        }
 
         String trainNumber = request.getParameter("trainNumber");
         model.addAttribute("selectedTrain", trainNumber);

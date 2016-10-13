@@ -301,7 +301,7 @@ public class PassengerService {
         List<TemplateRows> tr = TemplateRowsDao.getRows(templateId); // retrieving list of rows for selected templateId
         List<Seatmap> sm = SeatmapDao.getOccupiedSeats(tNumber); // retrieving list of objects - collection of Seatmap objects with occupied seats
 
-        if (tr.size() == 0 || sm.size() == 0) { // zero size could be in case if train number is wrong
+        if (tr.size() == 0) { // zero size could be in case if train number is wrong
             return sb;
         }
 

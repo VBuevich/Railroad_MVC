@@ -6,8 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import railroad.Main;
 import railroad.service.EmployeeService;
+import railroad.service.UserBean;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author vbuevich
@@ -25,7 +27,14 @@ public class NewTrainController {
      * @return forward to newStation.jsp
      */
     @RequestMapping("/newTrain")
-    public String newTrain(Model model) {
+    public String newTrain(HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        UserBean bean = UserBean.get(session); // session-scoped DTO
+        if (!bean.getRole().equals("Employee")) {
+            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
+            return "login";
+        }
 
         model.addAttribute("trainList", EmployeeService.getTrainList());
         model.addAttribute("templateNames", EmployeeService.getTemplateNames());
@@ -43,6 +52,13 @@ public class NewTrainController {
     @RequestMapping("/addTrain")
     public String addTrain(HttpServletRequest request, Model model) {
 
+        HttpSession session = request.getSession();
+        UserBean bean = UserBean.get(session); // session-scoped DTO
+        if (!bean.getRole().equals("Employee")) {
+            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
+            return "login";
+        }
+
         String trainNumber = request.getParameter("trainNumber");
         String templateId = request.getParameter("templateId");
 
@@ -52,6 +68,8 @@ public class NewTrainController {
         }
         catch (NumberFormatException e) {
             model.addAttribute("errorMessage", "Invalid train number");
+            model.addAttribute("templateNames", EmployeeService.getTemplateNames());
+            model.addAttribute("trainList", EmployeeService.getTrainList());
             return "newTrain";
         }
 

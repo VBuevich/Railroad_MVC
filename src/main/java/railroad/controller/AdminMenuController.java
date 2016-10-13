@@ -1,6 +1,7 @@
 package railroad.controller;
 
-import railroad.service.AdminBean;
+import railroad.service.MessageBean;
+import railroad.service.UserBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,16 +31,27 @@ public class AdminMenuController {
     public String adminMenu(HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        AdminBean bean = AdminBean.get(session); // session-scoped DTO
+        UserBean bean = UserBean.get(session); // session-scoped DTO
+        if (!bean.getRole().equals("Employee")) {
+            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
+            return "login";
+        }
 
-        model.addAttribute("name", bean.getUser().getName());
-        model.addAttribute("surname", bean.getUser().getSurname());
+        model.addAttribute("name", bean.getName());
+        model.addAttribute("surname", bean.getSurname());
 
         return "adminMenu";
     }
 
     @RequestMapping("/getStatistics")
-    public ModelAndView downloadExcel() {
+    public ModelAndView downloadExcel(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        UserBean bean = UserBean.get(session); // session-scoped DTO
+        if (!bean.getRole().equals("Employee")) {
+            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
+            return null;
+        }
+
         // create some sample data
         List<Statistics> statistics = StatisticsDao.getStatistics();
 

@@ -5,8 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import railroad.persistence.dao.StationDao;
 import railroad.service.EmployeeService;
+import railroad.service.UserBean;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author vbuevich
@@ -22,7 +24,14 @@ public class NewStationController {
      * @return forward to newStation.jsp
      */
     @RequestMapping("/newStation")
-    public String newStation(Model model) {
+    public String newStation(HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        UserBean bean = UserBean.get(session); // session-scoped DTO
+        if (!bean.getRole().equals("Employee")) {
+            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
+            return "login";
+        }
 
         model.addAttribute("stationList", EmployeeService.getStationList());
 
@@ -38,6 +47,13 @@ public class NewStationController {
      */
     @RequestMapping("/addStation")
     public String addStation(HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        UserBean bean = UserBean.get(session); // session-scoped DTO
+        if (!bean.getRole().equals("Employee")) {
+            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
+            return "login";
+        }
 
         String stationName = request.getParameter("stationName");
 

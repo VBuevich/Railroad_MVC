@@ -1,5 +1,7 @@
 package railroad.controller;
 
+import railroad.persistence.entity.Employee;
+import railroad.persistence.entity.Passenger;
 import railroad.service.*;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Controller;
@@ -60,10 +62,15 @@ public class LoginController {
             return "login";
         } else if (status.equals("Passenger")) {
             session.setAttribute("bean", null);
-            ServiceBean bean = ServiceBean.get(session);
-            bean.setUser(PassengerService.checkPass(email, pass));
-            if (bean.getUser() != null) {
-                LOGGER.info("Passenger " + bean.getUser().getName() + " " + bean.getUser().getSurname() + " has successfully logged in");
+            UserBean bean = UserBean.get(session);
+            Passenger p = PassengerService.checkPass(email, pass);
+
+            if (p != null) {
+                LOGGER.info("Passenger " + p.getName() + " " + p.getSurname() + " has successfully logged in");
+                bean.setName(p.getName());
+                bean.setSurname(p.getSurname());
+                bean.setUserId(p.getPassengerId());
+                bean.setRole("Passenger");
                 model.addAttribute("stationList", StationDao.getStationList());
                 MessageBean.get(session); // Data Transfer Object (DTO) , used during ticketing operations in order to deliver messages to customer
                 return "schedule";
@@ -76,12 +83,18 @@ public class LoginController {
 
         } else if (status.equals("Employee")) {
             session.setAttribute("bean", null);
-            AdminBean bean = AdminBean.get(session);
-            bean.setUser(EmployeeService.checkEmpl(email, pass));
-            if (bean.getUser() != null) {
-                LOGGER.info("Employee " + bean.getUser().getName() + " " + bean.getUser().getSurname() + " has successfully logged in");
-                model.addAttribute("name", bean.getUser().getName());
-                model.addAttribute("surname", bean.getUser().getSurname());
+            UserBean bean = UserBean.get(session);
+            Employee e = EmployeeService.checkEmpl(email, pass);
+
+            if (e != null) {
+                LOGGER.info("Employee " + e.getName() + " " + e.getSurname() + " has successfully logged in");
+                bean.setName(e.getName());
+                bean.setSurname(e.getSurname());
+                bean.setUserId(e.getEmployeeId());
+                bean.setRole("Employee");
+
+                model.addAttribute("name", e.getName());
+                model.addAttribute("surname", e.getSurname());
 
                 return "adminMenu";
             } else {

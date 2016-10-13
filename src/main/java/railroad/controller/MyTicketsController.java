@@ -1,6 +1,6 @@
 package railroad.controller;
 
-import railroad.service.ServiceBean;
+import railroad.service.UserBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +30,14 @@ public class MyTicketsController {
     public String myTickets(HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        ServiceBean bean = ServiceBean.get(session);
+        UserBean bean = UserBean.get(session);
 
-        List<Ticket> tickets = TicketDao.getTickets(bean.getUser().getPassengerId());
+        if (!bean.getRole().equals("Passenger")) {
+            model.addAttribute("errorMessage", "Please log-in as Passenger to access this page");
+            return "login";
+        }
+
+        List<Ticket> tickets = TicketDao.getTickets(bean.getUserId());
 
         if (tickets == null || tickets.size() == 0) {
             model.addAttribute("errorMessage", "Currently you have no tickets");
