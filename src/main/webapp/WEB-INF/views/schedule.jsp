@@ -23,6 +23,7 @@
             <li><a href="schedule">Schedule</a></li>
             <li><a href="findTrain">Find a Train</a></li>
             <li><a href="myTickets">My tickets</a></li>
+            <li><a href="googleMap">Railroad Map</a></li>
             <li><a href="#logoff" data-toggle="modal">Log off</a></li>
         </ul>
     </nav>

@@ -23,6 +23,7 @@
             <li><a href="schedule">Schedule</a></li>
             <li><a href="findTrain">Find a Train</a></li>
             <li><a href="myTickets">My tickets</a></li>
+            <li><a href="googleMap">Railroad Map</a></li>
             <li><a href="#logoff" data-toggle="modal">Log off</a></li>
         </ul>
     </nav>
@@ -75,7 +76,6 @@
         <a href="logoff" class="btn btn-primary" aria-hidden="true">Yes, log off</a>
     </div>
 </div>
-
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="<c:url value="/resources/Bootstrap/js/bootstrap.min.js" /> "></script>

@@ -1,5 +1,7 @@
 package railroad.persistence.entity;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Collection;
