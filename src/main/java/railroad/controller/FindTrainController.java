@@ -1,15 +1,15 @@
 package railroad.controller;
 
-import railroad.service.MessageBean;
-import railroad.service.Offer;
-import railroad.service.PassengerService;
-import railroad.service.UserBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import railroad.persistence.dao.StationDao;
+import railroad.dto.MessageBean;
+import railroad.dto.Offer;
+import railroad.service.PassengerService;
+import railroad.dto.UserBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

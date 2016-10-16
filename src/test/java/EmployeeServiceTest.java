@@ -5,7 +5,7 @@ import org.mockito.MockitoAnnotations;
 import railroad.persistence.dao.TrainDao;
 import railroad.persistence.entity.User;
 import railroad.service.EmployeeService;
-import railroad.service.PassengerList;
+import railroad.dto.PassengerList;
 
 import java.sql.SQLException;
 import java.util.List;

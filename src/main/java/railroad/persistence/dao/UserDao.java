@@ -1,9 +1,9 @@
 package railroad.persistence.dao;
 
-import railroad.persistence.entity.User;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import railroad.persistence.entity.User;
 
 import java.sql.Date;
 

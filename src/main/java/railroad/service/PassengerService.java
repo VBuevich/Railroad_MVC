@@ -1,12 +1,14 @@
 package railroad.service;
 
-import railroad.persistence.dao.*;
-import railroad.persistence.entity.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import railroad.dto.MessageBean;
+import railroad.dto.Offer;
+import railroad.persistence.dao.*;
+import railroad.persistence.entity.*;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

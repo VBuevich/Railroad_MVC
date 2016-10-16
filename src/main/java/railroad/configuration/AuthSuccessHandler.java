@@ -1,10 +1,6 @@
 package railroad.configuration;
 
 import org.jboss.logging.Logger;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,10 +9,9 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import railroad.controller.LoginController;
 import railroad.persistence.entity.User;
 import railroad.service.PassengerService;
-import railroad.service.UserBean;
+import railroad.dto.UserBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +20,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
- * Created by vbuevich on 15.10.2016.
+ * @author vbuevich
  */
 @Component
 public class AuthSuccessHandler implements AuthenticationSuccessHandler {

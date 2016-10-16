@@ -3,8 +3,8 @@ import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import railroad.persistence.entity.User;
-import railroad.service.MessageBean;
-import railroad.service.Offer;
+import railroad.dto.MessageBean;
+import railroad.dto.Offer;
 
 import java.sql.SQLException;
 import java.util.List;

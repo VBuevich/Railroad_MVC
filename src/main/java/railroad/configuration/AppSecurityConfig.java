@@ -16,13 +16,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AuthSuccessHandler successHandler;
-/*
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("user").roles("USER");
-        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
-    }
-*/
+
     @Autowired
     DataSource dataSource;
 
@@ -47,14 +41,11 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin().loginPage("/login")
                    .usernameParameter("email").passwordParameter("pass")
                    .and().csrf().disable();
-
-
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers("/resources/**");
-
     }
 }

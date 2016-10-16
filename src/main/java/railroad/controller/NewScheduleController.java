@@ -5,10 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import railroad.persistence.dao.ScheduleDao;
 import railroad.service.EmployeeService;
-import railroad.service.UserBean;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.sql.Time;
 import java.util.Calendar;
 

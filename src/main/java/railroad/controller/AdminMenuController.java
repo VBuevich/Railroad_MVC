@@ -1,13 +1,12 @@
 package railroad.controller;
 
-import railroad.service.MessageBean;
-import railroad.service.UserBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import railroad.persistence.dao.StatisticsDao;
 import railroad.persistence.entity.Statistics;
+import railroad.dto.UserBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

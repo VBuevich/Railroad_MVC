@@ -1,16 +1,13 @@
 package railroad.service;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import railroad.dto.PassengerList;
 import railroad.persistence.dao.*;
 import railroad.persistence.entity.Ticket;
 import railroad.persistence.entity.User;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 

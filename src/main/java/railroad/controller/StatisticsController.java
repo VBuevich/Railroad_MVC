@@ -1,7 +1,10 @@
 package railroad.controller;
 
 import org.jboss.logging.Logger;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import railroad.Main;
 import railroad.persistence.dao.StatisticsDao;
 import railroad.persistence.entity.Statistics;

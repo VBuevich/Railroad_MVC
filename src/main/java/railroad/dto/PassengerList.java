@@ -1,4 +1,4 @@
-package railroad.service;
+package railroad.dto;
 
 import java.sql.Date;
 

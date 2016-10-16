@@ -1,4 +1,4 @@
-package railroad.service;
+package railroad.dto;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;

@@ -1,14 +1,12 @@
 package railroad.controller;
 
-import railroad.service.EmployeeService;
-import railroad.service.PassengerList;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import railroad.service.UserBean;
+import railroad.service.EmployeeService;
+import railroad.dto.PassengerList;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
