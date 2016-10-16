@@ -29,10 +29,6 @@
                 </c:if>
                 <input type="text" name="email" class="span4" placeholder="E-Mail">
                 <input type="password" name="secret" class="span4" placeholder="Secret phrase">
-                <label class="radio">
-                    <input type = "radio" name = "status" value = "Passenger">  I am a Passenger <br>
-                    <input type = "radio" name = "status" value = "Employee">  I am an Employee <br>
-                </label>
                 <br>
                     <a href="login" >Back lo login page</a><br>
                     <a href="newCustomer" >New customer?</a><br><br>

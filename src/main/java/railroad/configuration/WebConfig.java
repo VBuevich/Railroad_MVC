@@ -3,6 +3,7 @@ package railroad.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -13,6 +14,17 @@ import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 @ComponentScan({ "railroad" })
 //@Import({ AppSecurityConfig.class })
 public class WebConfig {
+
+    @Bean(name = "dataSource")
+    public DriverManagerDataSource dataSource() {
+        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+        driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/javaschool");
+        driverManagerDataSource.setUsername("VBuevich");
+        driverManagerDataSource.setPassword("gw777blade");
+
+        return driverManagerDataSource;
+    }
 
     @Bean
     public ResourceBundleViewResolver resBundleViewResolver() {

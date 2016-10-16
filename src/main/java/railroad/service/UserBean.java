@@ -13,7 +13,6 @@ public class UserBean {
     private String name;
     private String surname;
     private int userId;
-    private String role = "Guest";
     private List<Offer> offerList = null;
 
     /**
@@ -52,14 +51,6 @@ public class UserBean {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public List<Offer> getOfferList() {

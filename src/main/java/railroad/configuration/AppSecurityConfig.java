@@ -8,17 +8,32 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableWebSecurity
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AuthSuccessHandler successHandler;
-
+/*
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("user").password("user").roles("USER");
         auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
+    }
+*/
+    @Autowired
+    DataSource dataSource;
+
+    @Autowired
+    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+
+        auth.jdbcAuthentication().dataSource(dataSource)
+                .usersByUsernameQuery(
+                        "SELECT email, password, enabled FROM user WHERE email =?")
+                .authoritiesByUsernameQuery(
+                        "SELECT email, user_role FROM user WHERE email =?");
     }
 
     @Override
@@ -28,7 +43,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").access("hasRole('ROLE_USER')")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .and().formLogin().successHandler(successHandler)
-                .and().exceptionHandling().accessDeniedPage("/login")
+                .and().exceptionHandling().accessDeniedPage("/login?errorMessage=denied")
                 .and().formLogin().loginPage("/login")
                    .usernameParameter("email").passwordParameter("pass")
                    .and().csrf().disable();

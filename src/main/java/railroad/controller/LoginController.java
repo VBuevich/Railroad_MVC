@@ -72,7 +72,6 @@ public class LoginController {
                 bean.setName(p.getName());
                 bean.setSurname(p.getSurname());
                 bean.setUserId(p.getUserId());
-                bean.setRole("Passenger");
                 model.addAttribute("stationList", StationDao.getStationList());
                 MessageBean.get(session); // Data Transfer Object (DTO) , used during ticketing operations in order to deliver messages to customer
                 return "schedule";
@@ -94,7 +93,6 @@ public class LoginController {
                 bean.setName(e.getName());
                 bean.setSurname(e.getSurname());
                 bean.setUserId(e.getUserId());
-                bean.setRole("Employee");
 
                 model.addAttribute("name", e.getName());
                 model.addAttribute("surname", e.getSurname());

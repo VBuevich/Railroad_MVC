@@ -20,6 +20,7 @@ public class User {
     private String password;
     private String passRecovery;
     private String userRole;
+    private Boolean enabled;
     private Collection<Ticket> ticketsByUserId;
     private Collection<Seatmap> seatmapsByUserId;
 
@@ -104,6 +105,16 @@ public class User {
         this.userRole = userRole;
     }
 
+    @Basic
+    @Column(name = "enabled")
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,6 +130,7 @@ public class User {
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (passRecovery != null ? !passRecovery.equals(user.passRecovery) : user.passRecovery != null) return false;
         if (userRole != null ? !userRole.equals(user.userRole) : user.userRole != null) return false;
+        if (enabled != null ? !enabled.equals(user.enabled) : user.enabled != null) return false;
 
         return true;
     }
@@ -133,6 +145,7 @@ public class User {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (passRecovery != null ? passRecovery.hashCode() : 0);
         result = 31 * result + (userRole != null ? userRole.hashCode() : 0);
+        result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
         return result;
     }
 

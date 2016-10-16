@@ -326,4 +326,32 @@ public class PassengerService {
 
         return isSuccess;
     }
+
+    /**
+     * Method, used during Log-in of user to get just successfully logged in user
+     *
+     * @param email Log-in field of user
+     * @return User object if Ok either null if error
+     */
+    public static User getUserByEmail(String email)
+    {
+        Session session = DaoFactory.getSessionFactory().openSession();
+        User user = null;
+
+        try {
+            Query q = session.createQuery("FROM User WHERE email = :em");
+            q.setParameter("em", email);
+
+            user = (User)q.uniqueResult(); // uniqueResult could be received just in case if passenger found
+        }
+        catch (Exception e) {
+            // method will return null if Exception is caught
+            // LOGGER of invoker method will log this case when receives null
+        }
+        finally {
+            session.close(); // we always closing Hibernate Session
+            return user;
+        }
+    }
+
 }

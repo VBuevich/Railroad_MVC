@@ -30,7 +30,8 @@ CREATE TABLE User
   dob                  DATE NOT NULL,
   password             VARCHAR(100) NOT NULL,
   pass_recovery        VARCHAR(100) NOT NULL,
-  user_role            VARCHAR(5) NOT NULL,
+  user_role            VARCHAR(10) NOT NULL,
+  enabled              BOOLEAN NOT NULL DEFAULT true,
   PRIMARY KEY (user_id)
 );
 
