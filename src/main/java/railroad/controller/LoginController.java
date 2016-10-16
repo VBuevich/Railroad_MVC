@@ -1,15 +1,16 @@
 package railroad.controller;
 
-import railroad.persistence.entity.Employee;
-import railroad.persistence.entity.Passenger;
-import railroad.service.*;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import railroad.persistence.dao.StationDao;
+import railroad.persistence.entity.User;
+import railroad.service.EmployeeService;
+import railroad.service.MessageBean;
+import railroad.service.PassengerService;
+import railroad.service.UserBean;
 
-import javax.mail.internet.AddressException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -63,13 +64,14 @@ public class LoginController {
         } else if (status.equals("Passenger")) {
             session.setAttribute("bean", null);
             UserBean bean = UserBean.get(session);
-            Passenger p = PassengerService.checkPass(email, pass);
+            // User p = PassengerService.checkPass(email, pass);
+            User p = null;
 
             if (p != null) {
                 LOGGER.info("Passenger " + p.getName() + " " + p.getSurname() + " has successfully logged in");
                 bean.setName(p.getName());
                 bean.setSurname(p.getSurname());
-                bean.setUserId(p.getPassengerId());
+                bean.setUserId(p.getUserId());
                 bean.setRole("Passenger");
                 model.addAttribute("stationList", StationDao.getStationList());
                 MessageBean.get(session); // Data Transfer Object (DTO) , used during ticketing operations in order to deliver messages to customer
@@ -84,13 +86,14 @@ public class LoginController {
         } else if (status.equals("Employee")) {
             session.setAttribute("bean", null);
             UserBean bean = UserBean.get(session);
-            Employee e = EmployeeService.checkEmpl(email, pass);
+            // User e = EmployeeService.checkEmpl(email, pass);
+            User e = null;
 
             if (e != null) {
                 LOGGER.info("Employee " + e.getName() + " " + e.getSurname() + " has successfully logged in");
                 bean.setName(e.getName());
                 bean.setSurname(e.getSurname());
-                bean.setUserId(e.getEmployeeId());
+                bean.setUserId(e.getUserId());
                 bean.setRole("Employee");
 
                 model.addAttribute("name", e.getName());

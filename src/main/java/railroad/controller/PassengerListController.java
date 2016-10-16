@@ -24,15 +24,8 @@ public class PassengerListController {
      * @param model
      * @return forward to passengersList.jsp
      */
-    @RequestMapping("/passengerList")
+    @RequestMapping("/admin/passengerList")
     public String passengerList(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Employee")) {
-            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
-            return "login";
-        }
 
         model.addAttribute("trainList", EmployeeService.getTrainList());
 
@@ -45,15 +38,8 @@ public class PassengerListController {
      * @param model
      * @return forward back to passengersList.jsp
      */
-    @RequestMapping("/getPassengerList")
+    @RequestMapping("/admin/getPassengerList")
     public String getPassengerList(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Employee")) {
-            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
-            return "login";
-        }
 
         String trainNumber = request.getParameter("trainNumber");
         model.addAttribute("selectedTrain", trainNumber);

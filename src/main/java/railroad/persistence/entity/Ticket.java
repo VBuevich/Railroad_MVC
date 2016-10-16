@@ -1,6 +1,7 @@
 package railroad.persistence.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author vbuevich
@@ -9,64 +10,52 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="ticket")
-public class Ticket {
-    private Integer ticketId;
-    private Integer passengerId;
-    private Integer trainNumber;
+public class Ticket implements Serializable {
+    private int ticketId;
+    private int passengerId;
+    private int trainNumber;
     private String departureStation;
     private String arrivalStation;
+    private String seat;
     private Boolean isOneWay;
-    private Passenger passengerByPassengerId;
+    private User userByPassengerId;
     private Train trainByTrainNumber;
     private Station stationByDepartureStation;
     private Station stationByArrivalStation;
-    private String seat;
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
+    @Column(name = "ticket_id")
+    public int getTicketId() {
+        return ticketId;
+    }
 
     public void setTicketId(int ticketId) {
         this.ticketId = ticketId;
+    }
+
+    @Basic
+    @Column(name = "passenger_id")
+    public int getPassengerId() {
+        return passengerId;
     }
 
     public void setPassengerId(int passengerId) {
         this.passengerId = passengerId;
     }
 
+    @Basic
+    @Column(name = "train_number")
+    public int getTrainNumber() {
+        return trainNumber;
+    }
+
     public void setTrainNumber(int trainNumber) {
         this.trainNumber = trainNumber;
     }
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
-    @Column(name = "ticket_id", nullable = false)
-    public Integer getTicketId() {
-        return ticketId;
-    }
-
-    public void setTicketId(Integer ticketId) {
-        this.ticketId = ticketId;
-    }
-
     @Basic
-    @Column(name = "passenger_id", nullable = false, insertable = false, updatable = false) // IU
-    public Integer getPassengerId() {
-        return passengerId;
-    }
-
-    public void setPassengerId(Integer passengerId) {
-        this.passengerId = passengerId;
-    }
-
-    @Basic
-    @Column(name = "train_number", nullable = false, insertable = false, updatable = false) // IU
-    public Integer getTrainNumber() {
-        return trainNumber;
-    }
-
-    public void setTrainNumber(Integer trainNumber) {
-        this.trainNumber = trainNumber;
-    }
-
-    @Basic
-    @Column(name = "departure_station", nullable = false, length = 20, insertable = false, updatable = false) // IU
+    @Column(name = "departure_station")
     public String getDepartureStation() {
         return departureStation;
     }
@@ -76,7 +65,7 @@ public class Ticket {
     }
 
     @Basic
-    @Column(name = "arrival_station", nullable = false, length = 20, insertable = false, updatable = false) // IU
+    @Column(name = "arrival_station")
     public String getArrivalStation() {
         return arrivalStation;
     }
@@ -86,20 +75,25 @@ public class Ticket {
     }
 
     @Basic
-    @Column(name = "is_one_way", nullable = false)
-    public Boolean getOneWay() {
+    @Column(name = "seat")
+    public String getSeat() {
+        return seat;
+    }
+
+    public void setSeat(String seat) {
+        this.seat = seat;
+    }
+
+    @Basic
+    @Column(name = "is_one_way")
+    public Boolean getIsOneWay() {
         return isOneWay;
     }
 
-    public void setOneWay(Boolean oneWay) {
+    public void setIsOneWay(Boolean oneWay) {
         isOneWay = oneWay;
     }
 
-    /**
-     *
-     * @param o Object to compare
-     * @return true if equals
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -107,44 +101,43 @@ public class Ticket {
 
         Ticket ticket = (Ticket) o;
 
-        if (ticketId != null ? !ticketId.equals(ticket.ticketId) : ticket.ticketId != null) return false;
-        if (passengerId != null ? !passengerId.equals(ticket.passengerId) : ticket.passengerId != null) return false;
-        if (trainNumber != null ? !trainNumber.equals(ticket.trainNumber) : ticket.trainNumber != null) return false;
+        if (ticketId != ticket.ticketId) return false;
+        if (passengerId != ticket.passengerId) return false;
+        if (trainNumber != ticket.trainNumber) return false;
         if (departureStation != null ? !departureStation.equals(ticket.departureStation) : ticket.departureStation != null)
             return false;
         if (arrivalStation != null ? !arrivalStation.equals(ticket.arrivalStation) : ticket.arrivalStation != null)
             return false;
+        if (seat != null ? !seat.equals(ticket.seat) : ticket.seat != null) return false;
         if (isOneWay != null ? !isOneWay.equals(ticket.isOneWay) : ticket.isOneWay != null) return false;
 
         return true;
     }
 
-    /**
-     * @return hashcode
-     */
     @Override
     public int hashCode() {
-        int result = ticketId != null ? ticketId.hashCode() : 0;
-        result = 31 * result + (passengerId != null ? passengerId.hashCode() : 0);
-        result = 31 * result + (trainNumber != null ? trainNumber.hashCode() : 0);
+        int result = ticketId;
+        result = 31 * result + passengerId;
+        result = 31 * result + trainNumber;
         result = 31 * result + (departureStation != null ? departureStation.hashCode() : 0);
         result = 31 * result + (arrivalStation != null ? arrivalStation.hashCode() : 0);
+        result = 31 * result + (seat != null ? seat.hashCode() : 0);
         result = 31 * result + (isOneWay != null ? isOneWay.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "passenger_id", referencedColumnName = "passenger_id", nullable = false)
-    public Passenger getPassengerByPassengerId() {
-        return passengerByPassengerId;
+    @JoinColumn(name = "passenger_id", referencedColumnName = "user_id", nullable = false, insertable = false, updatable = false) // IU
+    public User getUserByPassengerId() {
+        return userByPassengerId;
     }
 
-    public void setPassengerByPassengerId(Passenger passengerByPassengerId) {
-        this.passengerByPassengerId = passengerByPassengerId;
+    public void setUserByPassengerId(User userByPassengerId) {
+        this.userByPassengerId = userByPassengerId;
     }
 
     @ManyToOne
-    @JoinColumn(name = "train_number", referencedColumnName = "train_number", nullable = false)
+    @JoinColumn(name = "train_number", referencedColumnName = "train_number", nullable = false, insertable = false, updatable = false) // IU
     public Train getTrainByTrainNumber() {
         return trainByTrainNumber;
     }
@@ -154,7 +147,7 @@ public class Ticket {
     }
 
     @ManyToOne
-    @JoinColumn(name = "departure_station", referencedColumnName = "station_name", nullable = false)
+    @JoinColumn(name = "departure_station", referencedColumnName = "station_name", nullable = false, insertable = false, updatable = false) // IU
     public Station getStationByDepartureStation() {
         return stationByDepartureStation;
     }
@@ -164,22 +157,12 @@ public class Ticket {
     }
 
     @ManyToOne
-    @JoinColumn(name = "arrival_station", referencedColumnName = "station_name", nullable = false)
+    @JoinColumn(name = "arrival_station", referencedColumnName = "station_name", nullable = false, insertable = false, updatable = false) // IU
     public Station getStationByArrivalStation() {
         return stationByArrivalStation;
     }
 
     public void setStationByArrivalStation(Station stationByArrivalStation) {
         this.stationByArrivalStation = stationByArrivalStation;
-    }
-
-    @Basic
-    @Column(name = "seat", nullable = false, length = 4)
-    public String getSeat() {
-        return seat;
-    }
-
-    public void setSeat(String seat) {
-        this.seat = seat;
     }
 }

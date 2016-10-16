@@ -56,7 +56,7 @@ public class PassengerService {
         if (listForDeparture != null && listForArrival != null) { // perhaps we received null from one of there methods due to error
             for (Schedule sD : listForDeparture) { // double loop
                 for (Schedule sA : listForArrival) {
-                    if (sD.getTrainNumber().equals(sA.getTrainNumber())) { // if this is a same train
+                    if (sD.getTrainNumber() == sA.getTrainNumber()) { // if this is a same train
                         long difference = sD.getTime().getTime() - sA.getTime().getTime(); // we getting time in milliseconds
                         if (difference < 0) { // if time of arrival is bigger (in fact - later) than arrival time
                             Offer offer = new Offer(); // we have found new offer for passenger and creating a new instance of Offer
@@ -76,39 +76,6 @@ public class PassengerService {
     }
 
     /**
-     * Method, used during Log-in of passenger
-     *
-     * @param email Log-in field of Passenger
-     * @param pass Password
-     * @return Passenger object if Ok either null is log-in unsuccessful
-     */
-    public static Passenger checkPass(String email, String pass)
-    {
-        Session session = DaoFactory.getSessionFactory().openSession();
-        Passenger passenger = null;
-        String sha1password = DigestUtils.sha1Hex(pass); // Due to the fact that all passwords are encrypted in database,
-                                                         // firstly we getting an encrypted value of string field of password
-
-
-        try {
-            Query q = session.createQuery("FROM Passenger WHERE email = :em AND password = :pa");
-            q.setParameter("em", email);
-            q.setParameter("pa", sha1password);
-
-            passenger = (Passenger)q.uniqueResult(); // uniqueResult could be received just in case if passenger found
-        }
-        catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            // method will return null is Exception is cought
-            // LOGGER of invoker method will log this case when receives null
-        }
-        finally {
-            session.close(); // we always closing Hibernate Session
-            return passenger;
-        }
-    }
-
-    /**
      * Method checks if user entered valid "secret phrase", generates new password and sends an email confirmation
      *
      * @param email User`s email
@@ -118,7 +85,7 @@ public class PassengerService {
     public static Boolean changePass(String email, String secret)
     {
         Boolean isSuccess = false; // flag for success return
-        Boolean isCorrect = PassengerDao.checkSecret(email, secret); // checking secret phrase
+        Boolean isCorrect = UserDao.checkSecret(email, secret); // checking secret phrase
         Session session = DaoFactory.getSessionFactory().openSession();
         Transaction tx = null;
 
@@ -129,7 +96,7 @@ public class PassengerService {
             String sha1password = DigestUtils.sha1Hex(newPassword); // encrypting new password
             try {
                 tx = session.beginTransaction(); // we are doing transaction due to the fact that we need to be sure that: 1) password changed AND email sent
-                Boolean newPassSuccess = PassengerDao.setPassword(sha1password, email, session); // set new password
+                Boolean newPassSuccess = UserDao.setPassword(sha1password, email, session); // set new password
                 Boolean isMailSuccess = false;
                 if (newPassSuccess) { // if successfully changed - sending a confirmation email
                     isMailSuccess = mailer.send("Password change for railroad site", "You have successfully changed your password: " + newPassword, "javaschool.railroad@gmail.com", email);
@@ -206,11 +173,11 @@ public class PassengerService {
             Ticket t = new Ticket(); // creating new instance of ticket
             t.setArrivalStation(arrivalS);
             t.setDepartureStation(departureS);
-            t.setOneWay(true);
+            t.setIsOneWay(true);
             t.setPassengerId(passengerId);
             t.setTrainNumber(trainNumber);
             t.setSeat(selectedSeat);
-            t.setPassengerByPassengerId((Passenger)session.get(Passenger.class, passengerId));
+            t.setUserByPassengerId((User)session.get(User.class, passengerId));
             t.setStationByArrivalStation((Station)session.get(Station.class, arrivalS));
             t.setStationByDepartureStation((Station)session.get(Station.class, departureS));
             t.setTrainByTrainNumber((Train)session.get(Train.class, trainNumber));
@@ -224,7 +191,7 @@ public class PassengerService {
             query.executeUpdate();
 
             Time timeOfArrival = ScheduleDao.getTime(trainNumber, arrivalS);
-            Passenger p = PassengerDao.getPassenger(passengerId);
+            User p = UserDao.getUser(passengerId);
             StringBuilder eTicket = new StringBuilder();
             eTicket.append("Dear " + p.getSurname() + " " + p.getName() + System.lineSeparator());
             eTicket.append("Please kindly find your e-Ticket details: " + System.lineSeparator());
@@ -355,7 +322,7 @@ public class PassengerService {
         c.set(year,month,day,0,0,0);
         Date date = new java.sql.Date(c.getTimeInMillis());
 
-        Boolean isSuccess = PassengerDao.addUser(name, surname, date, email, sha1password, secret);
+        Boolean isSuccess = UserDao.addUser(name, surname, date, email, sha1password, secret, "USER");
 
         return isSuccess;
     }

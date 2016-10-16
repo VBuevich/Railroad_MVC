@@ -2,7 +2,7 @@ import org.hibernate.query.Query;
 import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import railroad.persistence.entity.Passenger;
+import railroad.persistence.entity.User;
 import railroad.service.MessageBean;
 import railroad.service.Offer;
 
@@ -37,31 +37,11 @@ public class PassengerServiceTest {
     public void setUp() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
-        when((Passenger)q.uniqueResult()).thenReturn(new Passenger());
+        when((User)q.uniqueResult()).thenReturn(new User());
     }
 
     @After
     public void tearDown() {
-    }
-
-    @Test
-    public void checkPassTestPositive() {
-
-        System.out.println("-------------------");
-        System.out.println("Testing if Passenger is checking correctly: should be Ok"); // that Employee exists in DB for sure
-
-        Passenger p = checkPass("javaschool.railroad@gmail.com", "JS777JS");
-        assertTrue(p != null);
-    }
-
-    @Test
-    public void checkPassTestNeg() {
-
-        System.out.println("-------------------");
-        System.out.println("Testing if Passenger is checking correctly: should not be Ok"); // that Passenger never exists
-
-        Passenger p = checkPass("Java@ee.com", "qwerty");
-        assertTrue(p == null);
     }
 
     @Test

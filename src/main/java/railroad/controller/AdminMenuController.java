@@ -27,15 +27,11 @@ public class AdminMenuController {
      * @param model
      * @return forward to adminMenu.jsp
      */
-    @RequestMapping("/adminMenu")
+    @RequestMapping("/admin/adminMenu")
     public String adminMenu(HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
         UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Employee")) {
-            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
-            return "login";
-        }
 
         model.addAttribute("name", bean.getName());
         model.addAttribute("surname", bean.getSurname());
@@ -43,14 +39,8 @@ public class AdminMenuController {
         return "adminMenu";
     }
 
-    @RequestMapping("/getStatistics")
+    @RequestMapping("/admin/getStatistics")
     public ModelAndView downloadExcel(HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Employee")) {
-            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
-            return null;
-        }
 
         // create some sample data
         List<Statistics> statistics = StatisticsDao.getStatistics();

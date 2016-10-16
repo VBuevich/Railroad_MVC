@@ -1,6 +1,7 @@
 package railroad.persistence.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author vbuevich
@@ -9,9 +10,12 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="template_train")
-public class TemplateTrain {
+public class TemplateTrain implements Serializable {
     private int templateTrainId;
     private String templateId;
+    private Train trainByTemplateId;
+    private TemplateRows templateRowsByTemplateId;
+    private TemplateSeats templateSeatsByTemplateId;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
@@ -52,5 +56,35 @@ public class TemplateTrain {
         int result = templateTrainId;
         result = 31 * result + (templateId != null ? templateId.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "template_id", referencedColumnName = "template_id", insertable = false, updatable = false) // IU
+    public Train getTrainByTemplateId() {
+        return trainByTemplateId;
+    }
+
+    public void setTrainByTemplateId(Train trainByTemplateId) {
+        this.trainByTemplateId = trainByTemplateId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "template_id", referencedColumnName = "template_id", insertable = false, updatable = false) // IU
+    public TemplateRows getTemplateRowsByTemplateId() {
+        return templateRowsByTemplateId;
+    }
+
+    public void setTemplateRowsByTemplateId(TemplateRows templateRowsByTemplateId) {
+        this.templateRowsByTemplateId = templateRowsByTemplateId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "template_id", referencedColumnName = "template_id", insertable = false, updatable = false) // IU
+    public TemplateSeats getTemplateSeatsByTemplateId() {
+        return templateSeatsByTemplateId;
+    }
+
+    public void setTemplateSeatsByTemplateId(TemplateSeats templateSeatsByTemplateId) {
+        this.templateSeatsByTemplateId = templateSeatsByTemplateId;
     }
 }

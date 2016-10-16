@@ -26,15 +26,8 @@ public class NewTrainController {
      * @param model
      * @return forward to newStation.jsp
      */
-    @RequestMapping("/newTrain")
+    @RequestMapping("/admin/newTrain")
     public String newTrain(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Employee")) {
-            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
-            return "login";
-        }
 
         model.addAttribute("trainList", EmployeeService.getTrainList());
         model.addAttribute("templateNames", EmployeeService.getTemplateNames());
@@ -49,15 +42,8 @@ public class NewTrainController {
      * @param model
      * @return forward to newTrain.jsp
      */
-    @RequestMapping("/addTrain")
+    @RequestMapping("/admin/addTrain")
     public String addTrain(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Employee")) {
-            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
-            return "login";
-        }
 
         String trainNumber = request.getParameter("trainNumber");
         String templateId = request.getParameter("templateId");

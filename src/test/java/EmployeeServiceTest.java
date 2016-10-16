@@ -3,7 +3,7 @@ import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import railroad.persistence.dao.TrainDao;
-import railroad.persistence.entity.Employee;
+import railroad.persistence.entity.User;
 import railroad.service.EmployeeService;
 import railroad.service.PassengerList;
 
@@ -13,8 +13,7 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static railroad.service.EmployeeService.changePass;
-import static railroad.service.EmployeeService.checkEmpl;
+import static railroad.service.PassengerService.changePass;
 
 /**
  * @author vbuevich
@@ -38,33 +37,12 @@ public class EmployeeServiceTest {
     public void setUp() throws SQLException{
         MockitoAnnotations.initMocks(this);
 
-        when((Employee)q.uniqueResult()).thenReturn(new Employee());
+        when((User)q.uniqueResult()).thenReturn(new User());
     }
 
     @After
     public void tearDown() {
     }
-
-    @Test
-    public void checkEmplTestPositive() {
-
-        System.out.println("-------------------");
-        System.out.println("Testing if Employee is checking correctly: should be Ok"); // that Employee exists in DB for sure
-
-        Employee e = checkEmpl("javaschool.railroad@gmail.com", "JS777JS");
-        assertTrue(e != null);
-    }
-
-    @Test
-    public void checkEmplTestNeg() {
-
-        System.out.println("-------------------");
-        System.out.println("Testing if Employee is checking correctly: should not be Ok"); // that Employee never exists
-
-        Employee e = checkEmpl("Java@ee.com", "qwerty");
-        assertTrue(e == null);
-    }
-
 
     @Ignore
     @Test

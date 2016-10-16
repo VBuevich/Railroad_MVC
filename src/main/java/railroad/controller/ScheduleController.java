@@ -25,15 +25,8 @@ public class ScheduleController {
      * @param model
      * @return forward to schedule.jsp
      */
-    @RequestMapping("/schedule")
+    @RequestMapping("/user/schedule")
     public String schedule(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Passenger")) {
-            model.addAttribute("errorMessage", "Please log-in as Passenger to access this page");
-            return "login";
-        }
 
         model.addAttribute("stationList", StationDao.getStationList());
         return "schedule";
@@ -46,15 +39,8 @@ public class ScheduleController {
      * @param model
      * @return forward to schedule.jsp
      */
-    @RequestMapping("/getSchedule")
+    @RequestMapping("/user/getSchedule")
     public String getSchedule(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Passenger")) {
-            model.addAttribute("errorMessage", "Please log-in as Passenger to access this page");
-            return "login";
-        }
 
         String stationName = request.getParameter("stationName");
         List<Schedule> scheduleList = TrainDao.trainList(stationName);

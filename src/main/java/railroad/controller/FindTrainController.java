@@ -28,15 +28,8 @@ public class FindTrainController {
      * @param model
      * @return forward to findTrain.jsp
      */
-    @RequestMapping("/findTrain")
+    @RequestMapping("/user/findTrain")
     public String findTrain(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Passenger")) {
-            model.addAttribute("errorMessage", "Please log-in as Passenger to access this page");
-            return "login";
-        }
 
         model.addAttribute("stationList", StationDao.getStationList());
         return "findTrain";
@@ -49,16 +42,11 @@ public class FindTrainController {
      * @param model
      * @return forwards back to findTrain.jsp
      */
-    @RequestMapping("/ticketing")
+    @RequestMapping("/user/ticketing")
     public String ticketing(HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
         UserBean bean = UserBean.get(session);
-
-        if (!bean.getRole().equals("Passenger")) {
-            model.addAttribute("errorMessage", "Please log-in as Passenger to access this page");
-            return "login";
-        }
 
         String departureTime = request.getParameter("departureTime");
         String departureStation = request.getParameter("departureStation");
@@ -89,17 +77,9 @@ public class FindTrainController {
      * @param model
      * @return XML containing seatmap for chosen train and occupied seats on it
      */
-    @RequestMapping(value = "/occupiedSeats", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/occupiedSeats", method = RequestMethod.GET)
     @ResponseBody
     public String occupiedSeats(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session);
-
-        if (!bean.getRole().equals("Passenger")) {
-            model.addAttribute("errorMessage", "Please log-in as Passenger to access this page");
-            return "login";
-        }
 
         String trainNumber = request.getParameter("trainNumber");
         StringBuilder sb = PassengerService.getOccupiedSeats(trainNumber);
@@ -114,17 +94,12 @@ public class FindTrainController {
      * @param model
      * @return
      */
-    @RequestMapping("/buyTicket")
+    @RequestMapping("/user/buyTicket")
     public String buyTicket(HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
         UserBean bean = UserBean.get(session);
         MessageBean message = MessageBean.get(session);
-
-        if (!bean.getRole().equals("Passenger")) {
-            model.addAttribute("errorMessage", "Please log-in as Passenger to access this page");
-            return "login";
-        }
 
         String departureStation = request.getParameter("departureStation");
         String arrivalStation = request.getParameter("arrivalStation");

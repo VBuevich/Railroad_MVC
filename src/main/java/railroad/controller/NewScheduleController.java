@@ -25,15 +25,8 @@ public class NewScheduleController {
      * @param model
      * @return forward to newSchedule.jsp
      */
-    @RequestMapping("/newSchedule")
-    public String newSchedule(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Employee")) {
-            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
-            return "login";
-        }
+    @RequestMapping("/admin/newSchedule")
+    public String newSchedule(Model model) {
 
         model.addAttribute("trainList", EmployeeService.getTrainList());
         model.addAttribute("stationList", EmployeeService.getStationList());
@@ -48,15 +41,8 @@ public class NewScheduleController {
      * @param model
      * @return forward to newSchedule.jsp
      */
-    @RequestMapping("/addSchedule")
+    @RequestMapping("/admin/addSchedule")
     public String addSchedule(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Employee")) {
-            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
-            return "login";
-        }
 
         String trainNumber = request.getParameter("trainNumber");
         String station = request.getParameter("station");

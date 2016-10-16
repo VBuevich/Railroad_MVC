@@ -25,15 +25,8 @@ public class GoogleMapController {
      * @param model
      * @return forward to googleMap.jsp
      */
-    @RequestMapping("/googleMap")
+    @RequestMapping("/user/googleMap")
     public String googleMap(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Passenger")) {
-            model.addAttribute("errorMessage", "Please log-in as Passenger to access this page");
-            return "login";
-        }
 
         return "googleMap";
     }

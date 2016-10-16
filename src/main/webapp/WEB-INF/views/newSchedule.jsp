@@ -24,10 +24,10 @@
 
         <ul class="nav">
             <li class="divider-vertical"></li>
-            <li><a href="newStation">New Station</a></li>
-            <li><a href="newTrain">New Train</a></li>
-            <li><a href="newSchedule">New Schedule</a></li>
-            <li><a href="passengerList">List of passengers</a></li>
+            <li><a href="/railroad/admin/newStation">New Station</a></li>
+            <li><a href="/railroad/admin/newTrain">New Train</a></li>
+            <li><a href="/railroad/admin/newSchedule">New Schedule</a></li>
+            <li><a href="/railroad/admin/passengerList">List of passengers</a></li>
             <li><a href="#logoff" data-toggle="modal">Log off</a></li>
         </ul>
     </nav>
@@ -50,7 +50,7 @@
 </div>
 
 <div class="wrap">
-<form method="post" name="form1" action="addSchedule">
+<form method="post" name="form1" action="/railroad/admin/addSchedule">
 <strong>Add new schedule</strong>
 <div class="form-group">
     <label for="trainGroup">Train Number</label>
@@ -116,7 +116,7 @@
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">No</a>
-        <a href="logoff" class="btn btn-primary" aria-hidden="true">Yes, log off</a>
+        <a href="/railroad/logoff" class="btn btn-primary" aria-hidden="true">Yes, log off</a>
     </div>
 </div>
 

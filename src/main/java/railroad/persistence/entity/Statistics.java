@@ -11,6 +11,7 @@ import java.sql.Timestamp;
  * Hibernate entity class
  */
 @Entity
+@Table(name="statistics")
 public class Statistics {
     private int statisticsId;
     private Timestamp datetime;
@@ -28,7 +29,7 @@ public class Statistics {
     private Time departureTime;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
+    @GeneratedValue(strategy= GenerationType.IDENTITY) // SEQUENCE
     @Column(name = "statistics_id")
     public int getStatisticsId() {
         return statisticsId;
@@ -144,8 +145,8 @@ public class Statistics {
         return isOneWay;
     }
 
-    public void setIsOneWay(Boolean isOneWay) {
-        this.isOneWay = isOneWay;
+    public void setIsOneWay(Boolean oneWay) {
+        isOneWay = oneWay;
     }
 
     @Basic
@@ -168,11 +169,6 @@ public class Statistics {
         this.departureTime = departureTime;
     }
 
-    /**
-     *
-     * @param o Object to compare
-     * @return true if equals
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -182,7 +178,6 @@ public class Statistics {
 
         if (statisticsId != that.statisticsId) return false;
         if (trainNumber != that.trainNumber) return false;
-        if (isOneWay != that.isOneWay) return false;
         if (datetime != null ? !datetime.equals(that.datetime) : that.datetime != null) return false;
         if (passengerName != null ? !passengerName.equals(that.passengerName) : that.passengerName != null)
             return false;
@@ -197,6 +192,7 @@ public class Statistics {
         if (arrivalStation != null ? !arrivalStation.equals(that.arrivalStation) : that.arrivalStation != null)
             return false;
         if (seat != null ? !seat.equals(that.seat) : that.seat != null) return false;
+        if (isOneWay != null ? !isOneWay.equals(that.isOneWay) : that.isOneWay != null) return false;
         if (departureDate != null ? !departureDate.equals(that.departureDate) : that.departureDate != null)
             return false;
         if (departureTime != null ? !departureTime.equals(that.departureTime) : that.departureTime != null)
@@ -205,9 +201,6 @@ public class Statistics {
         return true;
     }
 
-    /**
-     * @return hashcode
-     */
     @Override
     public int hashCode() {
         int result = statisticsId;

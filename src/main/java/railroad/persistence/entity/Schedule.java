@@ -11,34 +11,26 @@ import java.sql.Time;
 @Entity
 @Table(name="schedule")
 public class Schedule {
-    private Integer scheduleId;
+    private int scheduleId;
     private String stationName;
-    private Integer trainNumber;
+    private int trainNumber;
     private Time time;
-    private Train trainByTrainNumber;
     private Station stationByStationName;
+    private Train trainByTrainNumber;
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
+    @Column(name = "schedule_id")
+    public int getScheduleId() {
+        return scheduleId;
+    }
 
     public void setScheduleId(int scheduleId) {
         this.scheduleId = scheduleId;
     }
 
-    public void setTrainNumber(int trainNumber) {
-        this.trainNumber = trainNumber;
-    }
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
-    @Column(name = "schedule_id", nullable = false)
-    public Integer getScheduleId() {
-        return scheduleId;
-    }
-
-    public void setScheduleId(Integer scheduleId) {
-        this.scheduleId = scheduleId;
-    }
-
     @Basic
-    @Column(name = "station_name", nullable = false, length = 20, insertable = false, updatable = false) // IU
+    @Column(name = "station_name")
     public String getStationName() {
         return stationName;
     }
@@ -48,17 +40,17 @@ public class Schedule {
     }
 
     @Basic
-    @Column(name = "train_number", nullable = false, insertable = false, updatable = false) // IU
-    public Integer getTrainNumber() {
+    @Column(name = "train_number")
+    public int getTrainNumber() {
         return trainNumber;
     }
 
-    public void setTrainNumber(Integer trainNumber) {
+    public void setTrainNumber(int trainNumber) {
         this.trainNumber = trainNumber;
     }
 
     @Basic
-    @Column(name = "time", nullable = false)
+    @Column(name = "time")
     public Time getTime() {
         return time;
     }
@@ -67,11 +59,6 @@ public class Schedule {
         this.time = time;
     }
 
-    /**
-     *
-     * @param o Object to compare
-     * @return true if equals
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,45 +66,41 @@ public class Schedule {
 
         Schedule schedule = (Schedule) o;
 
-        if (scheduleId != null ? !scheduleId.equals(schedule.scheduleId) : schedule.scheduleId != null) return false;
+        if (scheduleId != schedule.scheduleId) return false;
+        if (trainNumber != schedule.trainNumber) return false;
         if (stationName != null ? !stationName.equals(schedule.stationName) : schedule.stationName != null)
-            return false;
-        if (trainNumber != null ? !trainNumber.equals(schedule.trainNumber) : schedule.trainNumber != null)
             return false;
         if (time != null ? !time.equals(schedule.time) : schedule.time != null) return false;
 
         return true;
     }
 
-    /**
-     * @return hashcode
-     */
     @Override
     public int hashCode() {
-        int result = scheduleId != null ? scheduleId.hashCode() : 0;
+        int result = scheduleId;
         result = 31 * result + (stationName != null ? stationName.hashCode() : 0);
-        result = 31 * result + (trainNumber != null ? trainNumber.hashCode() : 0);
+        result = 31 * result + trainNumber;
         result = 31 * result + (time != null ? time.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "train_number", referencedColumnName = "train_number", nullable = false)
-    public Train getTrainByTrainNumber() {
-        return trainByTrainNumber;
-    }
-
-    public void setTrainByTrainNumber(Train trainByTrainNumber) {
-        this.trainByTrainNumber = trainByTrainNumber;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "station_name", referencedColumnName = "station_name", nullable = false)
+    @JoinColumn(name = "station_name", referencedColumnName = "station_name", nullable = false, insertable = false, updatable = false) // IU
     public Station getStationByStationName() {
         return stationByStationName;
     }
 
     public void setStationByStationName(Station stationByStationName) {
         this.stationByStationName = stationByStationName;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "train_number", referencedColumnName = "train_number", nullable = false, insertable = false, updatable = false) // IU
+    public Train getTrainByTrainNumber() {
+        return trainByTrainNumber;
+    }
+
+    public void setTrainByTrainNumber(Train trainByTrainNumber) {
+        this.trainByTrainNumber = trainByTrainNumber;
     }
 }

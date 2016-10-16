@@ -1,9 +1,9 @@
 package railroad.persistence.dao;
 
-import railroad.persistence.entity.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import railroad.persistence.entity.*;
 
 /**
  * @author vbuevich
@@ -22,8 +22,7 @@ public class DaoFactory {
         Configuration configuration = new Configuration().configure();
 
         // adding Hibernate mapped classes
-        configuration.addAnnotatedClass(Employee.class);
-        configuration.addAnnotatedClass(Passenger.class);
+        configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Schedule.class);
         configuration.addAnnotatedClass(Station.class);
         configuration.addAnnotatedClass(Ticket.class);

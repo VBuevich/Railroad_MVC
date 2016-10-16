@@ -23,15 +23,8 @@ public class NewStationController {
      * @param model
      * @return forward to newStation.jsp
      */
-    @RequestMapping("/newStation")
-    public String newStation(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Employee")) {
-            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
-            return "login";
-        }
+    @RequestMapping("/admin/newStation")
+    public String newStation(Model model) {
 
         model.addAttribute("stationList", EmployeeService.getStationList());
 
@@ -45,15 +38,8 @@ public class NewStationController {
      * @param model
      * @return
      */
-    @RequestMapping("/addStation")
+    @RequestMapping("/admin/addStation")
     public String addStation(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        UserBean bean = UserBean.get(session); // session-scoped DTO
-        if (!bean.getRole().equals("Employee")) {
-            model.addAttribute("errorMessage", "Please log-in as Employee to access this page");
-            return "login";
-        }
 
         String stationName = request.getParameter("stationName");
 

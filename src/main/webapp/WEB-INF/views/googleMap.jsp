@@ -20,10 +20,10 @@
 
         <ul class="nav">
             <li class="divider-vertical"></li>
-            <li><a href="schedule">Schedule</a></li>
-            <li><a href="findTrain">Find a Train</a></li>
-            <li><a href="myTickets">My tickets</a></li>
-            <li><a href="googleMap">Railroad Map</a></li>
+            <li><a href="/railroad/user/schedule">Schedule</a></li>
+            <li><a href="/railroad/user/findTrain">Find a Train</a></li>
+            <li><a href="/railroad/user/myTickets">My tickets</a></li>
+            <li><a href="/railroad/user/googleMap">Railroad Map</a></li>
             <li><a href="#logoff" data-toggle="modal">Log off</a></li>
         </ul>
     </nav>
@@ -39,7 +39,7 @@
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">No</a>
-        <a href="logoff" class="btn btn-primary" aria-hidden="true">Yes, log off</a>
+        <a href="/railroad/logoff" class="btn btn-primary" aria-hidden="true">Yes, log off</a>
     </div>
 </div>
 

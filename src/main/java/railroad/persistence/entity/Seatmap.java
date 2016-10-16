@@ -3,49 +3,43 @@ package railroad.persistence.entity;
 import javax.persistence.*;
 
 /**
- * Created by VBuevich on 19.09.2016.
+ * @author vbuevich
+ *
+ * Hibernate entity class
  */
 @Entity
 @Table(name="seatmap")
 public class Seatmap {
-    private Integer seatmapId;
-    private Integer trainNumber;
+    private int seatmapId;
+    private int trainNumber;
     private String seat;
     private Integer passengerOwner;
     private Train trainByTrainNumber;
-    private Passenger passengerByPassengerOwner;
+    private User userByPassengerOwner;
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
+    @Column(name = "seatmap_id")
+    public int getSeatmapId() {
+        return seatmapId;
+    }
 
     public void setSeatmapId(int seatmapId) {
         this.seatmapId = seatmapId;
+    }
+
+    @Basic
+    @Column(name = "train_number")
+    public int getTrainNumber() {
+        return trainNumber;
     }
 
     public void setTrainNumber(int trainNumber) {
         this.trainNumber = trainNumber;
     }
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
-    @Column(name = "seatmap_id", nullable = false)
-    public Integer getSeatmapId() {
-        return seatmapId;
-    }
-
-    public void setSeatmapId(Integer seatmapId) {
-        this.seatmapId = seatmapId;
-    }
-
     @Basic
-    @Column(name = "train_number", nullable = false, insertable = false, updatable = false) // IU
-    public Integer getTrainNumber() {
-        return trainNumber;
-    }
-
-    public void setTrainNumber(Integer trainNumber) {
-        this.trainNumber = trainNumber;
-    }
-
-    @Basic
-    @Column(name = "seat", nullable = false, length = 4)
+    @Column(name = "seat")
     public String getSeat() {
         return seat;
     }
@@ -55,7 +49,7 @@ public class Seatmap {
     }
 
     @Basic
-    @Column(name = "passenger_owner", nullable = true, insertable = false, updatable = false) // IU)
+    @Column(name = "passenger_owner")
     public Integer getPassengerOwner() {
         return passengerOwner;
     }
@@ -64,11 +58,6 @@ public class Seatmap {
         this.passengerOwner = passengerOwner;
     }
 
-    /**
-     *
-     * @param o Object to compare
-     * @return true if equals
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,8 +65,8 @@ public class Seatmap {
 
         Seatmap seatmap = (Seatmap) o;
 
-        if (seatmapId != null ? !seatmapId.equals(seatmap.seatmapId) : seatmap.seatmapId != null) return false;
-        if (trainNumber != null ? !trainNumber.equals(seatmap.trainNumber) : seatmap.trainNumber != null) return false;
+        if (seatmapId != seatmap.seatmapId) return false;
+        if (trainNumber != seatmap.trainNumber) return false;
         if (seat != null ? !seat.equals(seatmap.seat) : seatmap.seat != null) return false;
         if (passengerOwner != null ? !passengerOwner.equals(seatmap.passengerOwner) : seatmap.passengerOwner != null)
             return false;
@@ -85,20 +74,17 @@ public class Seatmap {
         return true;
     }
 
-    /**
-     * @return hashcode
-     */
     @Override
     public int hashCode() {
-        int result = seatmapId != null ? seatmapId.hashCode() : 0;
-        result = 31 * result + (trainNumber != null ? trainNumber.hashCode() : 0);
+        int result = seatmapId;
+        result = 31 * result + trainNumber;
         result = 31 * result + (seat != null ? seat.hashCode() : 0);
         result = 31 * result + (passengerOwner != null ? passengerOwner.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "train_number", referencedColumnName = "train_number", nullable = false)
+    @JoinColumn(name = "train_number", referencedColumnName = "train_number", nullable = false, insertable = false, updatable = false) // IU
     public Train getTrainByTrainNumber() {
         return trainByTrainNumber;
     }
@@ -108,12 +94,12 @@ public class Seatmap {
     }
 
     @ManyToOne
-    @JoinColumn(name = "passenger_owner", referencedColumnName = "passenger_id")
-    public Passenger getPassengerByPassengerOwner() {
-        return passengerByPassengerOwner;
+    @JoinColumn(name = "passenger_owner", referencedColumnName = "user_id", insertable = false, updatable = false) // IU
+    public User getUserByPassengerOwner() {
+        return userByPassengerOwner;
     }
 
-    public void setPassengerByPassengerOwner(Passenger passengerByPassengerOwner) {
-        this.passengerByPassengerOwner = passengerByPassengerOwner;
+    public void setUserByPassengerOwner(User userByPassengerOwner) {
+        this.userByPassengerOwner = userByPassengerOwner;
     }
 }

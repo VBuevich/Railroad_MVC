@@ -1,11 +1,11 @@
 package railroad.persistence.dao;
 
-import railroad.persistence.entity.Seatmap;
-import railroad.persistence.entity.TemplateSeats;
-import railroad.persistence.entity.Train;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import railroad.persistence.entity.Seatmap;
+import railroad.persistence.entity.TemplateSeats;
+import railroad.persistence.entity.Train;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class SeatmapDao {
                 Seatmap s = new Seatmap(); // creating new instance of Seatmap (1 seat in newly created train)
                 s.setTrainByTrainNumber((Train) session.get(Train.class, trainNumber));
                 s.setSeat(seats.get(i).getSeat());
-                s.setPassengerByPassengerOwner(null);
+                s.setUserByPassengerOwner(null);
 
                 session.save(s); // persisting an instance of ticket. Now it will be saved in the database.
             }

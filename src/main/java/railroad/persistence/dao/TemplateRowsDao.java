@@ -1,9 +1,9 @@
 package railroad.persistence.dao;
 
-import railroad.persistence.entity.TemplateRows;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import railroad.persistence.entity.TemplateRows;
 
 import java.util.List;
 

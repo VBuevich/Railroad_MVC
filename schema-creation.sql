@@ -3,8 +3,7 @@ DROP TABLE Schedule;
 DROP TABLE Ticket;
 DROP TABLE Station;
 DROP TABLE Train;
-DROP TABLE Passenger;
-DROP TABLE Employee;
+DROP TABLE User;
 DROP TABLE Template_rows;
 DROP TABLE Template_seats;
 DROP TABLE Template_train;
@@ -22,44 +21,29 @@ CREATE UNIQUE INDEX XAK1Template_train ON Template_train
   template_id
 );
 
-CREATE TABLE Employee
+CREATE TABLE User
 (
-  employee_id          INTEGER NOT NULL AUTO_INCREMENT,
+  user_id              INTEGER NOT NULL AUTO_INCREMENT,
   name                 VARCHAR(20) NOT NULL,
   surname              VARCHAR(20) NOT NULL,
   email                VARCHAR(40) NOT NULL,
+  dob                  DATE NOT NULL,
   password             VARCHAR(100) NOT NULL,
   pass_recovery        VARCHAR(100) NOT NULL,
-  PRIMARY KEY (employee_id)
+  user_role            VARCHAR(5) NOT NULL,
+  PRIMARY KEY (user_id)
 );
 
-CREATE UNIQUE INDEX XAK1Employee ON Employee
+CREATE UNIQUE INDEX XAK1User ON User
 (
   email
 );
 
-CREATE TABLE Passenger
-(
-  passenger_id         INTEGER NOT NULL AUTO_INCREMENT,
-  name                 VARCHAR(20) NOT NULL,
-  surname              VARCHAR(20) NOT NULL,
-  dob                  DATE NOT NULL,
-  email                VARCHAR(40) NOT NULL,
-  password             VARCHAR(100) NOT NULL,
-  pass_recovery        VARCHAR(100) NOT NULL,
-  PRIMARY KEY (passenger_id)
-);
-
-CREATE UNIQUE INDEX XAK1Passenger ON Passenger
+CREATE UNIQUE INDEX XAK2User ON User
 (
   name,
   surname,
   dob
-);
-
-CREATE UNIQUE INDEX XAK2Passenger ON Passenger
-(
-  email
 );
 
 CREATE TABLE Schedule
@@ -111,7 +95,7 @@ ALTER TABLE Schedule
   ADD FOREIGN KEY R_1 (station_name) REFERENCES Station (station_name);
 
 ALTER TABLE Ticket
-  ADD FOREIGN KEY R_4 (passenger_id) REFERENCES Passenger (passenger_id);
+  ADD FOREIGN KEY R_4 (passenger_id) REFERENCES User (user_id);
 
 ALTER TABLE Ticket
   ADD FOREIGN KEY R_5 (train_number) REFERENCES Train (train_number);
@@ -130,6 +114,12 @@ CREATE TABLE Seatmap
   passenger_owner      INTEGER,
   PRIMARY KEY (seatmap_id)
 );
+
+ALTER TABLE Seatmap
+  ADD FOREIGN KEY R_23 (passenger_owner) REFERENCES User (user_id);
+
+ALTER TABLE Seatmap
+  ADD FOREIGN KEY R_24 (train_number) REFERENCES Train (train_number);
 
 CREATE TABLE Template_rows
 (

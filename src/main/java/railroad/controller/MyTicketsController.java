@@ -1,5 +1,8 @@
 package railroad.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import railroad.service.UserBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +12,7 @@ import railroad.persistence.dao.TicketDao;
 import railroad.persistence.entity.Ticket;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -26,16 +30,11 @@ public class MyTicketsController {
      * @param model
      * @return forward to myTickets.jsp
      */
-    @RequestMapping("/myTickets")
+    @RequestMapping("/user/myTickets")
     public String myTickets(HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
         UserBean bean = UserBean.get(session);
-
-        if (!bean.getRole().equals("Passenger")) {
-            model.addAttribute("errorMessage", "Please log-in as Passenger to access this page");
-            return "login";
-        }
 
         List<Ticket> tickets = TicketDao.getTickets(bean.getUserId());
 
@@ -50,20 +49,4 @@ public class MyTicketsController {
         return "myTickets";
     }
 
-    /**
-     * Handles passengers` log off request and forwards to login page
-     *
-     * @param request
-     * @param model
-     * @return forward to login.jsp
-     */
-    @RequestMapping("/logoff")
-    public String logoff(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-        session.invalidate();
-
-        model.addAttribute("successMessage", "You have successfully logged off. Please come again!");
-        return "login";
-    }
 }

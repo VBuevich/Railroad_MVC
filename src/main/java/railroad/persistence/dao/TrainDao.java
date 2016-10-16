@@ -1,11 +1,11 @@
 package railroad.persistence.dao;
 
-import org.hibernate.exception.ConstraintViolationException;
-import railroad.persistence.entity.Schedule;
-import railroad.persistence.entity.Train;
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import railroad.persistence.entity.Schedule;
+import railroad.persistence.entity.Train;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class TrainDao {
             List<Train> tList = q.list(); // getting the list of Train entities
 
             for (Train t : tList) {
-                trainList.add(t.getTrainNumber().toString()); // getting the list of Train names
+                trainList.add(Integer.toString(t.getTrainNumber())); // getting the list of Train names
             }
         }
         catch (Exception e) {

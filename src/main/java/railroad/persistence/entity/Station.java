@@ -17,7 +17,7 @@ public class Station {
     private Collection<Ticket> ticketsByStationName_0;
 
     @Id
-    @Column(name = "station_name", nullable = false, length = 20)
+    @Column(name = "station_name")
     public String getStationName() {
         return stationName;
     }
@@ -26,11 +26,6 @@ public class Station {
         this.stationName = stationName;
     }
 
-    /**
-     *
-     * @param o Object to compare
-     * @return true if equals
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,9 +38,6 @@ public class Station {
         return true;
     }
 
-    /**
-     * @return hashcode
-     */
     @Override
     public int hashCode() {
         return stationName != null ? stationName.hashCode() : 0;

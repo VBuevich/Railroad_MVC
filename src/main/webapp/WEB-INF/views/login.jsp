@@ -21,7 +21,7 @@
         <div class="well span4 offset4">
             <legend>Authorisation</legend>
 
-            <form method="post" action="loginCheck" accept-charset="UTF-8">
+            <form method="post" action="login" accept-charset="UTF-8">
 
                 <c:if test="${not empty errorMessage}">
                     <div class="alert alert-error">

@@ -1,6 +1,7 @@
 package railroad.persistence.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -10,32 +11,35 @@ import java.util.Collection;
  */
 @Entity
 @Table(name="train")
-public class Train {
-    private Integer trainNumber;
+public class Train implements Serializable {
+    private int trainNumber;
+    private String templateId;
     private Collection<Schedule> schedulesByTrainNumber;
     private Collection<Ticket> ticketsByTrainNumber;
+    private Collection<TemplateTrain> templatesByTemplateId;
     private Collection<Seatmap> seatmapsByTrainNumber;
-    private String templateId;
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
+    @Column(name = "train_number")
+    public int getTrainNumber() {
+        return trainNumber;
+    }
 
     public void setTrainNumber(int trainNumber) {
         this.trainNumber = trainNumber;
     }
 
-    @Id
-    @Column(name = "train_number", nullable = false)
-    public Integer getTrainNumber() {
-        return trainNumber;
+    @Basic
+    @Column(name = "template_id")
+    public String getTemplateId() {
+        return templateId;
     }
 
-    public void setTrainNumber(Integer trainNumber) {
-        this.trainNumber = trainNumber;
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
     }
 
-    /**
-     *
-     * @param o Object to compare
-     * @return true if equals
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,17 +47,16 @@ public class Train {
 
         Train train = (Train) o;
 
-        if (trainNumber != null ? !trainNumber.equals(train.trainNumber) : train.trainNumber != null) return false;
+        if (trainNumber != train.trainNumber) return false;
+        if (templateId != null ? !templateId.equals(train.templateId) : train.templateId != null) return false;
 
         return true;
     }
 
-    /**
-     * @return hashcode
-     */
     @Override
     public int hashCode() {
-        int result = trainNumber != null ? trainNumber.hashCode() : 0;
+        int result = trainNumber;
+        result = 31 * result + (templateId != null ? templateId.hashCode() : 0);
         return result;
     }
 
@@ -75,6 +78,15 @@ public class Train {
         this.ticketsByTrainNumber = ticketsByTrainNumber;
     }
 
+    @OneToMany(mappedBy = "trainByTemplateId")
+    public Collection<TemplateTrain> getTemplatesByTemplateId() {
+        return templatesByTemplateId;
+    }
+
+    public void setTemplatesByTemplateId(Collection<TemplateTrain> templatesByTemplateId) {
+        this.templatesByTemplateId = templatesByTemplateId;
+    }
+
     @OneToMany(mappedBy = "trainByTrainNumber")
     public Collection<Seatmap> getSeatmapsByTrainNumber() {
         return seatmapsByTrainNumber;
@@ -82,15 +94,5 @@ public class Train {
 
     public void setSeatmapsByTrainNumber(Collection<Seatmap> seatmapsByTrainNumber) {
         this.seatmapsByTrainNumber = seatmapsByTrainNumber;
-    }
-
-    @Basic
-    @Column(name = "template_id")
-    public String getTemplateId() {
-        return templateId;
-    }
-
-    public void setTemplateId(String templateId) {
-        this.templateId = templateId;
     }
 }
