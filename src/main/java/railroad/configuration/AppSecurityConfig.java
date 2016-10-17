@@ -8,8 +8,12 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import javax.sql.DataSource;
-
+/**
+ * WebSecurityConfigurerAdapter provides a convenient base class for creating a WebSecurityConfigurer instance.
+ * The implementation allows customization by overriding methods.
+ *
+ * @author vbuevich
+ */
 @Configuration
 @EnableWebSecurity
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -17,6 +21,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     AuthSuccessHandler successHandler;
 
+    /* Just another way to get authentication in DB. Replaces authProvider.
     @Autowired
     DataSource dataSource;
 
@@ -28,6 +33,15 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                         "SELECT email, password, enabled FROM user WHERE email =?")
                 .authoritiesByUsernameQuery(
                         "SELECT email, user_role FROM user WHERE email =?");
+    }
+    */
+
+    @Autowired
+    AuthProvider authProvider;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authProvider);
     }
 
     @Override

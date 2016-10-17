@@ -9,9 +9,9 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import railroad.persistence.entity.User;
-import railroad.service.PassengerService;
 import railroad.dto.UserBean;
+import railroad.persistence.entity.UserDetails;
+import railroad.service.PassengerService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
+ * Custom AuthenticationSuccessHandler
+ * Strategy used to handle a successful user authentication.
+ *
  * @author vbuevich
  */
 @Component
@@ -41,19 +44,19 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName(); //get logged in users` mail
-        User user = PassengerService.getUserByEmail(email);
+        UserDetails userDetails = PassengerService.getUserByEmail(email);
 
-        if (user != null) {
+        if (userDetails != null) {
             HttpSession session = request.getSession();
             UserBean bean = UserBean.get(session);
 
-            LOGGER.info("User " + user.getName() + " " + user.getSurname() + " has successfully logged in");
-            bean.setName(user.getName());
-            bean.setSurname(user.getSurname());
-            bean.setUserId(user.getUserId());
+            LOGGER.info("UserDetails " + userDetails.getName() + " " + userDetails.getSurname() + " has successfully logged in");
+            bean.setName(userDetails.getName());
+            bean.setSurname(userDetails.getSurname());
+            bean.setUserId(userDetails.getUserId());
 
-            request.setAttribute("name", user.getName());
-            request.setAttribute("surname", user.getSurname());
+            request.setAttribute("name", userDetails.getName());
+            request.setAttribute("surname", userDetails.getSurname());
         }
 
         if (response.isCommitted()) {

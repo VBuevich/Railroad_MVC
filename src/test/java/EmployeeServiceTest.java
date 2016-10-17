@@ -3,7 +3,7 @@ import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import railroad.persistence.dao.TrainDao;
-import railroad.persistence.entity.User;
+import railroad.persistence.entity.UserDetails;
 import railroad.service.EmployeeService;
 import railroad.dto.PassengerList;
 
@@ -37,7 +37,7 @@ public class EmployeeServiceTest {
     public void setUp() throws SQLException{
         MockitoAnnotations.initMocks(this);
 
-        when((User)q.uniqueResult()).thenReturn(new User());
+        when((UserDetails)q.uniqueResult()).thenReturn(new UserDetails());
     }
 
     @After

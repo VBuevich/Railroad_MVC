@@ -4,7 +4,6 @@ import org.jboss.logging.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import railroad.Main;
 import railroad.service.EmployeeService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class NewTrainController {
 
-    private static final Logger LOGGER = Logger.getLogger(Main.class);
+    private static final Logger LOGGER = Logger.getLogger(NewTrainController.class);
 
     /**
      * Forwards to newTrain.jsp

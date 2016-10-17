@@ -2,10 +2,11 @@ import org.hibernate.query.Query;
 import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import railroad.persistence.entity.User;
+import railroad.persistence.entity.UserDetails;
 import railroad.dto.MessageBean;
 import railroad.dto.Offer;
 
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -25,6 +26,9 @@ public class PassengerServiceTest {
     @Mock
     Query q;
 
+    @Mock
+    HttpSession session;
+
     @BeforeClass
     public static void setUpClass() {
     }
@@ -37,7 +41,7 @@ public class PassengerServiceTest {
     public void setUp() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
-        when((User)q.uniqueResult()).thenReturn(new User());
+        when((UserDetails)q.uniqueResult()).thenReturn(new UserDetails());
     }
 
     @After
@@ -261,10 +265,12 @@ public class PassengerServiceTest {
         String surname = "Ivanov";
         String dob = "2000-05-24";
         String email = "java@t-systems.ru";
-        String pass = "pass";
+        String pass1 = "pass";
+        String pass2 = "pass";
         String secret = "secret";
+        MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass, secret);
+        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -279,10 +285,12 @@ public class PassengerServiceTest {
         String surname = "Ivanov";
         String dob = "2000-05-24";
         String email = "java@t-systems.ru";
-        String pass = "pass";
+        String pass1 = "pass";
+        String pass2 = "pass";
         String secret = "secret";
+        MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass, secret);
+        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -297,10 +305,12 @@ public class PassengerServiceTest {
         String surname = "";
         String dob = "2000-05-24";
         String email = "java@t-systems.ru";
-        String pass = "pass";
+        String pass1 = "pass";
+        String pass2 = "pass";
         String secret = "secret";
+        MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass, secret);
+        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -315,10 +325,12 @@ public class PassengerServiceTest {
         String surname = "Ivanov";
         String dob = "Двадцатое мая";
         String email = "java@t-systems.ru";
-        String pass = "pass";
+        String pass1 = "pass";
+        String pass2 = "pass";
         String secret = "secret";
+        MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass, secret);
+        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -333,10 +345,12 @@ public class PassengerServiceTest {
         String surname = "Ivanov";
         String dob = "2000-05-24";
         String email = "WRONG";
-        String pass = "pass";
+        String pass1 = "pass";
+        String pass2 = "pass";
         String secret = "secret";
+        MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass, secret);
+        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -351,10 +365,12 @@ public class PassengerServiceTest {
         String surname = "Ivanov";
         String dob = "2000-05-24";
         String email = "JavaSchool777@mail.ru";
-        String pass = "pass";
+        String pass1 = "pass";
+        String pass2 = "pass";
         String secret = "secret";
+        MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass, secret);
+        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -369,10 +385,12 @@ public class PassengerServiceTest {
         String surname = "Ivanov";
         String dob = "2000-05-24";
         String email = "java@t-systems.ru";
-        String pass = "";
+        String pass1 = "";
+        String pass2 = "pass";
         String secret = "secret";
+        MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass, secret);
+        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -381,16 +399,18 @@ public class PassengerServiceTest {
     public void testAddUserNegativePhrase() {
 
         System.out.println("-------------------");
-        System.out.println("Testing addUser : negative : email is incorrect");
+        System.out.println("Testing addUser : negative : secret phrase is empty");
 
         String name = "Ivan";
         String surname = "Ivanov";
         String dob = "2000-05-24";
         String email = "java@t-systems.ru";
-        String pass = "pass";
+        String pass1 = "pass";
+        String pass2 = "pass";
         String secret = "";
+        MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass, secret);
+        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }

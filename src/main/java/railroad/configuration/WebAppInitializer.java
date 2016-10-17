@@ -3,6 +3,13 @@ package railroad.configuration;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+/**
+ * Base class for WebApplicationInitializer implementations that register a DispatcherServlet configured with annotated classes,
+ * e.g. Spring's @Configuration classes.
+ * Concrete implementations are required to implement getRootConfigClasses(), getServletConfigClasses(), as well as
+ * AbstractDispatcherServletInitializer.getServletMappings(). Further template and customization methods are provided
+ * by AbstractDispatcherServletInitializer.
+ */
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override

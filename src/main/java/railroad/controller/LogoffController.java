@@ -32,7 +32,7 @@ public class LogoffController {
         HttpSession session = request.getSession();
         session.invalidate();
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication(); // Spring Security log off
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }

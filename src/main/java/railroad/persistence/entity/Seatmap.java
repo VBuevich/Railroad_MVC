@@ -15,7 +15,7 @@ public class Seatmap {
     private String seat;
     private Integer passengerOwner;
     private Train trainByTrainNumber;
-    private User userByPassengerOwner;
+    private UserDetails userDetailsByPassengerOwner;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
@@ -95,11 +95,11 @@ public class Seatmap {
 
     @ManyToOne
     @JoinColumn(name = "passenger_owner", referencedColumnName = "user_id", insertable = false, updatable = false) // IU
-    public User getUserByPassengerOwner() {
-        return userByPassengerOwner;
+    public UserDetails getUserDetailsByPassengerOwner() {
+        return userDetailsByPassengerOwner;
     }
 
-    public void setUserByPassengerOwner(User userByPassengerOwner) {
-        this.userByPassengerOwner = userByPassengerOwner;
+    public void setUserDetailsByPassengerOwner(UserDetails userDetailsByPassengerOwner) {
+        this.userDetailsByPassengerOwner = userDetailsByPassengerOwner;
     }
 }

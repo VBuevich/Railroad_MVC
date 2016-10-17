@@ -18,7 +18,7 @@ public class Ticket implements Serializable {
     private String arrivalStation;
     private String seat;
     private Boolean isOneWay;
-    private User userByPassengerId;
+    private UserDetails userDetailsByPassengerId;
     private Train trainByTrainNumber;
     private Station stationByDepartureStation;
     private Station stationByArrivalStation;
@@ -128,12 +128,12 @@ public class Ticket implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "passenger_id", referencedColumnName = "user_id", nullable = false, insertable = false, updatable = false) // IU
-    public User getUserByPassengerId() {
-        return userByPassengerId;
+    public UserDetails getUserDetailsByPassengerId() {
+        return userDetailsByPassengerId;
     }
 
-    public void setUserByPassengerId(User userByPassengerId) {
-        this.userByPassengerId = userByPassengerId;
+    public void setUserDetailsByPassengerId(UserDetails userDetailsByPassengerId) {
+        this.userDetailsByPassengerId = userDetailsByPassengerId;
     }
 
     @ManyToOne

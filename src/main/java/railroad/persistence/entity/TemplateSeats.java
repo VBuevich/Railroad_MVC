@@ -1,8 +1,6 @@
 package railroad.persistence.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Collection;
 
 /**
  * @author vbuevich
@@ -11,11 +9,10 @@ import java.util.Collection;
  */
 @Entity
 @Table(name="template_seats")
-public class TemplateSeats implements Serializable {
+public class TemplateSeats {
     private int templateSeatsId;
     private String templateId;
     private String seat;
-    private Collection<TemplateTrain> templatesByTemplateId;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) // SEQUENCE
@@ -68,14 +65,5 @@ public class TemplateSeats implements Serializable {
         result = 31 * result + (templateId != null ? templateId.hashCode() : 0);
         result = 31 * result + (seat != null ? seat.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "templateSeatsByTemplateId")
-    public Collection<TemplateTrain> getTemplatesByTemplateId() {
-        return templatesByTemplateId;
-    }
-
-    public void setTemplatesByTemplateId(Collection<TemplateTrain> templatesByTemplateId) {
-        this.templatesByTemplateId = templatesByTemplateId;
     }
 }

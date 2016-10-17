@@ -15,6 +15,7 @@ import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 //@Import({ AppSecurityConfig.class })
 public class WebConfig {
 
+    /* Datasource for another way to get auth data from DB
     @Bean(name = "dataSource")
     public DriverManagerDataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
@@ -25,7 +26,14 @@ public class WebConfig {
 
         return driverManagerDataSource;
     }
+    */
 
+    /**
+     * View resolver for PDF
+     * Order == 1
+     *
+     * @return
+     */
     @Bean
     public ResourceBundleViewResolver resBundleViewResolver() {
         ResourceBundleViewResolver resBundleViewResolver = new ResourceBundleViewResolver();
@@ -34,6 +42,12 @@ public class WebConfig {
         return resBundleViewResolver;
     }
 
+    /**
+     * View resolver for JSP
+     * Order == 2
+     *
+     * @return
+     */
     @Bean
     public InternalResourceViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();

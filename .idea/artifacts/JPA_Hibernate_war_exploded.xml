@@ -68,6 +68,8 @@
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-xc:1.7.1" />
           <element id="library" level="project" name="Maven: com.sun.jersey:jersey-client:1.8" />
           <element id="library" level="project" name="Maven: net.bytebuddy:byte-buddy:1.4.31" />
+          <element id="library" level="project" name="Maven: javax.validation:validation-api:1.1.0.Final" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator:5.2.4.Final" />
         </element>
       </element>
       <element id="directory" name="META-INF">

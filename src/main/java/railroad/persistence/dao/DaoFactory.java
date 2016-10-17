@@ -22,7 +22,7 @@ public class DaoFactory {
         Configuration configuration = new Configuration().configure();
 
         // adding Hibernate mapped classes
-        configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(UserDetails.class);
         configuration.addAnnotatedClass(Schedule.class);
         configuration.addAnnotatedClass(Station.class);
         configuration.addAnnotatedClass(Ticket.class);

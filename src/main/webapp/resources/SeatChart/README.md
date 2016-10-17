@@ -127,11 +127,11 @@ Each event handler is fired in *seat* context which gives you an easy access (us
 		//…
 	}
 
-**Please note**: event handler should return new status of a seat depending on what happended. If user clicks on a seat and the seat's *available*, *selected* status should be returned. If user clicks on a *selected* seat, it most likely should become *available* again. Full status reference:
+**Please note**: event handler should return new status of a seat depending on what happended. If userDetails clicks on a seat and the seat's *available*, *selected* status should be returned. If userDetails clicks on a *selected* seat, it most likely should become *available* again. Full status reference:
 
 * **available**: seat which can be taken
 * **unavailable**: seat which cannot be taken
-* **selected**: seat which has been taken by current user
+* **selected**: seat which has been taken by current userDetails
 
 Since JSC also works with *focus/blur* events, it features a special status called *focused* which actually doesn't apply to seat status but rather to the way it's displayed. If you use *.status* method on a focused seat, you will get its real status. To get an idea of this, please take a look at how events are handled by default:
 
@@ -211,7 +211,7 @@ Blur handler. Fired when seat loses focus due to mouse move or arrow hit. You mo
 
 ### click
 
-Click handler. Fired when user clicks on a seat or hits spacebar on a focused seat. You're most likely to overwrite this one based off this example:
+Click handler. Fired when userDetails clicks on a seat or hits spacebar on a focused seat. You're most likely to overwrite this one based off this example:
 
 	click   : function() {
 

@@ -3,10 +3,12 @@ package railroad.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import railroad.dto.MessageBean;
 import railroad.persistence.dao.ScheduleDao;
 import railroad.service.EmployeeService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Time;
 import java.util.Calendar;
 
@@ -42,43 +44,19 @@ public class NewScheduleController {
     @RequestMapping("/admin/addSchedule")
     public String addSchedule(HttpServletRequest request, Model model) {
 
+        HttpSession session = request.getSession();
         String trainNumber = request.getParameter("trainNumber");
         String station = request.getParameter("station");
         String departureTime = request.getParameter("departureTime");
+        MessageBean message = MessageBean.get(session);
 
-        int hour, minute, second = 0;
-
-        try {
-            String hourS = departureTime.substring(0, 2);
-            String minuteS = departureTime.substring(3, 5);
-
-            hour = Integer.parseInt(hourS);
-            minute = Integer.parseInt(minuteS);
-        }
-        catch (Exception e) {
-            model.addAttribute("errorMessage", "Invalid time");
-            return "newSchedule";
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(1970,1,1, hour, minute, second);
-        Time dTime = new Time(calendar.getTimeInMillis());
-
-        int tNumber = 0;
-        try {
-            tNumber = Integer.parseInt(trainNumber);
-        }
-        catch (NumberFormatException e) {
-            model.addAttribute("errorMessage", "Invalid train number");
-            return "newSchedule";
-        }
-
-        Boolean addSchedule = ScheduleDao.addSchedule(tNumber, station, dTime);
+        message.setErrorMessage(null);
+        Boolean addSchedule = EmployeeService.addSchedule(trainNumber, station, departureTime, message);
 
         if (addSchedule) {
             model.addAttribute("successMessage", "Schedule for train # " + trainNumber + " departing from " + station + " at " + departureTime + " is successfully added");
         } else {
-            model.addAttribute("errorMessage", "Schedule for train # " + trainNumber + " departing from " + station + " at " + departureTime + " is not added, please check and try again");
+            model.addAttribute("errorMessage", "Schedule for train # " + trainNumber + " departing from " + station + " at " + departureTime + " is not added, please check and try again. " + message.getErrorMessage());
         }
 
         model.addAttribute("trainList", EmployeeService.getTrainList());

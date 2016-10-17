@@ -3,38 +3,38 @@ package railroad.persistence.dao;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
-import railroad.persistence.entity.User;
+import railroad.persistence.entity.UserDetails;
 
 import java.sql.Date;
 
 /**
  * @author vbuevich
  *
- * DAO class for User entity
+ * DAO class for UserDetails entity
  */
-public class UserDao {
+public class UserDetailsDao {
 
-    private static final Logger LOGGER = Logger.getLogger(UserDao.class);
+    private static final Logger LOGGER = Logger.getLogger(UserDetailsDao.class);
 
     /**
-     * Method to change User`s secret phrase
+     * Method to change UserDetails`s secret phrase
      *
-     * @param email User`s email
-     * @param secret User`s secret phrase
+     * @param email UserDetails`s email
+     * @param secret UserDetails`s secret phrase
      * @return true if secret phrase is correct
      */
     public static Boolean checkSecret(String email, String secret) {
         Session session = DaoFactory.getSessionFactory().openSession();
-        User user;
+        UserDetails userDetails;
         Boolean isSuccess = false;
 
         try {
-            Query q = session.createQuery("FROM User u WHERE u.email = :em AND u.passRecovery = :secret");
+            Query q = session.createQuery("FROM UserDetails u WHERE u.email = :em AND u.passRecovery = :secret");
             q.setParameter("em", email);
             q.setParameter("secret", secret);
 
-            user = (User) q.uniqueResult(); // uniqueResult could be received just in case if passenger found
-            if (user != null) { // if we have Employee object - then the combination of email and secret was correct
+            userDetails = (UserDetails) q.uniqueResult(); // uniqueResult could be received just in case if passenger found
+            if (userDetails != null) { // if we have Employee object - then the combination of email and secret was correct
                 isSuccess = true;
             }
         } catch (Exception e) {
@@ -46,17 +46,17 @@ public class UserDao {
     }
 
     /**
-     * Method to change User`s password
+     * Method to change UserDetails`s password
      *
-     * @param pass User`s NEW password
-     * @param email User`s email
-     * @param session Hibernate session, opened in EmployeeService as we doing transaction
+     * @param pass UserDetails`s NEW password
+     * @param email UserDetails`s email
+     * @param session Hibernate session, opened in Service as we doing transaction
      * @return
      */
     public static Boolean setPassword(String pass, String email, Session session) {
         Boolean isSuccess = false;
         try {
-            Query query = session.createQuery("UPDATE User u SET u.password = :pass WHERE u.email = :email");
+            Query query = session.createQuery("UPDATE UserDetails u SET u.password = :pass WHERE u.email = :email");
             query.setParameter("pass", pass);
             query.setParameter("email", email);
             query.executeUpdate();
@@ -72,18 +72,18 @@ public class UserDao {
     /**
      * Method to get user using his Id
      *
-     * @param userId primary key of User entity
-     * @return User entity for given key
+     * @param userId primary key of UserDetails entity
+     * @return UserDetails entity for given key
      */
-    public static User getUser(int userId) {
+    public static UserDetails getUser(int userId) {
         Session session = DaoFactory.getSessionFactory().openSession(); // Hibernate session
-        User p = null;
+        UserDetails p = null;
 
         try {
-            Query q = session.createQuery("FROM User u WHERE u.userId = :userId");
+            Query q = session.createQuery("FROM UserDetails u WHERE u.userId = :userId");
 
             q.setParameter("userId", userId);
-            p = (User)q.uniqueResult(); // due to the fact that userId is primary key we can get just unique result
+            p = (UserDetails)q.uniqueResult(); // due to the fact that userId is primary key we can get just unique result
         }
         catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -105,12 +105,12 @@ public class UserDao {
      * @param secret Users` secret phrase user for password retrieval
      * @return true if success, otherwise false
      */
-    public static Boolean addUser(String name, String surname, Date dob, String email, String pass, String secret, String userRole) {
+    public static Boolean addUser(String name, String surname, Date dob, String email, String pass, String secret, String userRole, Boolean enabled) {
         Boolean isSuccess = false; // flag for success return
         Session session = DaoFactory.getSessionFactory().openSession();
 
         try {
-            User p = new User();
+            UserDetails p = new UserDetails();
             p.setName(name);
             p.setSurname(surname);
             p.setDob(dob);
@@ -120,6 +120,7 @@ public class UserDao {
             p.setSeatmapsByUserId(null);
             p.setTicketsByUserId(null);
             p.setUserRole(userRole);
+            p.setEnabled(enabled);
             session.save(p);
             isSuccess = true;
         }

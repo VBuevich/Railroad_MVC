@@ -29,7 +29,7 @@ public class TrainDao {
 
         ArrayList<String> trainList = new ArrayList<String>();
         try {
-            Query q = session.createQuery("FROM Train");
+            Query q = session.createQuery("FROM Train ORDER BY 1");
             List<Train> tList = q.list(); // getting the list of Train entities
 
             for (Train t : tList) {

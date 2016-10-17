@@ -3,12 +3,15 @@ package railroad.service;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jboss.logging.Logger;
+import railroad.dto.MessageBean;
 import railroad.dto.PassengerList;
 import railroad.persistence.dao.*;
 import railroad.persistence.entity.Ticket;
-import railroad.persistence.entity.User;
+import railroad.persistence.entity.UserDetails;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -20,6 +23,46 @@ public class EmployeeService {
 
     private static final Logger LOGGER = Logger.getLogger(EmployeeService.class);
     private static Mailer mailer = new Mailer();
+
+
+    /**
+     * Method that adds new schedule
+     *
+     * @param trainNumber Train number
+     * @param station Station
+     * @param departureTime The time of departure of train
+     * @return true if schedule is successfully added , false if fail
+     */
+    public static Boolean addSchedule(String trainNumber, String station, String departureTime, MessageBean message) {
+
+        int hour, minute, second = 0;
+
+        try {
+            String hourS = departureTime.substring(0, 2);
+            String minuteS = departureTime.substring(3, 5);
+
+            hour = Integer.parseInt(hourS);
+            minute = Integer.parseInt(minuteS);
+        }
+        catch (Exception e) {
+            message.setErrorMessage("Invalid time");
+            return false;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1970,1,1, hour, minute, second);
+        Time dTime = new Time(calendar.getTimeInMillis());
+
+        int tNumber = 0;
+        try {
+            tNumber = Integer.parseInt(trainNumber);
+        }
+        catch (NumberFormatException e) {
+            message.setErrorMessage("Invalid train number");
+            return false;
+        }
+        return ScheduleDao.addSchedule(tNumber, station, dTime);
+    }
 
     /**
      * Method adds new Train and new Seatmap for it
@@ -83,7 +126,7 @@ public class EmployeeService {
             passengerList = new ArrayList<PassengerList>();
             for (Ticket t : tickets) { // we filling the list of passengers
                 PassengerList p = new PassengerList();
-                User passenger = UserDao.getUser(t.getPassengerId()); // using passengerId, taken from list of tickets
+                UserDetails passenger = UserDetailsDao.getUser(t.getPassengerId()); // using passengerId, taken from list of tickets
 
                 p.setName(passenger.getName());
                 p.setSurname(passenger.getSurname());

@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 @Entity
 @Table(name="user")
-public class User {
+public class UserDetails {
     private int userId;
     private String name;
     private String surname;
@@ -120,17 +120,17 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        UserDetails userDetails = (UserDetails) o;
 
-        if (userId != user.userId) return false;
-        if (name != null ? !name.equals(user.name) : user.name != null) return false;
-        if (surname != null ? !surname.equals(user.surname) : user.surname != null) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (dob != null ? !dob.equals(user.dob) : user.dob != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (passRecovery != null ? !passRecovery.equals(user.passRecovery) : user.passRecovery != null) return false;
-        if (userRole != null ? !userRole.equals(user.userRole) : user.userRole != null) return false;
-        if (enabled != null ? !enabled.equals(user.enabled) : user.enabled != null) return false;
+        if (userId != userDetails.userId) return false;
+        if (name != null ? !name.equals(userDetails.name) : userDetails.name != null) return false;
+        if (surname != null ? !surname.equals(userDetails.surname) : userDetails.surname != null) return false;
+        if (email != null ? !email.equals(userDetails.email) : userDetails.email != null) return false;
+        if (dob != null ? !dob.equals(userDetails.dob) : userDetails.dob != null) return false;
+        if (password != null ? !password.equals(userDetails.password) : userDetails.password != null) return false;
+        if (passRecovery != null ? !passRecovery.equals(userDetails.passRecovery) : userDetails.passRecovery != null) return false;
+        if (userRole != null ? !userRole.equals(userDetails.userRole) : userDetails.userRole != null) return false;
+        if (enabled != null ? !enabled.equals(userDetails.enabled) : userDetails.enabled != null) return false;
 
         return true;
     }
@@ -149,7 +149,7 @@ public class User {
         return result;
     }
 
-    @OneToMany(mappedBy = "userByPassengerId")
+    @OneToMany(mappedBy = "userDetailsByPassengerId")
     public Collection<Ticket> getTicketsByUserId() {
         return ticketsByUserId;
     }
@@ -158,7 +158,7 @@ public class User {
         this.ticketsByUserId = ticketsByUserId;
     }
 
-    @OneToMany(mappedBy = "userByPassengerOwner")
+    @OneToMany(mappedBy = "userDetailsByPassengerOwner")
     public Collection<Seatmap> getSeatmapsByUserId() {
         return seatmapsByUserId;
     }

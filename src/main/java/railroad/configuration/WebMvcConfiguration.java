@@ -9,14 +9,14 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
+ * An implementation of WebMvcConfigurer with empty methods allowing subclasses to override only the methods they're interested in.
+ *
  * @author vbuevich
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan("railroad") // ("org.springframework.security.samples.mvc")
+@ComponentScan("railroad")
 public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
-
-    // ...
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {

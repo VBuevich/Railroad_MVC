@@ -10,6 +10,8 @@ import railroad.dto.Offer;
 import railroad.persistence.dao.*;
 import railroad.persistence.entity.*;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.Date;
@@ -18,7 +20,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -80,14 +83,14 @@ public class PassengerService {
     /**
      * Method checks if user entered valid "secret phrase", generates new password and sends an email confirmation
      *
-     * @param email User`s email
-     * @param secret User`s secret phrase
+     * @param email UserDetails`s email
+     * @param secret UserDetails`s secret phrase
      * @return true if password successfully changed, false in case of any error
      */
     public static Boolean changePass(String email, String secret)
     {
         Boolean isSuccess = false; // flag for success return
-        Boolean isCorrect = UserDao.checkSecret(email, secret); // checking secret phrase
+        Boolean isCorrect = UserDetailsDao.checkSecret(email, secret); // checking secret phrase
         Session session = DaoFactory.getSessionFactory().openSession();
         Transaction tx = null;
 
@@ -98,7 +101,7 @@ public class PassengerService {
             String sha1password = DigestUtils.sha1Hex(newPassword); // encrypting new password
             try {
                 tx = session.beginTransaction(); // we are doing transaction due to the fact that we need to be sure that: 1) password changed AND email sent
-                Boolean newPassSuccess = UserDao.setPassword(sha1password, email, session); // set new password
+                Boolean newPassSuccess = UserDetailsDao.setPassword(sha1password, email, session); // set new password
                 Boolean isMailSuccess = false;
                 if (newPassSuccess) { // if successfully changed - sending a confirmation email
                     isMailSuccess = mailer.send("Password change for railroad site", "You have successfully changed your password: " + newPassword, "javaschool.railroad@gmail.com", email);
@@ -179,7 +182,7 @@ public class PassengerService {
             t.setPassengerId(passengerId);
             t.setTrainNumber(trainNumber);
             t.setSeat(selectedSeat);
-            t.setUserByPassengerId((User)session.get(User.class, passengerId));
+            t.setUserDetailsByPassengerId((UserDetails)session.get(UserDetails.class, passengerId));
             t.setStationByArrivalStation((Station)session.get(Station.class, arrivalS));
             t.setStationByDepartureStation((Station)session.get(Station.class, departureS));
             t.setTrainByTrainNumber((Train)session.get(Train.class, trainNumber));
@@ -193,7 +196,7 @@ public class PassengerService {
             query.executeUpdate();
 
             Time timeOfArrival = ScheduleDao.getTime(trainNumber, arrivalS);
-            User p = UserDao.getUser(passengerId);
+            UserDetails p = UserDetailsDao.getUser(passengerId);
             StringBuilder eTicket = new StringBuilder();
             eTicket.append("Dear " + p.getSurname() + " " + p.getName() + System.lineSeparator());
             eTicket.append("Please kindly find your e-Ticket details: " + System.lineSeparator());
@@ -292,39 +295,134 @@ public class PassengerService {
     /**
      * Method for register new user
      *
-     * @param name User`s name
-     * @param surname User`s surname
-     * @param dob User`s date of birth
-     * @param email User`s e-mail
-     * @param pass User`s password
-     * @param secret User`s secret phrase
+     * @param name Users` name
+     * @param surname Users` surname
+     * @param dob Users` date of birth
+     * @param email User` e-mail
+     * @param pass1 Users` password
+     * @param pass2 Users` password to compare
+     * @param secret Users` secret phrase
      * @return true is success, false if error
      */
-    public static boolean addUser(String name, String surname, String dob, String email, String pass, String secret) {
+    public static boolean addUser(String name, String surname, String dob, String email, String pass1, String pass2, String secret, Boolean enabled, MessageBean message) {
 
-        String sha1password = DigestUtils.sha1Hex(pass);
+        Pattern pName = Pattern.compile("^[A-z]{2,15}$");
+        Pattern pDate = Pattern.compile("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
+        Date dateOfBirth = null;
 
-        int year, month, day = 0;
-
-        try {
-            String yearS = dob.substring(0, 4);
-            String monthS = dob.substring(5, 7);
-            String dayS = dob.substring(8, 10);
-
-            year = Integer.parseInt(yearS);
-            month = Integer.parseInt(monthS);
-            day = Integer.parseInt(dayS);
+        if (name == null || name.equals("")) {
+            message.setErrorMessage("Name is missing");
+            return false;
         }
-        catch (Exception e) {
-            // message.setErrorMessage("Invalid time");
+        else {
+            Matcher m = pName.matcher(name);
+            if (!m.matches()) {
+                message.setErrorMessage("Please check name");
+                return false;
+            }
+        }
+        if (surname == null || surname.equals("")) {
+            message.setErrorMessage("Surname is missing");
+            return false;
+
+        }
+        else {
+            Matcher m = pName.matcher(surname);
+            if (!m.matches()) {
+                message.setErrorMessage("Please check surname");
+                return false;
+            }
+        }
+        if (dob == null || dob.equals("")) {
+            message.setErrorMessage("Date of birth is missing");
+            return false;
+        }
+        else {
+            Matcher m = pDate.matcher(dob);
+            if (!m.matches()) {
+                message.setErrorMessage("Please check date of birth");
+                return false;
+            }
+
+            // checking if passenger is not born in future
+            Calendar calendarNow = Calendar.getInstance(); // an instance of Calendar - we need to know "time now"
+            Calendar calendarDob = Calendar.getInstance(); // an instance of Calendar - to use with users` dob
+
+            int year = 0;
+            int month = 0;
+            int day = 0;
+
+            try {
+                String yearS = dob.substring(0, 4);
+                String monthS = dob.substring(5, 7);
+                String dayS = dob.substring(8, 10);
+
+                year = Integer.parseInt(yearS);
+                month = Integer.parseInt(monthS);
+                day = Integer.parseInt(dayS);
+            } catch (Exception e) {
+                message.setErrorMessage("Invalid time");
+                return false;
+            }
+            calendarDob.set(year, month, day, 0, 0, 0); // setting the date of birth
+            long difference = calendarNow.getTimeInMillis() - calendarDob.getTimeInMillis(); // and getting the difference
+
+            if (difference < 0) {
+                message.setErrorMessage("Wrong date: born in future");
+                return false;
+            }
+
+            Long years150 = 150L*365*24*60*60*1000;
+
+            // Time now - 150 years can not be more than passengers` date of birth. Otherwise he is too old to travel
+            Boolean tooOld = ((calendarNow.getTimeInMillis() - years150) > calendarDob.getTimeInMillis());
+
+            if (tooOld) {
+                message.setErrorMessage("Too old to travel, sorry.");
+                return false;
+            }
+
+            dateOfBirth = new java.sql.Date(calendarDob.getTimeInMillis()); // finally if date is fine - we can generate SQL Date to pass it to DAO
+
+        }
+        if (email == null || email.equals("")) {
+            message.setErrorMessage("E-mail is missing");
+            return false;
+        }
+        else {
+            try {
+                InternetAddress validEmail = new InternetAddress(email);
+                validEmail.validate();
+            }
+            catch (AddressException e) {
+                message.setErrorMessage("E-mail is incorrect");
+                return false;
+            }
+        }
+        if (pass1 == null || pass1.equals("") || pass2 == null || pass2.equals("")) {
+            message.setErrorMessage("Password is missing");
+            return false;
+        }
+        if (pass1.length() < 9) {
+            message.setErrorMessage("Password is too short, should be at least 8 symbols");
+            return false;
+        }
+        if (pass1.length() > 50) {
+            message.setErrorMessage("Password is too long, should be maximum 50 symbols");
+            return false;
+        }
+        if (!pass1.equals(pass2)) {
+            message.setErrorMessage("Passwords does not match");
+            return false;
+        }
+        if (secret == null || secret.equals("")) {
+            message.setErrorMessage("Secret phrase is missing");
             return false;
         }
 
-        Calendar c = Calendar.getInstance();
-        c.set(year,month,day,0,0,0);
-        Date date = new java.sql.Date(c.getTimeInMillis());
+        String sha1password = DigestUtils.sha1Hex(pass1);
 
-        Boolean isSuccess = UserDao.addUser(name, surname, date, email, sha1password, secret, "USER");
+        Boolean isSuccess = UserDetailsDao.addUser(name, surname, dateOfBirth, email, sha1password, secret, "ROLE_USER", enabled);
 
         return isSuccess;
     }
@@ -333,18 +431,18 @@ public class PassengerService {
      * Method, used during Log-in of user to get just successfully logged in user
      *
      * @param email Log-in field of user
-     * @return User object if Ok either null if error
+     * @return UserDetails object if Ok either null if error
      */
-    public static User getUserByEmail(String email)
+    public static UserDetails getUserByEmail(String email)
     {
         Session session = DaoFactory.getSessionFactory().openSession();
-        User user = null;
+        UserDetails userDetails = null;
 
         try {
-            Query q = session.createQuery("FROM User WHERE email = :em");
+            Query q = session.createQuery("FROM UserDetails WHERE email = :em");
             q.setParameter("em", email);
 
-            user = (User)q.uniqueResult(); // uniqueResult could be received just in case if passenger found
+            userDetails = (UserDetails)q.uniqueResult(); // uniqueResult could be received just in case if passenger found
         }
         catch (Exception e) {
             // method will return null if Exception is caught
@@ -352,7 +450,7 @@ public class PassengerService {
         }
         finally {
             session.close(); // we always closing Hibernate Session
-            return user;
+            return userDetails;
         }
     }
 

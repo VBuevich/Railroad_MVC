@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import railroad.Main;
 import railroad.persistence.dao.StatisticsDao;
 import railroad.persistence.entity.Statistics;
 
@@ -17,7 +16,7 @@ import java.util.List;
 @RestController
 public class StatisticsController {
 
-    private static final Logger LOGGER = Logger.getLogger(Main.class);
+    private static final Logger LOGGER = Logger.getLogger(StatisticsController.class);
 
     @RequestMapping("/statistics")
     public @ResponseBody
