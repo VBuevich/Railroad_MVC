@@ -48,6 +48,9 @@ public class NewTrainController {
         int tNumber = 0;
         try {
             tNumber = Integer.parseInt(trainNumber);
+            if (tNumber < 1) {
+                throw new NumberFormatException(); // train numbers should be positive so < 1 we count as error
+            }
         }
         catch (NumberFormatException e) {
             model.addAttribute("errorMessage", "Invalid train number");

@@ -41,10 +41,16 @@ public class NewStationController {
 
         String stationName = request.getParameter("stationName");
 
+        if (stationName.length() < 2 || stationName.length() > 20) {
+
+            model.addAttribute("errorMessage", "Station '" + stationName + "' is not added due to incorrect length, should be between 2 and 20");
+            model.addAttribute("stationList", EmployeeService.getStationList());
+            return "newStation";
+        }
         Boolean addStation = StationDao.addStation(stationName);
 
         if (addStation) {
-            model.addAttribute("successMessage", "Station '" + stationName + "' is succesfully added");
+            model.addAttribute("successMessage", "Station '" + stationName + "' is successfully added");
         } else {
             model.addAttribute("errorMessage", "Station '" + stationName + "' is not added, please check and try again");
         }

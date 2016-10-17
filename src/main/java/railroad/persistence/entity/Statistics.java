@@ -1,6 +1,14 @@
 package railroad.persistence.entity;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -13,19 +21,33 @@ import java.sql.Timestamp;
 @Entity
 @Table(name="statistics")
 public class Statistics {
+    @NotNull
     private int statisticsId;
+    @NotNull @Past
     private Timestamp datetime;
+    @NotEmpty @Size(min=2, max=20)
     private String passengerName;
+    @NotEmpty @Size(min=2, max=20)
     private String passengerSurname;
+    @NotNull @Past
     private Date passengerDob;
+    @NotEmpty @Email @Size(min=5, max=40)
     private String passengerEmail;
+    @NotNull @Min(1)
     private int trainNumber;
+    @NotEmpty @Size(min=1, max=3)
     private String trainType;
+    @NotEmpty @Size(min=2, max=20)
     private String departureStation;
+    @NotEmpty @Size(min=2, max=20)
     private String arrivalStation;
+    @NotEmpty @Size(min=1, max=4)
     private String seat;
+    @NotNull
     private Boolean isOneWay;
+    @NotNull @DateTimeFormat(pattern="yyyy-dd-MM")
     private Date departureDate;
+    @NotNull @DateTimeFormat(pattern="HH:mm")
     private Time departureTime;
 
     @Id

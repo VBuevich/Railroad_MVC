@@ -43,7 +43,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         String targetUrl = determineTargetUrl(authentication);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName(); //get logged in users` mail
+        String email = auth.getName(); // get logged in users` mail
         UserDetails userDetails = PassengerService.getUserByEmail(email);
 
         if (userDetails != null) {

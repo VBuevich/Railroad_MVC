@@ -1,6 +1,11 @@
 package railroad.persistence.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 /**
@@ -11,10 +16,12 @@ import java.util.Collection;
 @Entity
 @Table(name="train")
 public class Train {
+    @NotNull
     private Integer trainNumber;
     private Collection<Schedule> schedulesByTrainNumber;
     private Collection<Ticket> ticketsByTrainNumber;
     private Collection<Seatmap> seatmapsByTrainNumber;
+    @NotEmpty @Size(min=1, max=3)
     private String templateId;
 
     public void setTrainNumber(int trainNumber) {

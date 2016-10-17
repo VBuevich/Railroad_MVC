@@ -1,6 +1,11 @@
 package railroad.persistence.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -11,12 +16,19 @@ import java.io.Serializable;
 @Entity
 @Table(name="ticket")
 public class Ticket implements Serializable {
+    @NotNull
     private int ticketId;
+    @NotNull @Min(1)
     private int passengerId;
+    @NotNull @Min(1)
     private int trainNumber;
+    @NotEmpty @Size(min=2, max=20)
     private String departureStation;
+    @NotEmpty @Size(min=2, max=20)
     private String arrivalStation;
+    @NotEmpty @Size(min=1, max=4)
     private String seat;
+    @NotNull
     private Boolean isOneWay;
     private UserDetails userDetailsByPassengerId;
     private Train trainByTrainNumber;

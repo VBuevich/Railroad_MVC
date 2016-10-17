@@ -1,6 +1,12 @@
 package railroad.persistence.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Time;
 
 /**
@@ -11,9 +17,13 @@ import java.sql.Time;
 @Entity
 @Table(name="schedule")
 public class Schedule {
+    @NotNull
     private int scheduleId;
+    @NotEmpty @Size(min=2, max=20)
     private String stationName;
+    @NotNull @Min(1)
     private int trainNumber;
+    @NotNull @DateTimeFormat(pattern="HH:mm")
     private Time time;
     private Station stationByStationName;
     private Train trainByTrainNumber;

@@ -1,6 +1,9 @@
 package railroad.persistence.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 /**
@@ -11,6 +14,7 @@ import java.util.Collection;
 @Entity
 @Table(name="station")
 public class Station {
+    @NotEmpty @Size(min=2, max=20)
     private String stationName;
     private Collection<Schedule> schedulesByStationName;
     private Collection<Ticket> ticketsByStationName;

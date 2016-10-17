@@ -419,6 +419,14 @@ public class PassengerService {
             message.setErrorMessage("Secret phrase is missing");
             return false;
         }
+        if (secret.length() < 6) {
+            message.setErrorMessage("Secret phrase is too short, should be at least 8 symbols");
+            return false;
+        }
+        if (secret.length() > 50) {
+            message.setErrorMessage("Secret phrase is too long, should be maximum 50 symbols");
+            return false;
+        }
 
         String sha1password = DigestUtils.sha1Hex(pass1);
 

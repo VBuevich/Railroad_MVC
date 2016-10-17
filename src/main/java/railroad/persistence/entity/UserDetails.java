@@ -1,6 +1,14 @@
 package railroad.persistence.entity;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.util.Collection;
 
@@ -12,14 +20,23 @@ import java.util.Collection;
 @Entity
 @Table(name="user")
 public class UserDetails {
+    @NotNull
     private int userId;
+    @NotEmpty @Size(min=2, max=20)
     private String name;
+    @NotEmpty @Size(min=2, max=20)
     private String surname;
+    @NotEmpty @Email @Size(min=5, max=40)
     private String email;
+    @NotNull @DateTimeFormat(pattern="yyyy-dd-MM") @Past
     private Date dob;
+    @NotEmpty @Size(min=8, max=100) // SHA1 Generated, length == 40
     private String password;
+    @NotEmpty @Size(min=6, max=100)
     private String passRecovery;
+    @NotEmpty @Size(min=1, max=10)
     private String userRole;
+    @NotNull
     private Boolean enabled;
     private Collection<Ticket> ticketsByUserId;
     private Collection<Seatmap> seatmapsByUserId;

@@ -1,6 +1,11 @@
 package railroad.persistence.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -11,9 +16,13 @@ import java.io.Serializable;
 @Entity
 @Table(name="template_rows")
 public class TemplateRows implements Serializable {
+    @NotNull
     private int templateRowsId;
+    @NotEmpty @Size(min=1, max=3)
     private String templateId;
+    @NotNull @Min(1)
     private int rowNumber;
+    @NotEmpty @Size(min=1, max=10)
     private String rowSeats;
 
     @Id
