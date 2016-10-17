@@ -1,9 +1,10 @@
 import org.hibernate.query.Query;
 import org.junit.*;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import railroad.persistence.dao.TrainDao;
+import railroad.persistence.dao.*;
 import railroad.persistence.entity.UserDetails;
 import railroad.dto.MessageBean;
 import railroad.dto.Offer;
@@ -24,14 +25,28 @@ import static railroad.service.PassengerService.*;
  */
 public class PassengerServiceTest {
 
-    @Autowired
-    private PassengerService passengerService;
-
     public PassengerServiceTest() {
     }
 
+    @InjectMocks
+    private PassengerService passengerService;
+    @InjectMocks
+    private EmployeeService employeeService;
+
     @Mock
-    Query q;
+    private ScheduleDao scheduleDao;
+    @Mock
+    private UserDetailsDao userDetailsDao;
+    @Mock
+    private StationDao stationDao;
+    @Mock
+    private TicketDao ticketDao;
+    @Mock
+    private SeatmapDao seatmapDao;
+    @Mock
+    private TrainDao trainDao;
+    @Mock
+    private TemplateTrainDao templateTrainDao;
 
     @Mock
     HttpSession session;
@@ -47,8 +62,6 @@ public class PassengerServiceTest {
     @Before
     public void setUp() throws SQLException {
         MockitoAnnotations.initMocks(this);
-
-        when((UserDetails)q.uniqueResult()).thenReturn(new UserDetails());
     }
 
     @After
@@ -135,8 +148,7 @@ public class PassengerServiceTest {
     public void changePassTestPositive() {
 
         System.out.println("-------------------");
-        System.out.println("Testing ChangePass : positive"); // ignored in order to save time due to the fact that password is changed in random way
-        // and we need to retrieve new pass from email to run test again
+        System.out.println("Testing ChangePass : positive");
 
         Boolean bool = passengerService.changePass("JavaSchool7772@mail.ru", "secret");
         assertTrue(bool);

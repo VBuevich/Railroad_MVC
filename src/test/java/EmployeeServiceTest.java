@@ -1,9 +1,13 @@
+import com.sun.jersey.spi.inject.Inject;
 import org.hibernate.query.Query;
+import org.hibernate.service.spi.InjectService;
 import org.junit.*;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import railroad.persistence.dao.TrainDao;
+import org.springframework.context.ApplicationContext;
+import railroad.persistence.dao.*;
 import railroad.persistence.entity.UserDetails;
 import railroad.service.EmployeeService;
 import railroad.dto.PassengerList;
@@ -21,19 +25,32 @@ import static org.mockito.Mockito.when;
  */
 public class EmployeeServiceTest {
 
-    @Autowired
+    @InjectMocks
     private PassengerService passengerService;
-
-    @Autowired
-    private TrainDao trainDao;
-
-    @Autowired
+    @InjectMocks
     private EmployeeService employeeService;
+
+    @Mock
+    private ScheduleDao scheduleDao;
+    @Mock
+    private UserDetailsDao userDetailsDao;
+    @Mock
+    private StationDao stationDao;
+    @Mock
+    private TicketDao ticketDao;
+    @Mock
+    private SeatmapDao seatmapDao;
+    @Mock
+    private TrainDao trainDao;
+    @Mock
+    private TemplateTrainDao templateTrainDao;
+    @Mock
+    private TemplateRowsDao templateRowsDao;
+    @Mock
+    private DaoFactory sessionFactory;
 
     public EmployeeServiceTest() {
     }
-    @Mock
-    Query q;
 
     @BeforeClass
     public static void setUpClass() {
@@ -45,45 +62,12 @@ public class EmployeeServiceTest {
 
     @Before
     public void setUp() throws SQLException{
-        MockitoAnnotations.initMocks(this);
 
-        when((UserDetails)q.uniqueResult()).thenReturn(new UserDetails());
+        MockitoAnnotations.initMocks(this);
     }
 
     @After
     public void tearDown() {
-    }
-
-    @Ignore
-    @Test
-    public void changePassTestPositive() {
-
-        System.out.println("-------------------");
-        System.out.println("Testing ChangePass : positive"); // ignored in order to save time due to the fact that password is changed in random way
-                                                             // and we need to retrieve new pass from email to run test again
-
-        Boolean bool = passengerService.changePass("JavaSchool7772@mail.ru", "secret");
-        assertTrue(bool);
-    }
-
-    @Test
-    public void changePassTestNegativeUser() {
-
-        System.out.println("-------------------");
-        System.out.println("Testing ChangePass : negative : wrong email"); // that Employee never exists
-
-        Boolean bool = passengerService.changePass("WRONG100500EMAIL", "qwerty");
-        assertFalse(bool);
-    }
-
-    @Test
-    public void changePassTestNegativePass() {
-
-        System.out.println("-------------------");
-        System.out.println("Testing ChangePass : negative : wrong reminder phrase"); // that Employee exists, but secret phrase is wrong
-
-        Boolean bool = passengerService.changePass("javaschool.railroad@mail.ru", "qwerty");
-        assertFalse(bool);
     }
 
     @Test

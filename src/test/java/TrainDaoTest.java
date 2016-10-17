@@ -12,8 +12,7 @@ import java.util.List;
  */
 public class TrainDaoTest {
 
-    @Autowired
-    private TrainDao trainDao;
+    private TrainDao trainDao = new TrainDao();
 
     public TrainDaoTest() {
     }
