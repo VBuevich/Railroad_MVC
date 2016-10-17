@@ -1,5 +1,6 @@
 package railroad.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,12 @@ import java.util.List;
 @Controller
 public class FindTrainController {
 
+    @Autowired
+    private StationDao stationDao;
+
+    @Autowired
+    private PassengerService passengerService;
+
     /**
      * forwards for findTrain.jsp
      *
@@ -31,7 +38,7 @@ public class FindTrainController {
     @RequestMapping("/user/findTrain")
     public String findTrain(HttpServletRequest request, Model model) {
 
-        model.addAttribute("stationList", StationDao.getStationList());
+        model.addAttribute("stationList", stationDao.getStationList());
         return "findTrain";
     }
 
@@ -53,7 +60,7 @@ public class FindTrainController {
         String arrivalTime = request.getParameter("arrivalTime");
         String arrivalStation = request.getParameter("arrivalStation");
 
-        List<Offer> offers = PassengerService.getOffers(departureStation, departureTime, arrivalStation, arrivalTime);
+        List<Offer> offers = passengerService.getOffers(departureStation, departureTime, arrivalStation, arrivalTime);
 
         if (offers == null || offers.size() == 0) {
             model.addAttribute("errorMessage", "No offers found using your criteria of search");
@@ -66,7 +73,7 @@ public class FindTrainController {
         model.addAttribute("selectedStationDeparture", departureStation);
         model.addAttribute("arrivalTime", arrivalTime);
         model.addAttribute("selectedStationArrival", arrivalStation);
-        model.addAttribute("stationList", StationDao.getStationList());
+        model.addAttribute("stationList", stationDao.getStationList());
         return "findTrain";
     }
 
@@ -82,7 +89,7 @@ public class FindTrainController {
     public String occupiedSeats(HttpServletRequest request, Model model) {
 
         String trainNumber = request.getParameter("trainNumber");
-        StringBuilder sb = PassengerService.getOccupiedSeats(trainNumber);
+        StringBuilder sb = passengerService.getOccupiedSeats(trainNumber);
 
         return sb.toString();
     }
@@ -119,14 +126,14 @@ public class FindTrainController {
             model.addAttribute("selectedStationDeparture", departureStation);
             model.addAttribute("arrivalTime", arrivalTime);
             model.addAttribute("selectedStationArrival", arrivalStation);
-            model.addAttribute("stationList", StationDao.getStationList());
+            model.addAttribute("stationList", stationDao.getStationList());
             return "findTrain";
         }
 
         message.setSuccessMessage(null);
         message.setErrorMessage(null);
 
-        PassengerService.buyTicket(userId, departureStation, arrivalStation, tNumber, selectedSeat, message);
+        passengerService.buyTicket(userId, departureStation, arrivalStation, tNumber, selectedSeat, message);
 
         if (message.getErrorMessage() != null) {
             model.addAttribute("errorMessage", message.getErrorMessage());
@@ -141,7 +148,7 @@ public class FindTrainController {
         model.addAttribute("selectedStationDeparture", departureStation);
         model.addAttribute("arrivalTime", arrivalTime);
         model.addAttribute("selectedStationArrival", arrivalStation);
-        model.addAttribute("stationList", StationDao.getStationList());
+        model.addAttribute("stationList", stationDao.getStationList());
 
         return "findTrain";
     }

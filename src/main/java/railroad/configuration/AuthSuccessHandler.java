@@ -1,6 +1,7 @@
 package railroad.configuration;
 
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +32,9 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     private static final Logger LOGGER = Logger.getLogger(AuthSuccessHandler.class);
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
+    @Autowired
+    private PassengerService passengerService;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication) throws IOException {
@@ -44,7 +48,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName(); // get logged in users` mail
-        UserDetails userDetails = PassengerService.getUserByEmail(email);
+        UserDetails userDetails = passengerService.getUserByEmail(email);
 
         if (userDetails != null) {
             HttpSession session = request.getSession();

@@ -1,6 +1,7 @@
 package railroad.controller;
 
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 public class ForgotPasswordController {
 
     private static final Logger LOGGER = Logger.getLogger(ForgotPasswordController.class);
+
+    @Autowired
+    private PassengerService passengerService;
 
     /**
      * Forwards to forgotPassword.jsp
@@ -49,7 +53,7 @@ public class ForgotPasswordController {
             return "forgotPassword";
         }
         else {
-            Boolean isSuccess = PassengerService.changePass(email, secret);
+            Boolean isSuccess = passengerService.changePass(email, secret);
             if (isSuccess) {
                 LOGGER.info("New password sent to " + email);
                 model.addAttribute("successMessage", "Password changed, check your Email");

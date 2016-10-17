@@ -1,5 +1,6 @@
 package railroad.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,13 @@ import java.util.List;
 @Controller
 public class MyTicketsController {
 
+    @Autowired
+    private TicketDao ticketDao;
+
+    @Autowired
+    private StationDao stationDao;
+
+
     /**
      * Handles myTickets.jsp
      *
@@ -32,7 +40,7 @@ public class MyTicketsController {
         HttpSession session = request.getSession();
         UserBean bean = UserBean.get(session);
 
-        List<Ticket> tickets = TicketDao.getTickets(bean.getUserId());
+        List<Ticket> tickets = ticketDao.getTickets(bean.getUserId());
 
         if (tickets == null || tickets.size() == 0) {
             model.addAttribute("errorMessage", "Currently you have no tickets");
@@ -41,7 +49,7 @@ public class MyTicketsController {
         }
 
 
-        model.addAttribute("stationList", StationDao.getStationList());
+        model.addAttribute("stationList", stationDao.getStationList());
         return "myTickets";
     }
 

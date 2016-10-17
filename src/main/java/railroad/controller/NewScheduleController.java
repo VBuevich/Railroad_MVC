@@ -1,5 +1,6 @@
 package railroad.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,9 @@ import java.util.Calendar;
 @Controller
 public class NewScheduleController {
 
+    @Autowired
+    private EmployeeService employeeService;
+
     /**
      * Forwards to newSchedule.jsp
      *
@@ -28,8 +32,8 @@ public class NewScheduleController {
     @RequestMapping("/admin/newSchedule")
     public String newSchedule(Model model) {
 
-        model.addAttribute("trainList", EmployeeService.getTrainList());
-        model.addAttribute("stationList", EmployeeService.getStationList());
+        model.addAttribute("trainList", employeeService.getTrainList());
+        model.addAttribute("stationList", employeeService.getStationList());
         return "newSchedule";
     }
 
@@ -51,7 +55,7 @@ public class NewScheduleController {
         MessageBean message = MessageBean.get(session);
 
         message.setErrorMessage(null);
-        Boolean addSchedule = EmployeeService.addSchedule(trainNumber, station, departureTime, message);
+        Boolean addSchedule = employeeService.addSchedule(trainNumber, station, departureTime, message);
 
         if (addSchedule) {
             model.addAttribute("successMessage", "Schedule for train # " + trainNumber + " departing from " + station + " at " + departureTime + " is successfully added");
@@ -59,8 +63,8 @@ public class NewScheduleController {
             model.addAttribute("errorMessage", "Schedule for train # " + trainNumber + " departing from " + station + " at " + departureTime + " is not added, please check and try again. " + message.getErrorMessage());
         }
 
-        model.addAttribute("trainList", EmployeeService.getTrainList());
-        model.addAttribute("stationList", EmployeeService.getStationList());
+        model.addAttribute("trainList", employeeService.getTrainList());
+        model.addAttribute("stationList", employeeService.getStationList());
         model.addAttribute("selectedStation", station);
         model.addAttribute("selectedTrain", trainNumber);
         return "newSchedule";

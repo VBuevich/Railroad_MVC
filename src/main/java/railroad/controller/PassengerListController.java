@@ -1,5 +1,6 @@
 package railroad.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,9 @@ import java.util.List;
 @Controller
 public class PassengerListController {
 
+    @Autowired
+    private EmployeeService employeeService;
+
     /**
      * Forwards to passengerList.jsp
      *
@@ -25,7 +29,7 @@ public class PassengerListController {
     @RequestMapping("/admin/passengerList")
     public String passengerList(HttpServletRequest request, Model model) {
 
-        model.addAttribute("trainList", EmployeeService.getTrainList());
+        model.addAttribute("trainList", employeeService.getTrainList());
 
         return "passengerList";
     }
@@ -41,7 +45,7 @@ public class PassengerListController {
 
         String trainNumber = request.getParameter("trainNumber");
         model.addAttribute("selectedTrain", trainNumber);
-        model.addAttribute("trainList", EmployeeService.getTrainList());
+        model.addAttribute("trainList", employeeService.getTrainList());
 
         int tNumber = 0;
         try {
@@ -51,7 +55,7 @@ public class PassengerListController {
             return "passengerList";
         }
 
-        List<PassengerList> passengerList = EmployeeService.getPassengerList(tNumber);
+        List<PassengerList> passengerList = employeeService.getPassengerList(tNumber);
         if (passengerList == null) {
             model.addAttribute("errorMessage", "No passengers found for this train");
         } else {

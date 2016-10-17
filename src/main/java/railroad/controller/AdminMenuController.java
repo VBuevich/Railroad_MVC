@@ -1,5 +1,6 @@
 package railroad.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,9 @@ import java.util.List;
  */
 @Controller
 public class AdminMenuController {
+
+    @Autowired
+    private StatisticsDao statisticsDao;
 
     /**
      * Forwards to adminMenu.jsp after successful login
@@ -42,7 +46,7 @@ public class AdminMenuController {
     public ModelAndView downloadExcel(HttpServletRequest request, Model model) {
 
         // create some sample data
-        List<Statistics> statistics = StatisticsDao.getStatistics();
+        List<Statistics> statistics = statisticsDao.getStatistics();
 
         // return a view which will be resolved by a view resolver
         return new ModelAndView("pdfView", "statistics", statistics);

@@ -1,5 +1,6 @@
 import org.hibernate.Session;
 import org.junit.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import railroad.persistence.dao.DaoFactory;
 import railroad.persistence.dao.TrainDao;
 
@@ -10,6 +11,9 @@ import java.util.List;
  * @author vbuevich
  */
 public class TrainDaoTest {
+
+    @Autowired
+    private TrainDao trainDao;
 
     public TrainDaoTest() {
     }
@@ -40,10 +44,10 @@ public class TrainDaoTest {
         System.out.println("-------------------");
         System.out.println("Testing if we can add duplicate train");
 
-        List<String> trainList = TrainDao.getTrainList();
+        List<String> trainList = trainDao.getTrainList();
         int trainNumber = Integer.parseInt(trainList.get(0)); // just first train , just for test
 
-        TrainDao.addTrain(trainNumber, "TST", session); // adding duplicate
+        trainDao.addTrain(trainNumber, "TST", session); // adding duplicate
 
         session.getTransaction().commit(); // throws PersistenceException
 

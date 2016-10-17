@@ -2,9 +2,13 @@ import org.hibernate.query.Query;
 import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import railroad.persistence.dao.TrainDao;
 import railroad.persistence.entity.UserDetails;
 import railroad.dto.MessageBean;
 import railroad.dto.Offer;
+import railroad.service.EmployeeService;
+import railroad.service.PassengerService;
 
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
@@ -19,6 +23,9 @@ import static railroad.service.PassengerService.*;
  * @author vbuevich
  */
 public class PassengerServiceTest {
+
+    @Autowired
+    private PassengerService passengerService;
 
     public PassengerServiceTest() {
     }
@@ -58,7 +65,7 @@ public class PassengerServiceTest {
         String depTime = "10:00:00";
         String arrStation = "Moscow";
         String arrTime = "23:55:55";
-        List<Offer> offerList = getOffers(depStation, depTime, arrStation, arrTime);
+        List<Offer> offerList = passengerService.getOffers(depStation, depTime, arrStation, arrTime);
 
         assertFalse(offerList.isEmpty());
     }
@@ -73,7 +80,7 @@ public class PassengerServiceTest {
         String depTime = "10:00:00";
         String arrStation = "Moscow";
         String arrTime = "23:55:55";
-        List<Offer> offerList = getOffers(depStation, depTime, arrStation, arrTime);
+        List<Offer> offerList = passengerService.getOffers(depStation, depTime, arrStation, arrTime);
 
         assertTrue(offerList.isEmpty());
     }
@@ -88,7 +95,7 @@ public class PassengerServiceTest {
         String depTime = "WRONG";
         String arrStation = "Moscow";
         String arrTime = "23:55:55";
-        List<Offer> offerList = getOffers(depStation, depTime, arrStation, arrTime);
+        List<Offer> offerList = passengerService.getOffers(depStation, depTime, arrStation, arrTime);
 
         assertTrue(offerList.isEmpty());
     }
@@ -103,7 +110,7 @@ public class PassengerServiceTest {
         String depTime = "10:00:00";
         String arrStation = "WRONG";
         String arrTime = "23:55:55";
-        List<Offer> offerList = getOffers(depStation, depTime, arrStation, arrTime);
+        List<Offer> offerList = passengerService.getOffers(depStation, depTime, arrStation, arrTime);
 
         assertTrue(offerList.isEmpty());
     }
@@ -118,7 +125,7 @@ public class PassengerServiceTest {
         String depTime = "10:00:00";
         String arrStation = "Moscow";
         String arrTime = "WRONG";
-        List<Offer> offerList = getOffers(depStation, depTime, arrStation, arrTime);
+        List<Offer> offerList = passengerService.getOffers(depStation, depTime, arrStation, arrTime);
 
         assertTrue(offerList.isEmpty());
     }
@@ -131,7 +138,7 @@ public class PassengerServiceTest {
         System.out.println("Testing ChangePass : positive"); // ignored in order to save time due to the fact that password is changed in random way
         // and we need to retrieve new pass from email to run test again
 
-        Boolean bool = changePass("JavaSchool7772@mail.ru", "secret");
+        Boolean bool = passengerService.changePass("JavaSchool7772@mail.ru", "secret");
         assertTrue(bool);
     }
 
@@ -141,7 +148,7 @@ public class PassengerServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing ChangePass : negative : wrong email"); // that Employee never exists
 
-        Boolean bool = changePass("WRONG100500EMAIL", "qwerty");
+        Boolean bool = passengerService.changePass("WRONG100500EMAIL", "qwerty");
         assertFalse(bool);
     }
 
@@ -151,7 +158,7 @@ public class PassengerServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing ChangePass : negative : wrong reminder phrase"); // that Employee exists, but secret phrase is wrong
 
-        Boolean bool = changePass("javaschool.railroad@mail.ru", "qwerty");
+        Boolean bool = passengerService.changePass("javaschool.railroad@mail.ru", "qwerty");
         assertFalse(bool);
     }
 
@@ -162,7 +169,7 @@ public class PassengerServiceTest {
         System.out.println("Testing Ticketing : negative : wrong user");
 
         MessageBean message = new MessageBean();
-        buyTicket(0, "Saint Petersburg", "Moscow", 1001, "1_1", message);
+        passengerService.buyTicket(0, "Saint Petersburg", "Moscow", 1001, "1_1", message);
         assertTrue(message.getErrorMessage() != null);
     }
 
@@ -173,7 +180,7 @@ public class PassengerServiceTest {
         System.out.println("Testing Ticketing : negative : wrong departure station");
 
         MessageBean message = new MessageBean();
-        buyTicket(1, "WRONG", "Moscow", 1001, "1_1", message);
+        passengerService.buyTicket(1, "WRONG", "Moscow", 1001, "1_1", message);
         assertTrue(message.getErrorMessage() != null);
     }
 
@@ -184,7 +191,7 @@ public class PassengerServiceTest {
         System.out.println("Testing Ticketing : negative : wrong arrival station");
 
         MessageBean message = new MessageBean();
-        buyTicket(0, "Saint Petersburg", "WRONG", 1001, "1_1", message);
+        passengerService.buyTicket(0, "Saint Petersburg", "WRONG", 1001, "1_1", message);
         assertTrue(message.getErrorMessage() != null);
     }
 
@@ -195,7 +202,7 @@ public class PassengerServiceTest {
         System.out.println("Testing Ticketing : negative : wrong train");
 
         MessageBean message = new MessageBean();
-        buyTicket(0, "Saint Petersburg", "Moscow", 0, "1_1", message);
+        passengerService.buyTicket(0, "Saint Petersburg", "Moscow", 0, "1_1", message);
         assertTrue(message.getErrorMessage() != null);
     }
 
@@ -206,7 +213,7 @@ public class PassengerServiceTest {
         System.out.println("Testing Ticketing : negative : wrong seat");
 
         MessageBean message = new MessageBean();
-        buyTicket(0, "Saint Petersburg", "Moscow", 1001, "WRONG", message);
+        passengerService.buyTicket(0, "Saint Petersburg", "Moscow", 1001, "WRONG", message);
         assertTrue(message.getErrorMessage() != null);
     }
 
@@ -217,7 +224,7 @@ public class PassengerServiceTest {
         System.out.println("Testing getOccupiedSeats : positive");
 
         MessageBean message = new MessageBean();
-        StringBuilder sb = getOccupiedSeats("1001"); // this train number exists for sure
+        StringBuilder sb = passengerService.getOccupiedSeats("1001"); // this train number exists for sure
         assertTrue(sb.length() > 0);
     }
 
@@ -228,7 +235,7 @@ public class PassengerServiceTest {
         System.out.println("Testing getOccupiedSeats : negative : argument is null");
 
         MessageBean message = new MessageBean();
-        StringBuilder sb = getOccupiedSeats(null); // argument is null
+        StringBuilder sb = passengerService.getOccupiedSeats(null); // argument is null
         assertTrue(sb.length() == 0);
     }
 
@@ -239,7 +246,7 @@ public class PassengerServiceTest {
         System.out.println("Testing getOccupiedSeats : negative : train number is incorrect");
 
         MessageBean message = new MessageBean();
-        StringBuilder sb = getOccupiedSeats("WRONG"); // argument is null
+        StringBuilder sb = passengerService.getOccupiedSeats("WRONG"); // argument is null
         assertTrue(sb.length() == 0);
     }
 
@@ -250,7 +257,7 @@ public class PassengerServiceTest {
         System.out.println("Testing getOccupiedSeats : negative : train number is wrong");
 
         MessageBean message = new MessageBean();
-        StringBuilder sb = getOccupiedSeats("0"); // argument is null
+        StringBuilder sb = passengerService.getOccupiedSeats("0"); // argument is null
         assertTrue(sb.length() == 0);
     }
 
@@ -270,7 +277,7 @@ public class PassengerServiceTest {
         String secret = "secret";
         MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
+        Boolean isUserAdded = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -290,7 +297,7 @@ public class PassengerServiceTest {
         String secret = "secret";
         MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
+        Boolean isUserAdded = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -310,7 +317,7 @@ public class PassengerServiceTest {
         String secret = "secret";
         MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
+        Boolean isUserAdded = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -330,7 +337,7 @@ public class PassengerServiceTest {
         String secret = "secret";
         MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
+        Boolean isUserAdded = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -350,7 +357,7 @@ public class PassengerServiceTest {
         String secret = "secret";
         MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
+        Boolean isUserAdded = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -370,7 +377,7 @@ public class PassengerServiceTest {
         String secret = "secret";
         MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
+        Boolean isUserAdded = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -390,7 +397,7 @@ public class PassengerServiceTest {
         String secret = "secret";
         MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
+        Boolean isUserAdded = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }
@@ -410,7 +417,7 @@ public class PassengerServiceTest {
         String secret = "";
         MessageBean message = MessageBean.get(session);
 
-        Boolean isUserAdded = addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
+        Boolean isUserAdded = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
 
         assertFalse(isUserAdded);
     }

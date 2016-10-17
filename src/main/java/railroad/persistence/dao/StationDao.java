@@ -4,6 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import railroad.persistence.entity.Station;
 
 import java.util.ArrayList;
@@ -14,9 +16,13 @@ import java.util.List;
  *
  * DAO class for Station entity
  */
+@Repository
 public class StationDao {
 
-    private static final Logger LOGGER = Logger.getLogger(StationDao.class);
+    private final Logger LOGGER = Logger.getLogger(StationDao.class);
+
+    @Autowired
+    private DaoFactory sessionFactory;
 
     /**
      * Method that adds new station
@@ -24,9 +30,9 @@ public class StationDao {
      * @param stationName Station Name
      * @return true is Station is successfully added
      */
-    public static Boolean addStation(String stationName) {
+    public Boolean addStation(String stationName) {
 
-        Session session = DaoFactory.getSessionFactory().openSession();
+        Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx = null;
         Boolean isSuccess = true; // true if success
 
@@ -59,8 +65,8 @@ public class StationDao {
      *
      * @return List<String> station names either empty list if encounter error
      */
-    public static List<String> getStationList() {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public List<String> getStationList() {
+        Session session = sessionFactory.getSessionFactory().openSession();
         ArrayList<String> stationList = new ArrayList<String>();
         try {
             Query q = session.createQuery("FROM Station");

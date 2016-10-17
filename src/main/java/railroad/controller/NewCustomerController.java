@@ -1,6 +1,7 @@
 package railroad.controller;
 
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,9 @@ import java.util.regex.Pattern;
 public class NewCustomerController {
 
     private static final Logger LOGGER = Logger.getLogger(PassengerService.class);
+
+    @Autowired
+    private PassengerService passengerService;
 
     /**
      * Handles users` registration as new user
@@ -53,7 +57,7 @@ public class NewCustomerController {
         model.addAttribute("secret", secret);
 
         message.setErrorMessage(null);
-        Boolean isSuccess = PassengerService.addUser(name, surname, dob, email, pass1, pass2, secret, true, message);
+        Boolean isSuccess = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, true, message);
         if (isSuccess) {
             LOGGER.info("Passenger " + name + " " + surname + " has successfully registered as new user");
             model.addAttribute("successMessage", "Registration success, please log-in");

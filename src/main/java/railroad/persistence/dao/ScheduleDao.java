@@ -3,6 +3,8 @@ package railroad.persistence.dao;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import railroad.persistence.entity.Schedule;
 import railroad.persistence.entity.Station;
 import railroad.persistence.entity.Train;
@@ -17,9 +19,13 @@ import java.util.List;
  *
  * DAO class for Schedule entity
  */
+@Repository
 public class ScheduleDao {
 
     private static final Logger LOGGER = Logger.getLogger(ScheduleDao.class);
+
+    @Autowired
+    private DaoFactory sessionFactory;
 
     /**
      * Method, used during ticketing
@@ -28,8 +34,8 @@ public class ScheduleDao {
      * @param departureTime Time of departure
      * @return List<Schedule> that meets the requirements - time of departure greater than given time
      */
-    public static List<Schedule> scheduleForDeparture(String stationName, String departureTime) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public List<Schedule> scheduleForDeparture(String stationName, String departureTime) {
+        Session session = sessionFactory.getSessionFactory().openSession();
         List<Schedule> trainList = null;
 
         try {
@@ -58,8 +64,8 @@ public class ScheduleDao {
      * @param arrivalTime Time of arrival
      * @return List<Schedule> that meets the requirements - time of departure is less than given time
      */
-    public static List<Schedule> scheduleForArrival(String stationName, String arrivalTime) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public List<Schedule> scheduleForArrival(String stationName, String arrivalTime) {
+        Session session = sessionFactory.getSessionFactory().openSession();
         List<Schedule> trainList = null;
 
         try {
@@ -89,9 +95,9 @@ public class ScheduleDao {
      * @param departureTime The time of departure of train
      * @return true if schedule is successfully added , false if fail
      */
-    public static Boolean addSchedule(int tNumber, String station, Time departureTime) {
+    public Boolean addSchedule(int tNumber, String station, Time departureTime) {
 
-        Session session = DaoFactory.getSessionFactory().openSession();
+        Session session = sessionFactory.getSessionFactory().openSession();
         Boolean isSuccess = true;
 
         try {
@@ -121,9 +127,9 @@ public class ScheduleDao {
      * @param departureS Departure station
      * @return time of departure
      */
-    public static Time getTime(int trainNumber, String departureS) {
+    public Time getTime(int trainNumber, String departureS) {
 
-        Session session = DaoFactory.getSessionFactory().openSession();
+        Session session = sessionFactory.getSessionFactory().openSession();
 
         Query q4 = session.createQuery("SELECT time FROM Schedule WHERE trainNumber = :tn AND stationName = :sn");
         q4.setParameter("tn", trainNumber);

@@ -3,6 +3,8 @@ package railroad.persistence.dao;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import railroad.persistence.entity.Statistics;
 
 import java.sql.Date;
@@ -14,17 +16,21 @@ import java.util.List;
  *
  * DAO class for Statistics entity
  */
+@Repository
 public class StatisticsDao {
 
-    private static final Logger LOGGER = Logger.getLogger(StationDao.class);
+    private final Logger LOGGER = Logger.getLogger(StationDao.class);
+
+    @Autowired
+    private DaoFactory sessionFactory;
 
     /**
      * Method that returns the list of Statistics records
      *
      * @return List<Statistics> list of statistics records either empty list if encounter error
      */
-    public static List<Statistics> getStatistics() {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public List<Statistics> getStatistics() {
+        Session session = sessionFactory.getSessionFactory().openSession();
         ArrayList<Statistics> statistics = new ArrayList<Statistics>();
         try {
             Query q = session.createQuery("FROM Statistics");
@@ -46,10 +52,10 @@ public class StatisticsDao {
      *
      * @return List<Statistics> list of statistics records either empty list if encounter error
      */
-    public static List<Statistics> getStatistics(String startTime, String endTime) {
+    public List<Statistics> getStatistics(String startTime, String endTime) {
         if (startTime == null || endTime == null) return null;
 
-        Session session = DaoFactory.getSessionFactory().openSession();
+        Session session = sessionFactory.getSessionFactory().openSession();
         ArrayList<Statistics> statistics = new ArrayList<Statistics>();
         try {
             Query q = session.createQuery("FROM Statistics WHERE datetime > :startTime AND datetime < :endTime");

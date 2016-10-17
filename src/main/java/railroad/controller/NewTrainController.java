@@ -1,6 +1,7 @@
 package railroad.controller;
 
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,9 @@ public class NewTrainController {
 
     private static final Logger LOGGER = Logger.getLogger(NewTrainController.class);
 
+    @Autowired
+    private EmployeeService employeeService;
+
     /**
      * Forwards to newTrain.jsp
      *
@@ -26,8 +30,8 @@ public class NewTrainController {
     @RequestMapping("/admin/newTrain")
     public String newTrain(HttpServletRequest request, Model model) {
 
-        model.addAttribute("trainList", EmployeeService.getTrainList());
-        model.addAttribute("templateNames", EmployeeService.getTemplateNames());
+        model.addAttribute("trainList", employeeService.getTrainList());
+        model.addAttribute("templateNames", employeeService.getTemplateNames());
 
         return "newTrain";
     }
@@ -54,14 +58,14 @@ public class NewTrainController {
         }
         catch (NumberFormatException e) {
             model.addAttribute("errorMessage", "Invalid train number");
-            model.addAttribute("templateNames", EmployeeService.getTemplateNames());
-            model.addAttribute("trainList", EmployeeService.getTrainList());
+            model.addAttribute("templateNames", employeeService.getTemplateNames());
+            model.addAttribute("trainList", employeeService.getTrainList());
             return "newTrain";
         }
 
         Boolean addTrain = false;
         try {
-            addTrain = EmployeeService.addTrain(tNumber, templateId);
+            addTrain = employeeService.addTrain(tNumber, templateId);
         }
         catch (Exception e) {
             LOGGER.info(e.getMessage());
@@ -72,8 +76,8 @@ public class NewTrainController {
             model.addAttribute("errorMessage", "Train # " + trainNumber + " is not added, please check and try again");
         }
 
-        model.addAttribute("templateNames", EmployeeService.getTemplateNames());
-        model.addAttribute("trainList", EmployeeService.getTrainList());
+        model.addAttribute("templateNames", employeeService.getTemplateNames());
+        model.addAttribute("trainList", employeeService.getTrainList());
         return "newTrain";
     }
 }

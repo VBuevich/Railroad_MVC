@@ -5,6 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import railroad.dto.MessageBean;
 import railroad.dto.Offer;
 import railroad.persistence.dao.*;
@@ -29,10 +31,29 @@ import java.util.regex.Pattern;
  *
  * railroad.service class for DAO requests of Passenger activity
  */
+@Service
 public class PassengerService {
 
     private static final Logger LOGGER = Logger.getLogger(PassengerService.class);
     private static Mailer mailer = new Mailer();
+
+    @Autowired
+    private ScheduleDao scheduleDao;
+
+    @Autowired
+    private UserDetailsDao userDetailsDao;
+
+    @Autowired
+    private TicketDao ticketDao;
+
+    @Autowired
+    private SeatmapDao seatmapDao;
+
+    @Autowired
+    private TrainDao trainDao;
+
+    @Autowired
+    private TemplateRowsDao templateRowsDao;
 
     /**
      * Method returns the list of "Offers" that meets passenger`s demands. Each offer has details of ticket that passenger can buy
@@ -43,17 +64,17 @@ public class PassengerService {
      * @param arrTime Arrival Time
      * @return List<Offer> List of 'Offers' that Passenger could buy
      */
-    public static List<Offer> getOffers(String depStation, String depTime, String arrStation, String arrTime) {
+    public List<Offer> getOffers(String depStation, String depTime, String arrStation, String arrTime) {
 
         List<Offer> offers = new ArrayList<Offer>();
 
         // First of all, we getting the list of trains that meets the requirements for departure:
         // this is a list of trains that departs from chosen station after chosen time
-        List<Schedule> listForDeparture = ScheduleDao.scheduleForDeparture(depStation, depTime);
+        List<Schedule> listForDeparture = scheduleDao.scheduleForDeparture(depStation, depTime);
 
         // Then, we getting the list of trains that meets the requirements for arrival:
         // this is a list of trains that arrives to chosen station before chosen time
-        List<Schedule> listForArrival = ScheduleDao.scheduleForArrival(arrStation, arrTime);
+        List<Schedule> listForArrival = scheduleDao.scheduleForArrival(arrStation, arrTime);
 
         // Then we process these two lists to get the offer for passenger:
         // - it should be the same train in both lists
@@ -87,10 +108,10 @@ public class PassengerService {
      * @param secret UserDetails`s secret phrase
      * @return true if password successfully changed, false in case of any error
      */
-    public static Boolean changePass(String email, String secret)
+    public Boolean changePass(String email, String secret)
     {
         Boolean isSuccess = false; // flag for success return
-        Boolean isCorrect = UserDetailsDao.checkSecret(email, secret); // checking secret phrase
+        Boolean isCorrect = userDetailsDao.checkSecret(email, secret); // checking secret phrase
         Session session = DaoFactory.getSessionFactory().openSession();
         Transaction tx = null;
 
@@ -101,7 +122,7 @@ public class PassengerService {
             String sha1password = DigestUtils.sha1Hex(newPassword); // encrypting new password
             try {
                 tx = session.beginTransaction(); // we are doing transaction due to the fact that we need to be sure that: 1) password changed AND email sent
-                Boolean newPassSuccess = UserDetailsDao.setPassword(sha1password, email, session); // set new password
+                Boolean newPassSuccess = userDetailsDao.setPassword(sha1password, email, session); // set new password
                 Boolean isMailSuccess = false;
                 if (newPassSuccess) { // if successfully changed - sending a confirmation email
                     isMailSuccess = mailer.send("Password change for railroad site", "You have successfully changed your password: " + newPassword, "javaschool.railroad@gmail.com", email);
@@ -131,7 +152,7 @@ public class PassengerService {
      * @param trainNumber Train number
      * @param message MessageBean to get access for information messages
      */
-    public static void buyTicket(int passengerId, String departureS, String arrivalS, int trainNumber, String selectedSeat, MessageBean message) {
+    public void buyTicket(int passengerId, String departureS, String arrivalS, int trainNumber, String selectedSeat, MessageBean message) {
         Session session = DaoFactory.getSessionFactory().openSession();
         Transaction tx = null;
 
@@ -139,7 +160,7 @@ public class PassengerService {
             tx = session.beginTransaction(); // we are doing transaction due to the fact that we are wrighting to different tables
 
             // checking if passenger has already bought ticket for chosen train
-            Boolean check = TicketDao.ifPassengerAlreadyBoughtTicket(trainNumber, passengerId);
+            Boolean check = ticketDao.ifPassengerAlreadyBoughtTicket(trainNumber, passengerId);
             if (check) { // invocked method returns true if passenger already bought a ticket
                 message.setErrorMessage("Ticket is not sold: You have already bought ticket for this train");
                 LOGGER.info("Ticket is not sold: Passenger have already bought ticket for this train");
@@ -147,7 +168,7 @@ public class PassengerService {
             }
 
             // then we need to check the availability of chosen seat - if it is still vacant:
-            Boolean seatStillAvailable = SeatmapDao.isSeatAvailable(trainNumber, selectedSeat);
+            Boolean seatStillAvailable = seatmapDao.isSeatAvailable(trainNumber, selectedSeat);
 
             if (!seatStillAvailable) { // false means that the seat is occupied already
                 message.setErrorMessage("Ticket is not sold: Selected seat is already occupied. Train number " + trainNumber + " , seat number " + selectedSeat);
@@ -157,7 +178,7 @@ public class PassengerService {
 
             // Then, we need to check if passenger still have time to get into the train.
             // getting the scheduled time of departure
-            Time timeOfDeparture = ScheduleDao.getTime(trainNumber, departureS);
+            Time timeOfDeparture = scheduleDao.getTime(trainNumber, departureS);
 
             // checking if passenger have at least 10 minutes
             Calendar calendarNow = Calendar.getInstance(); // an instance of Calendar - we need to know "time now"
@@ -195,8 +216,8 @@ public class PassengerService {
             query.setParameter("seat", selectedSeat);
             query.executeUpdate();
 
-            Time timeOfArrival = ScheduleDao.getTime(trainNumber, arrivalS);
-            UserDetails p = UserDetailsDao.getUser(passengerId);
+            Time timeOfArrival = scheduleDao.getTime(trainNumber, arrivalS);
+            UserDetails p = userDetailsDao.getUser(passengerId);
             StringBuilder eTicket = new StringBuilder();
             eTicket.append("Dear " + p.getSurname() + " " + p.getName() + System.lineSeparator());
             eTicket.append("Please kindly find your e-Ticket details: " + System.lineSeparator());
@@ -224,7 +245,7 @@ public class PassengerService {
             s.setPassengerDob(p.getDob());
             s.setPassengerEmail(p.getEmail());
             s.setTrainNumber(trainNumber);
-            s.setTrainType(TrainDao.getTemplateId(trainNumber));
+            s.setTrainType(trainDao.getTemplateId(trainNumber));
             s.setDepartureStation(departureS);
             s.setArrivalStation(arrivalS);
             s.setSeat(selectedSeat);
@@ -257,7 +278,7 @@ public class PassengerService {
      * @param trainNumber Train number
      * @return StringBuilder containing XML tree of occupied seats
      */
-    public static StringBuilder getOccupiedSeats(String trainNumber) {
+    public StringBuilder getOccupiedSeats(String trainNumber) {
 
         StringBuilder sb = new StringBuilder();
         int tNumber = 0;
@@ -269,9 +290,9 @@ public class PassengerService {
             return sb;
         }
 
-        String templateId = TrainDao.getTemplateId(tNumber); // we need to get the type of Train`s seatmap - his TemplateId
-        List<TemplateRows> tr = TemplateRowsDao.getRows(templateId); // retrieving list of rows for selected templateId
-        List<Seatmap> sm = SeatmapDao.getOccupiedSeats(tNumber); // retrieving list of objects - collection of Seatmap objects with occupied seats
+        String templateId = trainDao.getTemplateId(tNumber); // we need to get the type of Train`s seatmap - his TemplateId
+        List<TemplateRows> tr = templateRowsDao.getRows(templateId); // retrieving list of rows for selected templateId
+        List<Seatmap> sm = seatmapDao.getOccupiedSeats(tNumber); // retrieving list of objects - collection of Seatmap objects with occupied seats
 
         if (tr.size() == 0) { // zero size could be in case if train number is wrong
             return sb;
@@ -304,7 +325,7 @@ public class PassengerService {
      * @param secret Users` secret phrase
      * @return true is success, false if error
      */
-    public static boolean addUser(String name, String surname, String dob, String email, String pass1, String pass2, String secret, Boolean enabled, MessageBean message) {
+    public boolean addUser(String name, String surname, String dob, String email, String pass1, String pass2, String secret, Boolean enabled, MessageBean message) {
 
         Pattern pName = Pattern.compile("^[A-z]{2,15}$");
         Pattern pDate = Pattern.compile("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
@@ -430,7 +451,7 @@ public class PassengerService {
 
         String sha1password = DigestUtils.sha1Hex(pass1);
 
-        Boolean isSuccess = UserDetailsDao.addUser(name, surname, dateOfBirth, email, sha1password, secret, "ROLE_USER", enabled);
+        Boolean isSuccess = userDetailsDao.addUser(name, surname, dateOfBirth, email, sha1password, secret, "ROLE_USER", enabled);
 
         return isSuccess;
     }
@@ -441,7 +462,7 @@ public class PassengerService {
      * @param email Log-in field of user
      * @return UserDetails object if Ok either null if error
      */
-    public static UserDetails getUserByEmail(String email)
+    public UserDetails getUserByEmail(String email)
     {
         Session session = DaoFactory.getSessionFactory().openSession();
         UserDetails userDetails = null;

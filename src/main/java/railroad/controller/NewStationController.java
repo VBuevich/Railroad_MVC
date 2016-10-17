@@ -1,5 +1,6 @@
 package railroad.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class NewStationController {
 
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private StationDao stationDao;
+
     /**
      * Forwards to newStation.jsp
      *
@@ -24,7 +31,7 @@ public class NewStationController {
     @RequestMapping("/admin/newStation")
     public String newStation(Model model) {
 
-        model.addAttribute("stationList", EmployeeService.getStationList());
+        model.addAttribute("stationList", employeeService.getStationList());
 
         return "newStation";
     }
@@ -44,10 +51,10 @@ public class NewStationController {
         if (stationName.length() < 2 || stationName.length() > 20) {
 
             model.addAttribute("errorMessage", "Station '" + stationName + "' is not added due to incorrect length, should be between 2 and 20");
-            model.addAttribute("stationList", EmployeeService.getStationList());
+            model.addAttribute("stationList", employeeService.getStationList());
             return "newStation";
         }
-        Boolean addStation = StationDao.addStation(stationName);
+        Boolean addStation = stationDao.addStation(stationName);
 
         if (addStation) {
             model.addAttribute("successMessage", "Station '" + stationName + "' is successfully added");
@@ -55,7 +62,7 @@ public class NewStationController {
             model.addAttribute("errorMessage", "Station '" + stationName + "' is not added, please check and try again");
         }
 
-        model.addAttribute("stationList", EmployeeService.getStationList());
+        model.addAttribute("stationList", employeeService.getStationList());
 
         return "newStation";
     }

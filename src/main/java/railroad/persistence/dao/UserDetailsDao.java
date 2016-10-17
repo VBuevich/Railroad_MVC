@@ -3,6 +3,8 @@ package railroad.persistence.dao;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import railroad.persistence.entity.UserDetails;
 
 import java.sql.Date;
@@ -12,9 +14,13 @@ import java.sql.Date;
  *
  * DAO class for UserDetails entity
  */
+@Repository
 public class UserDetailsDao {
 
-    private static final Logger LOGGER = Logger.getLogger(UserDetailsDao.class);
+    private final Logger LOGGER = Logger.getLogger(UserDetailsDao.class);
+
+    @Autowired
+    private DaoFactory sessionFactory;
 
     /**
      * Method to change UserDetails`s secret phrase
@@ -23,8 +29,8 @@ public class UserDetailsDao {
      * @param secret UserDetails`s secret phrase
      * @return true if secret phrase is correct
      */
-    public static Boolean checkSecret(String email, String secret) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public Boolean checkSecret(String email, String secret) {
+        Session session = sessionFactory.getSessionFactory().openSession();
         UserDetails userDetails;
         Boolean isSuccess = false;
 
@@ -53,7 +59,7 @@ public class UserDetailsDao {
      * @param session Hibernate session, opened in Service as we doing transaction
      * @return
      */
-    public static Boolean setPassword(String pass, String email, Session session) {
+    public Boolean setPassword(String pass, String email, Session session) {
         Boolean isSuccess = false;
         try {
             Query query = session.createQuery("UPDATE UserDetails u SET u.password = :pass WHERE u.email = :email");
@@ -75,8 +81,8 @@ public class UserDetailsDao {
      * @param userId primary key of UserDetails entity
      * @return UserDetails entity for given key
      */
-    public static UserDetails getUser(int userId) {
-        Session session = DaoFactory.getSessionFactory().openSession(); // Hibernate session
+    public UserDetails getUser(int userId) {
+        Session session = sessionFactory.getSessionFactory().openSession(); // Hibernate session
         UserDetails p = null;
 
         try {
@@ -105,9 +111,9 @@ public class UserDetailsDao {
      * @param secret Users` secret phrase user for password retrieval
      * @return true if success, otherwise false
      */
-    public static Boolean addUser(String name, String surname, Date dob, String email, String pass, String secret, String userRole, Boolean enabled) {
+    public Boolean addUser(String name, String surname, Date dob, String email, String pass, String secret, String userRole, Boolean enabled) {
         Boolean isSuccess = false; // flag for success return
-        Session session = DaoFactory.getSessionFactory().openSession();
+        Session session = sessionFactory.getSessionFactory().openSession();
 
         try {
             UserDetails p = new UserDetails();

@@ -2,10 +2,12 @@ import org.hibernate.query.Query;
 import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import railroad.persistence.dao.TrainDao;
 import railroad.persistence.entity.UserDetails;
 import railroad.service.EmployeeService;
 import railroad.dto.PassengerList;
+import railroad.service.PassengerService;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,12 +15,20 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static railroad.service.PassengerService.changePass;
 
 /**
  * @author vbuevich
  */
 public class EmployeeServiceTest {
+
+    @Autowired
+    private PassengerService passengerService;
+
+    @Autowired
+    private TrainDao trainDao;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     public EmployeeServiceTest() {
     }
@@ -52,7 +62,7 @@ public class EmployeeServiceTest {
         System.out.println("Testing ChangePass : positive"); // ignored in order to save time due to the fact that password is changed in random way
                                                              // and we need to retrieve new pass from email to run test again
 
-        Boolean bool = changePass("JavaSchool7772@mail.ru", "secret");
+        Boolean bool = passengerService.changePass("JavaSchool7772@mail.ru", "secret");
         assertTrue(bool);
     }
 
@@ -62,7 +72,7 @@ public class EmployeeServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing ChangePass : negative : wrong email"); // that Employee never exists
 
-        Boolean bool = changePass("WRONG100500EMAIL", "qwerty");
+        Boolean bool = passengerService.changePass("WRONG100500EMAIL", "qwerty");
         assertFalse(bool);
     }
 
@@ -72,7 +82,7 @@ public class EmployeeServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing ChangePass : negative : wrong reminder phrase"); // that Employee exists, but secret phrase is wrong
 
-        Boolean bool = changePass("javaschool.railroad@mail.ru", "qwerty");
+        Boolean bool = passengerService.changePass("javaschool.railroad@mail.ru", "qwerty");
         assertFalse(bool);
     }
 
@@ -82,10 +92,10 @@ public class EmployeeServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing if we can add duplicate train from EmployeeService");
 
-        List<String> trainList = TrainDao.getTrainList();
+        List<String> trainList = trainDao.getTrainList();
         int trainNumber = Integer.parseInt(trainList.get(0)); // just first train , just for test
 
-        Boolean bool = EmployeeService.addTrain(trainNumber, "TST"); // adding duplicate
+        Boolean bool = employeeService.addTrain(trainNumber, "TST"); // adding duplicate
 
         assertFalse(bool);
     }
@@ -96,7 +106,7 @@ public class EmployeeServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing if we can get list of stations");
 
-        List<String> stationList = EmployeeService.getStationList();
+        List<String> stationList = employeeService.getStationList();
         assertFalse(stationList.isEmpty()); // list is not empty
     }
 
@@ -107,7 +117,7 @@ public class EmployeeServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing if we can get list of trains");
 
-        List<String> trainList = EmployeeService.getTrainList();
+        List<String> trainList = employeeService.getTrainList();
         assertFalse(trainList.isEmpty()); // list is not empty
     }
 
@@ -117,7 +127,7 @@ public class EmployeeServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing if we can get list of passengers: positive test");
 
-        List<PassengerList> passengerList = EmployeeService.getPassengerList(1001); // this train number exists for sure and there are passengers so it should be Ok
+        List<PassengerList> passengerList = employeeService.getPassengerList(1001); // this train number exists for sure and there are passengers so it should be Ok
         assertFalse(passengerList.isEmpty()); // list is not empty
     }
 
@@ -127,7 +137,7 @@ public class EmployeeServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing if we can get list of passengers: negative test");
 
-        List<PassengerList> passengerList = EmployeeService.getPassengerList(1); // this train number does not exist so it fails
+        List<PassengerList> passengerList = employeeService.getPassengerList(1); // this train number does not exist so it fails
         assertTrue(passengerList == null); // method returns null in case if receives wrong parameter train
     }
 
@@ -137,7 +147,7 @@ public class EmployeeServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing if we can get list of trains");
 
-        List<String> templateList = EmployeeService.getTemplateNames();
+        List<String> templateList = employeeService.getTemplateNames();
         assertFalse(templateList.isEmpty()); // list is not empty
     }
 }

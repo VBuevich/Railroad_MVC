@@ -3,6 +3,8 @@ package railroad.persistence.dao;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import railroad.persistence.entity.Ticket;
 
 import java.util.List;
@@ -12,9 +14,13 @@ import java.util.List;
  *
  * DAO class for Ticket entity
  */
+@Repository
 public class TicketDao {
 
-    private static final Logger LOGGER = Logger.getLogger(TicketDao.class);
+    private final Logger LOGGER = Logger.getLogger(TicketDao.class);
+
+    @Autowired
+    private DaoFactory sessionFactory;
 
     /**
      * Method that returns the list of tickets for given passenger
@@ -22,8 +28,8 @@ public class TicketDao {
      * @param userId ID of passenger, primary key
      * @return List<Ticket> list of tickets for given passenger
      */
-    public static List<Ticket> getTickets(int userId) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public List<Ticket> getTickets(int userId) {
+        Session session = sessionFactory.getSessionFactory().openSession();
         List<Ticket> tickets = null;
 
         try {
@@ -47,8 +53,8 @@ public class TicketDao {
      * @param tNumber ID of train , primary key
      * @return List<Ticket> list of tickets for given train
      */
-    public static List<Ticket> getTicketsForTrainNumber(int tNumber) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public List<Ticket> getTicketsForTrainNumber(int tNumber) {
+        Session session = sessionFactory.getSessionFactory().openSession();
         List<Ticket> tickets = null;
 
         try {
@@ -67,40 +73,14 @@ public class TicketDao {
     }
 
     /**
-     * Method return the number of sold tickets for given train
-     *
-     * @param trainNumber Train number
-     * @return number of tickets sold
-     */
-    public static int getNumberOfSoldTickets (int trainNumber) {
-        Session session = DaoFactory.getSessionFactory().openSession();
-
-        Integer count = 1;
-
-        try {
-            Query q1 = session.createQuery("SELECT COUNT(*) FROM Ticket WHERE trainNumber = :tn");
-            q1.setParameter("tn", trainNumber);
-            count = ((Number) q1.uniqueResult()).intValue();
-        }
-        catch (Exception e) {
-            LOGGER.error(e.getMessage());
-        }
-        finally {
-            session.close(); // we always closing Hibernate Session
-        }
-
-        return count;
-    }
-
-    /**
      * Method checks if passenger has already bought a ticket for given train
      *
      * @param trainNumber Train number
      * @param passengerId passenger ID, primary key
      * @return true if passenger already have bought ticket, false if not.
      */
-    public static Boolean ifPassengerAlreadyBoughtTicket(int trainNumber, int passengerId) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public Boolean ifPassengerAlreadyBoughtTicket(int trainNumber, int passengerId) {
+        Session session = sessionFactory.getSessionFactory().openSession();
 
         try {
             Query q3 = session.createQuery("SELECT COUNT(*) FROM Ticket WHERE trainNumber = :tn AND passengerId = :pid");

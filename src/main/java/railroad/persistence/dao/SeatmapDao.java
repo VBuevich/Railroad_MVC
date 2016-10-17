@@ -3,6 +3,8 @@ package railroad.persistence.dao;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import railroad.persistence.entity.Seatmap;
 import railroad.persistence.entity.TemplateSeats;
 import railroad.persistence.entity.Train;
@@ -12,9 +14,16 @@ import java.util.List;
 /**
  * Created by VBuevich on 19.09.2016.
  */
+@Repository
 public class SeatmapDao {
 
-    private static final Logger LOGGER = Logger.getLogger(ScheduleDao.class);
+    private final Logger LOGGER = Logger.getLogger(ScheduleDao.class);
+
+    @Autowired
+    private DaoFactory sessionFactory;
+
+    @Autowired
+    private TemplateSeatsDao templateSeatsDao;
 
     /**
      * Method creates new set of seatmap records, used when adding new train
@@ -23,12 +32,12 @@ public class SeatmapDao {
      * @param session Hibernate session - opened in EmployeeService due to the fat that the method is transactional
      * @return true is success, otherwise false
      */
-    public static Boolean createSeatmap(int trainNumber, String templateId, Session session) {
+    public Boolean createSeatmap(int trainNumber, String templateId, Session session) {
 
         Boolean isSuccess = false;
 
         try {
-             List<TemplateSeats> seats = TemplateSeatsDao.getSeats(templateId);
+             List<TemplateSeats> seats = templateSeatsDao.getSeats(templateId);
 
 
             for (int i = 0; i < seats.size(); i++) {
@@ -56,10 +65,10 @@ public class SeatmapDao {
      * @param trainNumber Train number
      * @return List<Seatmap> of occupied seats either null if no reults found
      */
-    public static List<Seatmap> getOccupiedSeats(int trainNumber) {
+    public List<Seatmap> getOccupiedSeats(int trainNumber) {
 
         List<Seatmap> sm = null;
-        Session session = DaoFactory.getSessionFactory().openSession();
+        Session session = sessionFactory.getSessionFactory().openSession();
 
         try {
             Query q = session.createQuery("FROM Seatmap s WHERE s.trainNumber = :tn AND s.passengerOwner != null");
@@ -83,8 +92,8 @@ public class SeatmapDao {
      * @param selectedSeat Selected seat
      * @return true if seat is still vacant either false if occupied
      */
-    public static Boolean isSeatAvailable(int trainNumber, String selectedSeat) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public Boolean isSeatAvailable(int trainNumber, String selectedSeat) {
+        Session session = sessionFactory.getSessionFactory().openSession();
 
         try {
             Query q = session.createQuery("FROM Seatmap s WHERE s.trainNumber = :tn AND s.seat = :seat");

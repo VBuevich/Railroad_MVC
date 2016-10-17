@@ -3,16 +3,24 @@ package railroad.persistence.dao;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import railroad.persistence.entity.TemplateRows;
 
 import java.util.List;
 
 /**
  * @author vbuevich
+ *
+ * DAO class for TemplateRows entity
  */
+@Repository
 public class TemplateRowsDao {
 
-    private static final Logger LOGGER = Logger.getLogger(StationDao.class);
+    private final Logger LOGGER = Logger.getLogger(StationDao.class);
+
+    @Autowired
+    private DaoFactory sessionFactory;
 
     /**
      * Method to get Train`s row mapping according to Train`s template (his real-world cabin type)
@@ -20,8 +28,8 @@ public class TemplateRowsDao {
      * @param templateId type of real-world Train` cabin type
      * @return List<TemplateRows> seat map
      */
-    public static List<TemplateRows> getRows(String templateId) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public List<TemplateRows> getRows(String templateId) {
+        Session session = sessionFactory.getSessionFactory().openSession();
         List<TemplateRows> rows = null;
 
         try {

@@ -3,6 +3,7 @@ package railroad.persistence.dao;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Component;
 import railroad.persistence.entity.*;
 
 /**
@@ -11,6 +12,7 @@ import railroad.persistence.entity.*;
  * Factory for SessionFactory, contains static field of SessionFactory and a getter
  * In order to initialise the factory the static block was used.
  */
+@Component
 public class DaoFactory {
 
     static private SessionFactory sessionFactory; // Static session factory, single-tone

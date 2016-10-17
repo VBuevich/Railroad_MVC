@@ -3,6 +3,8 @@ package railroad.service;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import railroad.dto.MessageBean;
 import railroad.dto.PassengerList;
 import railroad.persistence.dao.*;
@@ -19,11 +21,32 @@ import java.util.List;
  *
  * railroad.service class for DAO requests of Employee activity
  */
+@Service
 public class EmployeeService {
 
     private static final Logger LOGGER = Logger.getLogger(EmployeeService.class);
     private static Mailer mailer = new Mailer();
 
+    @Autowired
+    private ScheduleDao scheduleDao;
+
+    @Autowired
+    private UserDetailsDao userDetailsDao;
+
+    @Autowired
+    private StationDao stationDao;
+
+    @Autowired
+    private TicketDao ticketDao;
+
+    @Autowired
+    private SeatmapDao seatmapDao;
+
+    @Autowired
+    private TrainDao trainDao;
+
+    @Autowired
+    private TemplateTrainDao templateTrainDao;
 
     /**
      * Method that adds new schedule
@@ -33,7 +56,7 @@ public class EmployeeService {
      * @param departureTime The time of departure of train
      * @return true if schedule is successfully added , false if fail
      */
-    public static Boolean addSchedule(String trainNumber, String station, String departureTime, MessageBean message) {
+    public Boolean addSchedule(String trainNumber, String station, String departureTime, MessageBean message) {
 
         int hour, minute, second = 0;
 
@@ -61,7 +84,7 @@ public class EmployeeService {
             message.setErrorMessage("Invalid train number");
             return false;
         }
-        return ScheduleDao.addSchedule(tNumber, station, dTime);
+        return scheduleDao.addSchedule(tNumber, station, dTime);
     }
 
     /**
@@ -70,7 +93,7 @@ public class EmployeeService {
      * @param trainNumber Train number
      * @return true if Train and Seatmap were successfully added, false in case of error
      */
-    public static Boolean addTrain(int trainNumber, String templateId) {
+    public Boolean addTrain(int trainNumber, String templateId) {
         Session session = DaoFactory.getSessionFactory().openSession();
         Transaction tx = null;
         Boolean isSuccess = false;
@@ -78,8 +101,8 @@ public class EmployeeService {
         try {
             tx = session.beginTransaction(); // we are doing transaction due to the fact that we are wrighting to different tables
 
-            Boolean addTrain =  TrainDao.addTrain(trainNumber, templateId, session); // adding Traing
-            Boolean addSeatmap = SeatmapDao.createSeatmap(trainNumber, templateId, session); // adding Seatmap
+            Boolean addTrain =  trainDao.addTrain(trainNumber, templateId, session); // adding Traing
+            Boolean addSeatmap = seatmapDao.createSeatmap(trainNumber, templateId, session); // adding Seatmap
 
             if (addTrain && addSeatmap) { // if both success
                 tx.commit(); // successful commit
@@ -99,12 +122,12 @@ public class EmployeeService {
         return isSuccess;
     }
 
-    public static List<String> getStationList() {
-        return StationDao.getStationList();
+    public List<String> getStationList() {
+        return stationDao.getStationList();
     }
 
-    public static List<String> getTrainList() {
-        return TrainDao.getTrainList();
+    public List<String> getTrainList() {
+        return trainDao.getTrainList();
     }
 
     /**
@@ -113,10 +136,10 @@ public class EmployeeService {
      * @param tNumber Train number
      * @return List<Passenger> list of Passengers
      */
-    public static List<PassengerList> getPassengerList(int tNumber){
+    public List<PassengerList> getPassengerList(int tNumber){
         List<PassengerList> passengerList;
 
-        List<Ticket> tickets = TicketDao.getTicketsForTrainNumber(tNumber); // getting the list
+        List<Ticket> tickets = ticketDao.getTicketsForTrainNumber(tNumber); // getting the list
 
         // checking the list
         if (tickets == null || tickets.isEmpty()){ // if there is no results we returning the list which is empty
@@ -126,7 +149,7 @@ public class EmployeeService {
             passengerList = new ArrayList<PassengerList>();
             for (Ticket t : tickets) { // we filling the list of passengers
                 PassengerList p = new PassengerList();
-                UserDetails passenger = UserDetailsDao.getUser(t.getPassengerId()); // using passengerId, taken from list of tickets
+                UserDetails passenger = userDetailsDao.getUser(t.getPassengerId()); // using passengerId, taken from list of tickets
 
                 p.setName(passenger.getName());
                 p.setSurname(passenger.getSurname());
@@ -145,7 +168,7 @@ public class EmployeeService {
      *
      * @return List<String> list of Trains` template name
      */
-    public static List<String> getTemplateNames() {
-        return TemplateTrainDao.getTemplateNames();
+    public List<String> getTemplateNames() {
+        return templateTrainDao.getTemplateNames();
     }
 }

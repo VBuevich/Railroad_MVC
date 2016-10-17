@@ -4,6 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import railroad.persistence.entity.Schedule;
 import railroad.persistence.entity.Train;
 
@@ -15,17 +17,21 @@ import java.util.List;
  *
  * DAO class for Train entity
  */
+@Repository
 public class TrainDao {
 
-    private static final Logger LOGGER = Logger.getLogger(TrainDao.class);
+    private final Logger LOGGER = Logger.getLogger(TrainDao.class);
+
+    @Autowired
+    private DaoFactory sessionFactory;
 
     /**
      * Method that returns the list of train names
      *
      * @return List<String> train numbers
      */
-    public static List<String> getTrainList() {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public List<String> getTrainList() {
+        Session session = sessionFactory.getSessionFactory().openSession();
 
         ArrayList<String> trainList = new ArrayList<String>();
         try {
@@ -52,8 +58,8 @@ public class TrainDao {
      * @param stationName Station name
      * @return List<Schedule> list of schedules
      */
-    public static List<Schedule> trainList(String stationName) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public List<Schedule> trainList(String stationName) {
+        Session session = sessionFactory.getSessionFactory().openSession();
         List<Schedule> trainList = null;
 
         try {
@@ -78,7 +84,7 @@ public class TrainDao {
      * @param session Hibernate session, opened in EmployeeService due to the fact that method is transactional
      * @return true if success, otherwise false
      */
-    public static Boolean addTrain(int trainNumber, String templateId, Session session) throws ConstraintViolationException {
+    public Boolean addTrain(int trainNumber, String templateId, Session session) throws ConstraintViolationException {
 
         Boolean isSuccess = true;
 
@@ -91,8 +97,8 @@ public class TrainDao {
         return isSuccess;
     }
 
-    public static String getTemplateId(int trainNumber) {
-        Session session = DaoFactory.getSessionFactory().openSession();
+    public String getTemplateId(int trainNumber) {
+        Session session = sessionFactory.getSessionFactory().openSession();
         String templateId = null;
 
         try {
