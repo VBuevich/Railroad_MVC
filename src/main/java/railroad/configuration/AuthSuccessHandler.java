@@ -88,7 +88,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         }
 
         if (isUser) {
-            return "/user/schedule";
+            return "/user/googleMap";
         } else if (isAdmin) {
             return "/admin/adminMenu";
         } else {
