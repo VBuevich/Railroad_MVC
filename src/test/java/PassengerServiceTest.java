@@ -1,14 +1,10 @@
-import org.hibernate.query.Query;
 import org.junit.*;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import railroad.persistence.dao.*;
-import railroad.persistence.entity.UserDetails;
 import railroad.dto.MessageBean;
 import railroad.dto.Offer;
-import railroad.service.EmployeeService;
+import railroad.persistence.dao.*;
 import railroad.service.PassengerService;
 
 import javax.servlet.http.HttpSession;
@@ -17,39 +13,46 @@ import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-import static railroad.service.PassengerService.*;
 
 /**
  * @author vbuevich
  */
-public class PassengerServiceTest {
 
-    public PassengerServiceTest() {
-    }
-
-    @InjectMocks
-    private PassengerService passengerService;
-    @InjectMocks
-    private EmployeeService employeeService;
-
-    @Mock
-    private ScheduleDao scheduleDao;
-    @Mock
-    private UserDetailsDao userDetailsDao;
-    @Mock
-    private StationDao stationDao;
-    @Mock
-    private TicketDao ticketDao;
-    @Mock
-    private SeatmapDao seatmapDao;
-    @Mock
-    private TrainDao trainDao;
-    @Mock
-    private TemplateTrainDao templateTrainDao;
+public class PassengerServiceTest extends SpringTestSupport {
 
     @Mock
     HttpSession session;
+
+    @Autowired
+    private PassengerService passengerService;
+
+    @Autowired
+    private ScheduleDao scheduleDao;
+
+    @Autowired
+    private UserDetailsDao userDetailsDao;
+
+    @Autowired
+    private StationDao stationDao;
+
+    @Autowired
+    private TicketDao ticketDao;
+
+    @Autowired
+    private SeatmapDao seatmapDao;
+
+    @Autowired
+    private TrainDao trainDao;
+
+    @Autowired
+    private TemplateTrainDao templateTrainDao;
+
+    @Autowired
+    private TemplateRowsDao templateRowsDao;
+
+    @Autowired
+    private DaoFactory sessionFactory;
+
 
     @BeforeClass
     public static void setUpClass() {
@@ -61,26 +64,12 @@ public class PassengerServiceTest {
 
     @Before
     public void setUp() throws SQLException {
+
         MockitoAnnotations.initMocks(this);
     }
 
     @After
     public void tearDown() {
-    }
-
-    @Test
-    public void checkGetOffersPositive() {
-
-        System.out.println("-------------------");
-        System.out.println("Testing if we can get list of Offers : should not be Ok, all data is fine"); // that Passenger never exists
-
-        String depStation = "Saint Petersburg";
-        String depTime = "10:00:00";
-        String arrStation = "Moscow";
-        String arrTime = "23:55:55";
-        List<Offer> offerList = passengerService.getOffers(depStation, depTime, arrStation, arrTime);
-
-        assertFalse(offerList.isEmpty());
     }
 
     @Test
@@ -143,15 +132,20 @@ public class PassengerServiceTest {
         assertTrue(offerList.isEmpty());
     }
 
-    @Ignore
     @Test
-    public void changePassTestPositive() {
+    public void checkGetOffersPositive() {
 
         System.out.println("-------------------");
-        System.out.println("Testing ChangePass : positive");
+        System.out.println("Testing if we can get list of Offers : should not be Ok, all data is fine"); // that Passenger never exists
 
-        Boolean bool = passengerService.changePass("JavaSchool7772@mail.ru", "secret");
-        assertTrue(bool);
+        String depStation = "Saint Petersburg";
+        String depTime = "10:00:00";
+        String arrStation = "Moscow";
+        String arrTime = "23:55:55";
+
+        List<Offer> offerList = passengerService.getOffers(depStation, depTime, arrStation, arrTime);
+
+        assertFalse(offerList.isEmpty());
     }
 
     @Test
@@ -235,7 +229,6 @@ public class PassengerServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing getOccupiedSeats : positive");
 
-        MessageBean message = new MessageBean();
         StringBuilder sb = passengerService.getOccupiedSeats("1001"); // this train number exists for sure
         assertTrue(sb.length() > 0);
     }
@@ -246,7 +239,6 @@ public class PassengerServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing getOccupiedSeats : negative : argument is null");
 
-        MessageBean message = new MessageBean();
         StringBuilder sb = passengerService.getOccupiedSeats(null); // argument is null
         assertTrue(sb.length() == 0);
     }
@@ -257,7 +249,6 @@ public class PassengerServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing getOccupiedSeats : negative : train number is incorrect");
 
-        MessageBean message = new MessageBean();
         StringBuilder sb = passengerService.getOccupiedSeats("WRONG"); // argument is null
         assertTrue(sb.length() == 0);
     }
@@ -268,30 +259,8 @@ public class PassengerServiceTest {
         System.out.println("-------------------");
         System.out.println("Testing getOccupiedSeats : negative : train number is wrong");
 
-        MessageBean message = new MessageBean();
-        StringBuilder sb = passengerService.getOccupiedSeats("0"); // argument is null
+        StringBuilder sb = passengerService.getOccupiedSeats("0"); // argument is wrong
         assertTrue(sb.length() == 0);
-    }
-
-    @Ignore // due to the fact that we have to delete use each time
-    @Test
-    public void testAddUserPositive() {
-
-        System.out.println("-------------------");
-        System.out.println("Testing addUser : positive");
-
-        String name = "Ivan";
-        String surname = "Ivanov";
-        String dob = "2000-05-24";
-        String email = "java@t-systems.ru";
-        String pass1 = "pass";
-        String pass2 = "pass";
-        String secret = "secret";
-        MessageBean message = MessageBean.get(session);
-
-        Boolean isUserAdded = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
-
-        assertFalse(isUserAdded);
     }
 
     @Test
@@ -434,5 +403,35 @@ public class PassengerServiceTest {
         assertFalse(isUserAdded);
     }
 
+    @Ignore // due to the fact that we have to delete use each time
+    @Test
+    public void testAddUserPositive() {
 
+        System.out.println("-------------------");
+        System.out.println("Testing addUser : positive");
+
+        String name = "Ivan";
+        String surname = "Ivanov";
+        String dob = "2000-05-24";
+        String email = "java@t-systems.ru";
+        String pass1 = "qwertyuiop";
+        String pass2 = "qwertyuiop";
+        String secret = "secret";
+        MessageBean message = MessageBean.get(session);
+
+        Boolean isUserAdded = passengerService.addUser(name, surname, dob, email, pass1, pass2, secret, false, message);
+
+        assertTrue(isUserAdded);
+    }
+
+    @Ignore // Internet access required due to mail sending
+    @Test
+    public void changePassTestPositive() {
+
+        System.out.println("-------------------");
+        System.out.println("Testing ChangePass : positive");
+
+        Boolean bool = passengerService.changePass("Neena.Kochhar@oracle.com", "secret");
+        assertTrue(bool);
+    }
 }

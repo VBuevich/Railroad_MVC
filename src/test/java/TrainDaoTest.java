@@ -1,6 +1,5 @@
 import org.hibernate.Session;
 import org.junit.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import railroad.persistence.dao.DaoFactory;
 import railroad.persistence.dao.TrainDao;
 

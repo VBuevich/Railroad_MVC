@@ -97,7 +97,7 @@ public class ScheduleDao {
      */
     public Boolean addSchedule(int tNumber, String station, Time departureTime) {
 
-        Session session = sessionFactory.getSessionFactory().openSession();
+        Session session = DaoFactory.getSessionFactory().openSession();
         Boolean isSuccess = true;
 
         try {
@@ -129,7 +129,7 @@ public class ScheduleDao {
      */
     public Time getTime(int trainNumber, String departureS) {
 
-        Session session = sessionFactory.getSessionFactory().openSession();
+        Session session = DaoFactory.getSessionFactory().openSession();
 
         Query q4 = session.createQuery("SELECT time FROM Schedule WHERE trainNumber = :tn AND stationName = :sn");
         q4.setParameter("tn", trainNumber);

@@ -1,5 +1,5 @@
-import railroad.service.Mailer;
 import org.junit.*;
+import railroad.service.Mailer;
 
 import javax.mail.internet.AddressException;
 
@@ -30,7 +30,7 @@ public class MailerTest {
     public void tearDown() {
     }
 
-    @Ignore
+    @Ignore // Internet required
     @Test
     public void testSendEmail() throws Exception {
 
