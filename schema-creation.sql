@@ -119,9 +119,6 @@ CREATE TABLE Seatmap
 ALTER TABLE Seatmap
   ADD FOREIGN KEY R_23 (passenger_owner) REFERENCES User (user_id);
 
-ALTER TABLE Seatmap
-  ADD FOREIGN KEY R_24 (train_number) REFERENCES Train (train_number);
-
 CREATE TABLE Template_rows
 (
   Template_rows_id     INTEGER NOT NULL AUTO_INCREMENT,
